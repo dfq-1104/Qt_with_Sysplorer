@@ -6,7 +6,7 @@
 
 插件绑定 127.0.0.1 的动态 UDP 端口。发现记录位于 Windows 当前用户 LocalAppData/BatteryConsole/udp/<PID>.json，每 2 秒原子更新。记录包含 PID、可执行文件路径、协议、端口、会话编号、令牌、模型哈希及更新时间。
 
-客户端确认 PID 存活且可执行文件为配置的目标 Sysplorer，连接后核对模型哈希。没有可用宿主时启动本机 mworks.exe；连接已有繁忙任务时明确报错，不接管其他任务。
+客户端确认 PID 存活且可执行文件为配置的目标 Sysplorer，连接后核对模型哈希。发现已有繁忙或暂停任务时跳过该实例，不接管其他任务；没有空闲宿主时启动一个本任务专用的 mworks.exe。新启动实例也被占用时才报错，避免无限启动。
 
 令牌不进入普通客户端日志，也不对外分发发现记录。
 
@@ -34,6 +34,24 @@
 | resume | 无 | 请求继续本任务求解 |
 | stop | 无 | 请求停止本任务，导出部分结果 |
 | speed | speed | 调整运行期速度 |
+| tune | current、voltage、mode、vMin、vMax、iMax | 同一任务在线修改运行期输入；自动暂停、批量写入、回读、恢复 |
+
+### 运行期输入
+
+`tune` 必须一次提交上述六个数值字段，不接受 SOC、时间或任意变量名。
+mode 为 0 静置、1 恒流充电、2 恒流放电、3 恒压/限流充电；current 为 0–5 A；
+2.5 ≤ vMin < vMax ≤ 3.45 V；2.5 ≤ voltage ≤ vMax；iMax 为 0–5 A。
+voltage 是恒压目标，vMin/vMax 是独立的上下截止电压。恒压模式的实际电流由模型计算并受 iMax 限制。
+
+仅在 Running/Paused 接受。Running 请求先暂停求解器，再通过 MwSimData::SetInputReals 写入顶层 live 输入；
+Paused 请求暂存输入并保持暂停，点击继续后在下一求解步确认。写入前后检查求解器时间与 SOC，不重新编译、不重启任务、不修改初值。
+本机 SDK 的即时 GetReals 仍返回旧步值，不能用它判断修改失败。插件额外订阅六个模型输入，在后续实际模型采样与请求完全一致后才写入确认记录。
+`ok` 仅表示命令已接受；以状态 tuneHistory 中出现新的 sequence 为模型采样回读完成依据；time 是暂停写入边界，confirmedAt 是首次确认采样时刻。
+状态同时提供 tunePending、runtimeParams。tuneHistory 保存生效时间、写入前后 SOC 和输入回读值，最终也写入 result.json。
+同一请求 ID 的重发不重复执行；任务归属检查与其他控制命令一致。
+
+UI 使用独立“运行中调参”页；动态修改结果不能作为静态起始参数的缓存复用。
+验证脚本为 tools/sysplorer_udp_plugin/verify_runtime_tuning.py，另有 Qt 真实按钮测试 runtimeTuningButtons。
 
 mode 只允许 1 充电或 2 放电；voltage 2.5–3.45 V；current 0–5 A；soc0 0–1；duration 0.1–20000 秒；speed 0.5–60。界面时长按容量规则估算并限制为 120–20000 秒；零电流固定执行真实 120 秒静置任务。UI 倍速与 SDK 减速因子的映射为 slowdownFactor=1/speed，例如 60x 对应 1/60；倍速不是实时性能保证。
 

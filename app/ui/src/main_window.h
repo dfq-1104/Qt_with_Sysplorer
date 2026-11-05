@@ -11,6 +11,7 @@ class QPushButton;
 class QComboBox;
 class QTabWidget;
 class QPlainTextEdit;
+class QDoubleSpinBox;
 
 class BatteryView;
 class PlotWidget;
@@ -101,6 +102,10 @@ private:
     QLabel*      m_lblState = nullptr;
     QLabel*      m_lblHint = nullptr;
     QPlainTextEdit* m_errorPanel = nullptr;
+    QWidget* m_tuneControls = nullptr;
+    QComboBox* m_tuneMode = nullptr;
+    QDoubleSpinBox *m_tuneCurrent=nullptr,*m_tuneVoltage=nullptr,*m_tuneMin=nullptr,*m_tuneMax=nullptr,*m_tuneLimit=nullptr;
+    QLabel* m_tuneStatus=nullptr;
 
     QTabWidget*   m_tabs = nullptr;
     BatteryView*  m_batteryView = nullptr;

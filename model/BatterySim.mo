@@ -71,20 +71,20 @@ package BatterySim
       "对应 OCV [V]，示意值" annotation (Dialog(group="OCV 特性"));
 
     // ---------------- 保护限值 ----------------
-    parameter SI.Voltage V_min = 2.5 "放电截止电压 [V]" 
+    input SI.Voltage V_min = 2.5 "放电截止电压 [V]"
       annotation (Dialog(group="保护限值"));
-    parameter SI.Voltage V_max = 3.45 "充电截止电压 [V]（端电压上限；取 Rint 模型可达值，非 3.65 V 极化截止）" 
+    input SI.Voltage V_max = 3.45 "充电截止电压 [V]（端电压上限；取 Rint 模型可达值，非 3.65 V 极化截止）"
       annotation (Dialog(group="保护限值"));
-    parameter SI.Current I_max = 5.0 "电流限幅 [A]，2C" 
+    input SI.Current I_max = 5.0 "电流限幅 [A]，2C"
       annotation (Dialog(group="保护限值"));
 
     // ---------------- 工作模式与设定值 ----------------
     Integer mode(start=2) "工作模式：1=恒流充电，2=恒流放电，3=恒压/限流充电，0=静置（可被外层模型随时间驱动）" 
       annotation (Dialog(group="工作模式"),
                   choices(__MWORKS(choice = 1 "恒流充电", choice = 2 "恒流放电", choice = 3 "恒压/限流充电")));
-    parameter SI.Current I_set = 2.5 "恒流模式设定电流，正数，方向由 mode 决定 [A]" 
+    input SI.Current I_set = 2.5 "恒流模式设定电流，正数，方向由 mode 决定 [A]"
       annotation (Dialog(group="工作模式"));
-    parameter SI.Voltage V_set = 3.45 "恒压/限流模式设定端电压 [V]（不应超过 V_max）" 
+    input SI.Voltage V_set = 3.45 "恒压/限流模式设定端电压 [V]（不应超过 V_max）"
       annotation (Dialog(group="工作模式"));
 
     // ---------------- 对外输出 ----------------
@@ -296,17 +296,26 @@ package BatterySim
     parameter Real runVoltage = 3.45 "恒流充电上限或恒流放电下限 [V]";
     parameter Real socStart = 0.5 "初始 SOC";
 
+    // Top-level inputs survive translation and are written only at a paused
+    // communication boundary. Real mode permits one atomic real-input batch.
+    input Real liveCurrent = runCurrent "运行期电流指令 [A]";
+    input Real liveVoltage = runVoltage "运行期恒压目标 [V]";
+    input Real liveMode = runMode "0=静置，1=充电，2=放电，3=恒压";
+    input Real liveVMin = if runMode == 2 then runVoltage else 2.5;
+    input Real liveVMax = if runMode == 1 then runVoltage else 3.45;
+    input Real liveIMax = 5.0;
+
     BatteryCell cell(
       Q_rated=2.5*3600,
       SOC0=socStart,
       R0=0.01,
       eta_chg=0.995,
       eta_dis=1.0,
-      V_min=if runMode == 2 then runVoltage else 2.5,
-      V_max=if runMode == 1 then runVoltage else 3.45,
-      I_max=5.0,
-      I_set=runCurrent,
-      V_set=runVoltage) 
+      V_min=liveVMin,
+      V_max=liveVMax,
+      I_max=liveIMax,
+      I_set=liveCurrent,
+      V_set=liveVoltage)
       annotation (Placement(transformation(extent={{-28,-28},{28,28}})));
 
     Real SOC_out = cell.SOC "对外暴露的 SOC";
@@ -314,7 +323,7 @@ package BatterySim
     Real V_out = cell.V_term "对外暴露的端电压";
 
   equation
-    cell.mode = runMode;
+    cell.mode = integer(liveMode);
 
     annotation (
       experiment(StopTime=3600, Interval=1));

@@ -23,6 +23,8 @@
 #include <QSignalBlocker>
 #include <QTimer>
 #include <QPlainTextEdit>
+#include <QDoubleSpinBox>
+#include <QFormLayout>
 #include <cmath>
 
 namespace {
@@ -190,6 +192,42 @@ void MainWindow::buildUi()
     plotRow->addWidget(m_sideBattery, 2);
     m_tabs->addTab(plotPage, QString::fromUtf8("结果曲线"));
 
+    auto tunePage=new QWidget(m_tabs);auto tuneLayout=new QVBoxLayout(tunePage);
+    auto note=new QLabel(QString::fromUtf8("运行中修改控制指令；提交时短暂停算并继续，仿真时间和 SOC 保留。恒流模式由电流控制，恒压模式由电压目标控制。"),tunePage);
+    note->setWordWrap(true);tuneLayout->addWidget(note);
+    m_tuneControls=new QWidget(tunePage);auto form=new QFormLayout(m_tuneControls);
+    m_tuneMode=new QComboBox(m_tuneControls);m_tuneMode->setObjectName("tuneMode");
+    m_tuneMode->addItems({QString::fromUtf8("静置"),QString::fromUtf8("恒流充电"),QString::fromUtf8("恒流放电"),QString::fromUtf8("恒压 / 限流充电")});
+    form->addRow(QString::fromUtf8("工作模式"),m_tuneMode);
+    auto spin=[this,form](const char *name,const QString& label,double lo,double hi,double value,const QString& unit){
+        auto w=new QDoubleSpinBox(m_tuneControls);w->setObjectName(name);w->setRange(lo,hi);w->setDecimals(3);w->setSingleStep(.01);w->setSuffix(unit);w->setValue(value);form->addRow(label,w);return w;
+    };
+    m_tuneCurrent=spin("tuneCurrent",QString::fromUtf8("恒流电流指令"),0,5,2.5," A");
+    m_tuneVoltage=spin("tuneVoltage",QString::fromUtf8("恒压目标"),2.5,3.45,3.30," V");
+    m_tuneMin=spin("tuneVMin",QString::fromUtf8("放电截止下限"),2.5,3.45,2.5," V");
+    m_tuneMax=spin("tuneVMax",QString::fromUtf8("充电截止上限"),2.5,3.45,3.45," V");
+    m_tuneLimit=spin("tuneIMax",QString::fromUtf8("电流上限"),0,5,5," A");
+    auto submit=new QPushButton(QString::fromUtf8("提交运行中修改"),m_tuneControls);submit->setObjectName("btnTune");form->addRow(submit);
+    tuneLayout->addWidget(m_tuneControls);
+    m_tuneStatus=new QLabel(QString::fromUtf8("启动真实仿真后可修改；初始 SOC 在本次运行中保持不变。"),tunePage);
+    m_tuneStatus->setObjectName("tuneStatus");m_tuneStatus->setWordWrap(true);tuneLayout->addWidget(m_tuneStatus);tuneLayout->addStretch();
+    connect(submit,&QPushButton::clicked,this,[this]{
+        if(m_tuneMin->value()>=m_tuneMax->value()||m_tuneVoltage->value()>m_tuneMax->value()){
+            m_tuneStatus->setText(QString::fromUtf8("未提交：下截止电压必须小于上截止电压，恒压目标不能超过上截止电压。"));return;
+        }
+        m_runner->tune({{"current",m_tuneCurrent->value()},{"voltage",m_tuneVoltage->value()},{"mode",m_tuneMode->currentIndex()},
+            {"vMin",m_tuneMin->value()},{"vMax",m_tuneMax->value()},{"iMax",m_tuneLimit->value()}});
+        m_tuneStatus->setText(m_runner->phase()=="Paused"?QString::fromUtf8("修改已暂存，点击「继续」后由下一求解步确认生效。"):
+            QString::fromUtf8("修改已提交，等待模型下一求解步回读确认……"));refreshButtons();
+    });
+    connect(m_runner,&SysplorerRunner::tuneApplied,this,[this](double time,const QJsonObject&p){
+        m_tuneStatus->setText(QString::fromUtf8("已在仿真 %1 s 由模型采样回读确认：模式 %2，电流指令 %3 A，恒压目标 %4 V，截止 %5–%6 V，电流上限 %7 A。")
+            .arg(time,0,'f',3).arg(p["mode"].toInt()).arg(p["current"].toDouble()).arg(p["voltage"].toDouble())
+            .arg(p["vMin"].toDouble()).arg(p["vMax"].toDouble()).arg(p["iMax"].toDouble()));
+    });
+    connect(m_runner,&SysplorerRunner::tuneRejected,this,[this](const QString&e){m_tuneStatus->setText(QString::fromUtf8("修改被拒绝：%1").arg(e));});
+    m_tabs->addTab(tunePage,QString::fromUtf8("运行中调参"));
+
     root->addWidget(bar);
     m_errorPanel=new QPlainTextEdit(central);
     m_errorPanel->setObjectName("errorPanel");
@@ -329,6 +367,7 @@ void MainWindow::setStateText(const QString& phase)
 
 void MainWindow::refreshButtons() {
     const bool busy=m_runner->isRunning();
+    m_tuneControls->setEnabled(busy&&(m_runner->phase()=="Running"||m_runner->phase()=="Paused")&&!m_runner->controlPending()&&!m_runner->tunePending());
     m_batteryView->setParametersEnabled(!busy);
     if(m_resultSelector)m_resultSelector->setEnabled(!busy);
     if(busy) {
@@ -533,6 +572,9 @@ void MainWindow::startSysplorerRun(double voltage,double current,int mode,double
     m_batteryView->setApplyEnabled(false);
     m_lblHint->setText(QString::fromUtf8("新任务通过 UDP 调用本地 Sysplorer；运行中实时绘图，完成后更新成功缓存。"));
     m_lblTime->setText(QString::fromUtf8("等待连接…"));
+    m_tuneMode->setCurrentIndex(mode);m_tuneCurrent->setValue(current);m_tuneVoltage->setValue(voltage);
+    m_tuneMin->setValue(mode==2?voltage:2.5);m_tuneMax->setValue(mode==1?voltage:3.45);m_tuneLimit->setValue(5);
+    m_tuneStatus->setText(QString::fromUtf8("等待求解器开始运行。"));
     m_runner->start(voltage,current,mode,soc0,duration);
     refreshResultSelector();refreshButtons();
 }
@@ -559,6 +601,12 @@ void MainWindow::onSysplorerFinished(bool ok,const QString&csvPath,const QString
         QString::fromUtf8("完整结果 ·任务 %1 ·起点 %2% ·%3 A %4 ·有效范围 0–%5 s。%6")
         .arg(m_runner->taskId()).arg(m_reqSoc0*100,0,'f',1).arg(m_reqCurrent,0,'f',2)
         .arg(m_reqMode==1?QString::fromUtf8("充电"):QString::fromUtf8("放电")).arg(result.duration(),0,'f',2).arg(message));
+    if(m_runner->hasRuntimeChanges()){
+        // A trajectory with a command history is not a cache of static settings.
+        m_states[0].realSdk=false;
+        m_states[0].hint=QString::fromUtf8("动态调参完整结果 ·任务 %1；再次仿真将按起始参数重新计算。修改记录位于任务目录 result.json。").arg(m_runner->taskId());
+        m_lblHint->setText(m_states[0].hint);
+    }
 }
 
 void MainWindow::onViewerFinished(const QString& jobDir,bool ok,const QString& message)
@@ -607,6 +655,11 @@ void MainWindow::onHostStateChanged(const QString&phase) {
         .arg(m_runner->taskId()).arg(m_reqCurrent,0,'f',2)
         .arg(m_reqMode==1?QString::fromUtf8("充电"):QString::fromUtf8("放电"))
         .arg(m_reqSoc0*100,0,'f',1).arg(m_reqVoltage,0,'f',3));refreshButtons();
+    if(m_runner->hasRuntimeChanges()&&!m_liveSamples.isEmpty()){
+        const auto &sample=m_liveSamples.last();
+        m_lblHint->setText(QString::fromUtf8("当前任务 %1 ·动态调参 ·实际电流 %2 A ·端电压 %3 V ·当前 SOC %4%")
+            .arg(m_runner->taskId()).arg(sample.current,0,'f',3).arg(sample.voltage,0,'f',3).arg(sample.soc*100,0,'f',2));
+    }
 }
 void MainWindow::onLiveSamples(const QVector<ReplaySample>&samples) {
     if(m_display!="live"||samples.isEmpty())return;
@@ -621,6 +674,7 @@ void MainWindow::onSysplorerStopped(const QString&csvPath,const QString&message)
     m_batteryView->setApplyEnabled(true);m_errorPanel->hide();refreshResultSelector();
     showStoredResult(m_resultSelector->findData("partial:"+QString::number(m_partialIndex)));
     if(!message.isEmpty())m_lblHint->setText(m_lblHint->text()+"\n"+message);
+    if(m_runner->hasRuntimeChanges())m_lblHint->setText(m_lblHint->text()+QString::fromUtf8("\n本轨迹包含运行期修改；各次输入和生效确认时刻见任务目录 result.json。"));
 }
 void MainWindow::refreshResultSelector() {
     if(!m_resultSelector)return;

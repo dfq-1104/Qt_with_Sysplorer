@@ -1,9 +1,16 @@
-param([string]$RuntimeDirectory = '')
+param([string]$RuntimeDirectory = '', [string]$SysplorerHome = '')
 $ErrorActionPreference='Stop'
 $root=(Resolve-Path "$PSScriptRoot\..\..").Path
 $runtime=if($RuntimeDirectory){[IO.Path]::GetFullPath($RuntimeDirectory)}else{Join-Path $PSScriptRoot 'runtime'}
 $qt='C:\Qt\Qt5.14.2\5.14.2\msvc2017_64'
 New-Item -ItemType Directory -Force "$runtime" | Out-Null
+if($SysplorerHome) {
+    $hostHome=[IO.Path]::GetFullPath($SysplorerHome).Replace('\','/')
+    if(-not(Test-Path -LiteralPath "$hostHome/Bin64/mworks.exe")){throw "Sysplorer executable missing: $hostHome"}
+    $builtPlugin=Join-Path $root 'tools/sysplorer_udp_plugin/release/battery_udp_control.dll'
+    $hostPlugin="$hostHome/Bin64/addins/BatteryUdpControl/battery_udp_control.dll"
+    if((Get-FileHash -LiteralPath $builtPlugin).Hash -ne (Get-FileHash -LiteralPath $hostPlugin).Hash){throw 'Configured host plugin differs from the worktree build'}
+}
 function Copy-VerifiedBinary([string]$source,[string]$target) {
     [IO.Directory]::CreateDirectory([IO.Path]::GetDirectoryName($target)) | Out-Null
     if((Test-Path -LiteralPath $target) -and
@@ -27,4 +34,7 @@ foreach($folder in @('platforms','styles','iconengines','imageformats')) {
 Prefix=.
 Plugins=.
 "@ | Set-Content -LiteralPath "$runtime\qt.conf" -Encoding ascii
+if($SysplorerHome) {
+    "[Host]`r`nHome=$hostHome" | Set-Content -LiteralPath "$runtime/sysplorer.ini" -Encoding utf8
+}
 Write-Output "Deployed verified Qt binaries: $runtime"

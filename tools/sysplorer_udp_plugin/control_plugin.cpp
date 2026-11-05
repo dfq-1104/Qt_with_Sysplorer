@@ -13,6 +13,7 @@
 #include <mw_sim_inst/mw_ani_service.h>
 #include <mw_sim_inst/mw_ani_data_manager.h>
 #include <mw_model_var_tree/var_info.h>
+#include <mw_model_var_tree/var_tree.h>
 #include <mw_sim_plot/mw_sim_plot_window.h>
 #include <QApplication>
 #include <QCryptographicHash>
@@ -108,7 +109,8 @@ bool BatteryUdpControl::bindHost(QString &error) {
             if(control)disconnect(control,nullptr,this,nullptr);
             control=c;panel=p;manager=app->GetClassManager();
             connect(c,&MwSimControl::SigSimPaused,this,[this]{
-                if(!active()||!ownsController())return;phase="Paused";collect();persist();});
+                if(!active()||!ownsController())return;phase="Paused";collect();
+                if(!pendingTune.isEmpty()&&!tuneAwaitingSample)applyTune();persist();});
             connect(c,&MwSimControl::SigSimResumed,this,[this]{
                 if(!active()||!ownsController())return;phase="Running";persist();});
             connect(c,&MwSimControl::SigSimStopped,this,&BatteryUdpControl::simulationStopped);
@@ -152,6 +154,7 @@ QJsonObject BatteryUdpControl::snapshot(int cursor) const {
     QJsonArray rows;cursor=qBound(0,cursor,live.size());int end=qMin(cursor+8,live.size());
     for(int n=cursor;n<end;++n){const auto&r=live[n];rows.append(QJsonArray{r.t,r.soc,r.current,r.voltage});}
     return {{"phase",phase},{"taskId",taskId},{"owner",owner},{"params",verifiedParams},
+        {"runtimeParams",runtimeParams},{"tuneHistory",tuneHistory},{"tunePending",!pendingTune.isEmpty()},
         {"modelHash",modelHash},{"controller",pointer(control)},{"data",pointer(data)},
         {"pid",double(QCoreApplication::applicationPid())},{"duration",duration},
         {"time",live.isEmpty()?0:live.last().t},{"cursor",cursor},{"next",end},{"total",live.size()},{"rows",rows},
@@ -170,6 +173,9 @@ void BatteryUdpControl::beginTask(const QJsonObject &a,const QString &client,con
     taskId=id;owner=client;voltage=v;current=i;mode=md;soc0=s;duration=d;speed=sp;
     errorCode.clear();errorMessage.clear();viewMessage.clear();csvHash.clear();nativeResult.clear();
     live.clear();verifiedParams={};data.clear();stopAt=-1;stopRequested=false;preparing=false;phase="Preparing";
+    pendingTune={};tuneHistory={};resumeAfterTune=false;tuneAwaitingSample=false;tuneBoundary={};
+    runtimeParams={{"current",current},{"voltage",voltage},{"mode",mode},
+        {"vMin",mode==2?voltage:2.5},{"vMax",mode==1?voltage:3.45},{"iMax",5.0}};
     QString base=qEnvironmentVariable("BATTERY_SIM_WORKSPACE",QDir::tempPath()+"/BatteryConsoleUDP");
     for(QChar c:base)require(c.unicode()<128,"ASCII_WORKSPACE_REQUIRED");
     jobDir=QDir(base).absoluteFilePath(taskId);require(QDir().mkpath(jobDir),"Cannot create task directory");
@@ -202,12 +208,54 @@ void BatteryUdpControl::prepare() {
         if(!p->TranslateModel("BatterySim.SingleRun",false))fail("TRANSLATE_REJECTED","宿主未接受翻译请求");
     } catch(const std::exception&e){fail("PREPARE_FAILED",QString::fromUtf8(e.what()));}
 }
+void BatteryUdpControl::applyTune() {
+    // Never touch initial values or restart/translate the model here.
+    try {
+        require(phase=="Paused"&&ownsController(),"TUNE_REQUIRES_PAUSE");
+        auto c=static_cast<MwSimControl*>(control.data());
+        auto d=static_cast<MwSimData*>(data.data());
+        auto info=d->MwSimData::GetVarInfo();require(info!=nullptr,"Missing variable information");
+        auto index=[info](const char *name){
+            auto ref=info->VariableReference(name);
+            std::map<MWK::MwValueReference,MWK::MwVarTree> vars;
+            info->GetVariables(std::set<MWK::MwValueReference>{ref},&vars);
+            require(vars.count(ref)!=0,"Runtime input missing");return vars.at(ref).Index();
+        };
+        MWK::MwValueIndex ids[]={index("liveCurrent"),index("liveVoltage"),index("liveMode"),
+            index("liveVMin"),index("liveVMax"),index("liveIMax")};
+        const char *keys[]={"current","voltage","mode","vMin","vMax","iMax"};
+        double values[6],back[6];for(int n=0;n<6;++n)values[n]=pendingTune[keys[n]].toDouble();
+        MWK::MwValueIndex stateId[]={index("cell.SOC")};double before[1],after[1];
+        require(d->GetReals(stateId,before,1),"Cannot read SOC before tuning");
+        double t=get<double>(c,L"mw_sim_inst.dll","?GetCurSimTime@MwSimControl@@QEAANXZ");
+        require(d->SetInputReals(ids,values,6),"Runtime input write rejected");
+        require(d->GetReals(ids,back,6),"Runtime input readback failed");
+        QJsonArray diagnostics;
+        for(int n=0;n<6;++n)diagnostics.append(QJsonObject{{"name",keys[n]},{"index",int(ids[n])},{"expected",values[n]},{"actual",back[n]}});
+        log("tune_readback",{{"values",diagnostics}});
+        require(d->GetReals(stateId,after,1)&&std::abs(before[0]-after[0])<1e-12,"SOC changed during tuning");
+        require(std::abs(t-get<double>(c,L"mw_sim_inst.dll","?GetCurSimTime@MwSimControl@@QEAANXZ"))<1e-9,"Time changed during tuning");
+        // This SDK queues input writes for the next communication step. An
+        // immediate GetReals still returns the old step. Confirm through actual
+        // model input samples after the boundary before acknowledging success.
+        tuneAwaitingSample=true;
+        tuneBoundary={{"sequence",tuneHistory.size()+1},{"time",t},{"socBefore",before[0]},
+            {"socAfter",after[0]}};
+        log("tune_staged",tuneBoundary);persist();
+        if(resumeAfterTune){phase="Resuming";require(c->ResumeSimulate(),"Tune resume rejected");}
+    }catch(const std::exception &e){
+        pendingTune={};resumeAfterTune=false;tuneAwaitingSample=false;
+        // A failed write is never silently resumed with unknown inputs.
+        fail("TUNE_FAILED",QString::fromUtf8(e.what()));
+        if(ownsController())static_cast<MwSimControl*>(control.data())->StopSimulate(5,false);
+    }
+}
 void BatteryUdpControl::registerVariables(MwAniService *s,MwAniListener *l) {
     if(!data)return;
     auto d=static_cast<MwSimData*>(data.data());auto info=d->MwSimData::GetVarInfo();
     require(info!=nullptr,"Variable information missing");
     std::vector<unsigned int> reals,empty;
-    for(auto name:{"cell.SOC","cell.I_act","cell.V_term"}) reals.push_back(info->VariableReference(name));
+    for(auto name:{"cell.SOC","cell.I_act","cell.V_term","liveCurrent","liveVoltage","liveMode","liveVMin","liveVMax","liveIMax"}) reals.push_back(info->VariableReference(name));
     s->SetAnimationRefVars(l,d,reals,empty,empty);
 }
 void BatteryUdpControl::startSolver() {
@@ -215,6 +263,7 @@ void BatteryUdpControl::startSolver() {
     try {
         auto c=static_cast<MwSimControl*>(control.data());auto d=static_cast<MwSimData*>(data.data());
         c->RebindSimData(d);
+        c->SetOnlineParamToCurveRes(true);
         auto cfg=get<void*>(d->GetSimInstance(),L"modelica_post_processor.dll","?SimConfig@MwModelSimInstance@@QEBAPEAVMwModelSimConfig@@XZ");
         require(cfg!=nullptr,"Missing simulation config");
         sym<void(*)(void*,double)>(L"modelica_post_processor.dll","?SetStopTime@MwModelSimConfig@@QEAAXN@Z")(cfg,duration);
@@ -232,11 +281,24 @@ void BatteryUdpControl::startSolver() {
     } catch(const std::exception&e){fail("START_FAILED",QString::fromUtf8(e.what()));}
 }
 void BatteryUdpControl::append(double t,const std::vector<double>&v) {
-    if(!active()||v.size()!=3||!finite(t)||t<0||t>duration+.01)return;
+    if(!active()||v.size()!=9||!finite(t)||t<0||t>duration+.01)return;
     if(stopAt>=0&&t>stopAt+1e-6)return;
-    if(!finite(v[0])||!finite(v[1])||!finite(v[2])||v[0]<-1e-5||v[0]>1.00001||std::abs(v[1])>current+1e-4)return;
+    if(!finite(v[0])||!finite(v[1])||!finite(v[2])||v[0]<-1e-5||v[0]>1.00001||std::abs(v[1])>5.0001)return;
     if(!live.isEmpty()&&t<=live.last().t+1e-9)return;
     live.append({t,v[0],v[1],v[2]});
+    if(tuneAwaitingSample&&t>tuneBoundary["time"].toDouble()+1e-8){
+        const char *keys[]={"current","voltage","mode","vMin","vMax","iMax"};QJsonObject actual;
+        bool matched=true;
+        for(int n=0;n<6;++n){actual[keys[n]]=v[n+3];matched=matched&&finite(v[n+3])&&std::abs(v[n+3]-pendingTune[keys[n]].toDouble())<1e-8;}
+        if(!matched){
+            log("tune_model_mismatch",{{"time",t},{"actual",actual},{"expected",pendingTune}});
+            tuneAwaitingSample=false;pendingTune={};fail("TUNE_FAILED","Model inputs did not update at the next step");
+            if(ownsController())static_cast<MwSimControl*>(control.data())->StopSimulate(5,false);return;
+        }
+        runtimeParams=actual;pendingTune={};tuneAwaitingSample=false;
+        auto event=tuneBoundary;event["confirmedAt"]=t;event["params"]=actual;
+        tuneHistory.append(event);persist();log("tune_applied",event);
+    }
 }
 void BatteryUdpControl::collect() {
     if(!active()||!ownsController())return;
@@ -262,7 +324,8 @@ bool BatteryUdpControl::saveResult(const QVector<LiveRow>&rows,bool complete) {
     if(f.write(bytes)!=bytes.size()||!f.commit())return false;
     csvHash=digest(bytes);
     return writeJson(jobDir+"/result.json",{{"schema",1},{"source","sysplorer-host-udp"},{"taskId",taskId},{"model","BatterySim.SingleRun"},
-        {"modelHash",modelHash},{"params",verifiedParams},{"complete",complete},{"duration",duration},{"points",rows.size()},
+        {"modelHash",modelHash},{"params",verifiedParams},{"runtimeParams",runtimeParams},{"tuneHistory",tuneHistory},
+        {"complete",complete},{"duration",duration},{"points",rows.size()},
         {"lastTime",rows.isEmpty()?0:rows.last().t},{"csvHash",csvHash},{"nativeResult",nativeResult}});
 }
 void BatteryUdpControl::finish(int code) {
@@ -286,8 +349,8 @@ void BatteryUdpControl::finish(int code) {
         double last=-1;
         for(const auto&r:rows){
             require(finite(r.t)&&finite(r.soc)&&finite(r.current)&&finite(r.voltage)&&r.t>=last&&r.soc>=-1e-5&&r.soc<=1.00001
-                &&std::abs(r.current)<=current+1e-4,"Result validation failed");
-            require(mode==1?r.current>=-1e-4:r.current<=1e-4,"Result current direction mismatch");last=r.t;
+                &&std::abs(r.current)<=5.0001,"Result validation failed");
+            if(tuneHistory.isEmpty())require(mode==1?r.current>=-1e-4:r.current<=1e-4,"Result current direction mismatch");last=r.t;
         }
         require((stopRequested&&rows.first().t>1e-8)||std::abs(rows.first().soc-soc0)<1e-6,"Result initial SOC mismatch");
         const bool full=!stopRequested&&code==0&&std::abs(rows.last().t-duration)<.02;
@@ -328,7 +391,21 @@ QJsonObject BatteryUdpControl::execute(const QJsonObject&r) {
     require(id==taskId&&client==owner,"TASK_OWNERSHIP_MISMATCH");lastClientMs=heartbeat.elapsed();
     if(cmd=="poll")return {{"ok",true},{"status",snapshot(r["args"].toObject()["cursor"].toInt())}};
     require(ownsController(),"HOST_TASK_CHANGED");auto c=static_cast<MwSimControl*>(control.data());
-    if(cmd=="pause"){require(phase=="Running","INVALID_STATE");phase="Pausing";require(c->PauseSimulate(),"Pause rejected");}
+    if(cmd=="tune"){
+        require((phase=="Running"||phase=="Paused")&&pendingTune.isEmpty(),"INVALID_STATE");
+        const auto a=r["args"].toObject();
+        const QStringList keys={"current","voltage","mode","vMin","vMax","iMax"};
+        require(a.size()==keys.size(),"INVALID_TUNE_FIELDS");
+        for(const auto &key:keys)require(a[key].isDouble()&&finite(a[key].toDouble()),"INVALID_TUNE_FIELDS");
+        double md=a["mode"].toDouble(),lo=a["vMin"].toDouble(),hi=a["vMax"].toDouble();
+        require(md==std::floor(md)&&md>=0&&md<=3&&a["current"].toDouble()>=0&&a["current"].toDouble()<=5
+            &&lo>=2.5&&hi<=3.45&&lo<hi&&a["voltage"].toDouble()>=2.5&&a["voltage"].toDouble()<=hi
+            &&a["iMax"].toDouble()>=0&&a["iMax"].toDouble()<=5,"INVALID_TUNE_PARAMS");
+        pendingTune=a;resumeAfterTune=phase=="Running";
+        if(resumeAfterTune){phase="Pausing";if(!c->PauseSimulate()){pendingTune={};phase="Running";throw std::runtime_error("Pause rejected");}}
+        else applyTune();
+    }
+    else if(cmd=="pause"){require(phase=="Running","INVALID_STATE");phase="Pausing";require(c->PauseSimulate(),"Pause rejected");}
     else if(cmd=="resume"){require(phase=="Paused","INVALID_STATE");phase="Resuming";require(c->ResumeSimulate(),"Resume rejected");}
     else if(cmd=="stop"){
         require(phase=="Running"||phase=="Paused"||phase=="Pausing"||phase=="Resuming","INVALID_STATE");

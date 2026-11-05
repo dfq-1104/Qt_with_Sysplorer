@@ -10,6 +10,7 @@
 #include <QProcess>
 #include <QProcessEnvironment>
 #include <QSaveFile>
+#include <QSettings>
 #include <QStandardPaths>
 #include <QUuid>
 #include <cmath>
@@ -39,7 +40,10 @@ SysplorerRunner::SysplorerRunner(QObject*p):QObject(p),m_clientId(uid()){
 }
 SysplorerRunner::~SysplorerRunner(){m_timer.stop();bestEffortStop();}
 QString SysplorerRunner::guiExecutable() const {
-    return qEnvironmentVariable("SYSPLORER_HOME","C:/Program Files/MWORKS/Sysplorer 2026a")+"/Bin64/mworks.exe";
+    QSettings config(QCoreApplication::applicationDirPath()+"/sysplorer.ini",QSettings::IniFormat);
+    const auto home=qEnvironmentVariable("SYSPLORER_HOME",
+        config.value("Host/Home","C:/Program Files/MWORKS/Sysplorer 2026a").toString());
+    return QDir(home).absoluteFilePath("Bin64/mworks.exe");
 }
 QString SysplorerRunner::modelFingerprint() const {
     QFile f(":/models/BatterySim.mo");if(!f.open(QIODevice::ReadOnly))return {};return hash(f.readAll());
@@ -55,6 +59,8 @@ void SysplorerRunner::setPhase(const QString&p){
 void SysplorerRunner::start(double voltage,double current,int mode,double soc0,double duration,const QString&){
     if(m_busy)return;
     m_busy=true;m_begun=false;m_launched=false;m_launchedPid=0;m_hostPid=0;
+    m_busyHosts.clear();
+    m_tuned=false;m_tunePending=false;m_tuneSequence=0;m_tuneArgs={};
     m_pending.clear();m_control.clear();m_cursor=0;m_samples.clear();m_port=0;m_session.clear();m_token.clear();
     m_taskId=uid();m_modelHash=modelFingerprint();m_phase.clear();m_voltage=voltage;m_current=current;m_mode=mode;
     m_soc0=soc0;m_duration=duration;m_clock.start();m_phaseClock.start();m_log.close();
@@ -67,7 +73,7 @@ void SysplorerRunner::start(double voltage,double current,int mode,double soc0,d
     m_jobDir=QDir(base).absoluteFilePath(m_taskId);
     if(!QDir().mkpath(m_jobDir)){QTimer::singleShot(0,this,[this]{fail(QString::fromUtf8("无法创建任务目录。"));});return;}
     m_log.setFileName(m_jobDir+"/client.log");m_log.open(QIODevice::WriteOnly|QIODevice::Append);
-    trace("request",{{"mode",mode},{"voltage",voltage},{"current",current},{"soc0",soc0},{"duration",duration},{"modelHash",m_modelHash}});
+    trace("request",{{"mode",mode},{"voltage",voltage},{"current",current},{"soc0",soc0},{"duration",duration},{"modelHash",m_modelHash},{"hostExecutable",guiExecutable()}});
     setPhase("Connecting");m_timer.start();QTimer::singleShot(0,this,&SysplorerRunner::pump);
 }
 bool SysplorerRunner::discover(){
@@ -81,6 +87,7 @@ bool SysplorerRunner::discover(){
         if(o["schema"].toInt()!=1||o["protocol"].toString()!="battery-udp/1"||!updated.isValid()
             ||updated.secsTo(QDateTime::currentDateTimeUtc())>20||!processMatches(pid,guiExecutable()))continue;
         if(m_launchedPid&&pid!=m_launchedPid)continue;
+        if(m_busyHosts.contains(pid))continue;
         if(!o["bound"].toBool())return true; // Existing host is still starting; do not spawn duplicates.
         const int port=o["port"].toInt();
         if(port<=0||port>65535||o["session"].toString().isEmpty()||o["token"].toString().size()<24)continue;
@@ -98,7 +105,9 @@ bool SysplorerRunner::launchHost(){
     auto env=QProcessEnvironment::systemEnvironment();
     for(const auto&key:{"QT_QPA_PLATFORM","QT_QPA_PLATFORM_PLUGIN_PATH","QT_PLUGIN_PATH","PYTHONHOME","PYTHONPATH"})env.remove(key);
     env.insert("PATH",QDir::toNativeSeparators(QFileInfo(exe).absolutePath())+";"+env.value("PATH"));
-    auto work=qEnvironmentVariable("BATTERY_SIM_WORKSPACE",QDir::tempPath()+"/BatteryConsoleUDP");
+    auto base=qEnvironmentVariable("BATTERY_SIM_WORKSPACE",QDir::tempPath()+"/BatteryConsoleUDP");
+    auto work=QDir(base).absoluteFilePath("hosts/"+m_clientId);
+    if(!QDir().mkpath(work)){fail(QString::fromUtf8("无法创建 Sysplorer 独立工作目录。"));return false;}
     QProcess process;process.setProcessEnvironment(env);process.setProgram(exe);
     process.setArguments({"-d",work,"-w",work});process.setWorkingDirectory(work);
     if(!process.startDetached(&m_launchedPid)){fail(QString::fromUtf8("无法启动 Sysplorer：%1").arg(process.errorString()));return false;}
@@ -133,7 +142,7 @@ void SysplorerRunner::pump(){
     if(m_phase=="Translating"&&m_phaseClock.elapsed()>300000){fail(QString::fromUtf8("模型翻译超时。"));return;}
     if(!m_control.isEmpty()){
         auto cmd=m_control;m_control.clear();
-        send(cmd,cmd=="speed"?QJsonObject{{"speed",m_speed}}:QJsonObject{});return;
+        send(cmd,cmd=="tune"?m_tuneArgs:cmd=="speed"?QJsonObject{{"speed",m_speed}}:QJsonObject{});return;
     }
     send("poll",{{"cursor",m_cursor}});
 }
@@ -148,14 +157,31 @@ void SysplorerRunner::receive(){
         if(!r["ok"].toBool()){
             auto code=r["code"].toString();
             if(cmd=="begin"&&code=="HOST_STARTING")continue;
+            if(cmd=="tune"){m_tunePending=false;emit tuneRejected(r["message"].toString());emit stateChanged(m_phase);continue;}
             fail(QString::fromUtf8("Sysplorer 操作 %1 失败：%2。任务 %3；日志 %4/client.log").arg(cmd,r["message"].toString(),m_taskId,m_jobDir));continue;
         }
         if(cmd=="hello"){
-            if(r["modelHash"].toString()!=m_modelHash){fail(QString::fromUtf8("客户端与宿主插件的电池模型版本不一致，请重新构建部署插件。"));continue;}
+            if(r["modelHash"].toString()!=m_modelHash){
+                trace("host_model_mismatch",{{"pid",double(m_hostPid)},{"expected",m_modelHash},{"actual",r["modelHash"]}});
+                if(m_launchedPid){
+                    fail(QString::fromUtf8("所配置宿主的插件模型版本不一致。宿主：%1；客户端模型：%2；宿主模型：%3。请更新隔离测试包，日志：%4/client.log")
+                        .arg(guiExecutable(),m_modelHash,r["modelHash"].toString(),m_jobDir));
+                }else{
+                    m_busyHosts.insert(m_hostPid);m_port=0;m_hostPid=0;m_session.clear();m_token.clear();
+                }
+                continue;
+            }
             const auto st=r["status"].toObject();
             const auto p=st["phase"].toString();
-            if(p!="Ready"&&p!="Completed"&&p!="Stopped"&&p!="Failed"){fail(QString::fromUtf8("Sysplorer 正在执行其他任务，请等待或在宿主中停止该任务。"));continue;}
-            if(r["controllerState"].toString()!="Idle"){fail(QString::fromUtf8("Sysplorer 求解器已被其他任务占用。"));continue;}
+            if((p!="Ready"&&p!="Completed"&&p!="Stopped"&&p!="Failed")||r["controllerState"].toString()!="Idle"
+                ||(!m_launchedPid&&(p=="Failed"||!r["ready"].toBool()))){
+                if(m_launchedPid){fail(QString::fromUtf8("新启动的 Sysplorer 求解器仍被占用，请查看宿主任务。"));continue;}
+                trace("host_busy_skipped",{{"pid",double(m_hostPid)},{"phase",p},{"controllerState",r["controllerState"]}});
+                m_busyHosts.insert(m_hostPid);m_port=0;m_hostPid=0;m_session.clear();m_token.clear();
+                // Keep the other client's simulation intact. Discovery tries
+                // other hosts, then starts one dedicated instance if needed.
+                continue;
+            }
             if(!r["ready"].toBool())continue;
             send("begin",{{"modelHash",m_modelHash},{"mode",m_mode},{"voltage",m_voltage},{"current",m_current},
                 {"soc0",m_soc0},{"duration",m_duration},{"speed",m_speed}});
@@ -172,6 +198,11 @@ void SysplorerRunner::consume(const QJsonObject&s){
     }
     if(!s["jobDir"].toString().isEmpty())m_jobDir=s["jobDir"].toString();
     const auto p=s["params"].toObject();
+    const auto history=s["tuneHistory"].toArray();
+    if(history.size()>m_tuneSequence){
+        const auto event=history.last().toObject();m_tuneSequence=history.size();m_tuned=true;m_tunePending=false;
+        emit tuneApplied(event["confirmedAt"].toDouble(event["time"].toDouble()),event["params"].toObject());
+    }
     if(!p.isEmpty()&&(p["mode"].toInt()!=m_mode||std::abs(p["voltage"].toDouble()-m_voltage)>1e-8
         ||std::abs(p["current"].toDouble()-m_current)>1e-8||std::abs(p["soc0"].toDouble()-m_soc0)>1e-8)){
         fail(QString::fromUtf8("宿主参数回读不一致。"));return;
@@ -184,9 +215,9 @@ void SysplorerRunner::consume(const QJsonObject&s){
             auto a=value.toArray();if(a.size()!=4){fail(QString::fromUtf8("实时数据格式错误。"));return;}
             ReplaySample v{a[0].toDouble(-1),a[1].toDouble(-1),a[2].toDouble(),a[3].toDouble()};
             if(!std::isfinite(v.t)||!std::isfinite(v.soc)||!std::isfinite(v.current)||!std::isfinite(v.voltage)
-                ||v.t<0||v.t>m_duration+.02||v.soc<-1e-5||v.soc>1.00001||std::abs(v.current)>m_current+1e-4
+                ||v.t<0||v.t>m_duration+.02||v.soc<-1e-5||v.soc>1.00001||std::abs(v.current)>(m_tuned?5.0:m_current)+1e-4
                 ||(!m_samples.isEmpty()&&v.t<=m_samples.last().t)
-                ||(m_mode==1?v.current<-1e-4:v.current>1e-4)){
+                ||(!m_tuned&&(m_mode==1?v.current<-1e-4:v.current>1e-4))){
                 fail(QString::fromUtf8("实时数据越界或时间顺序异常。"));return;
             }
             m_samples.append(v);batch.append(v);
@@ -219,8 +250,8 @@ void SysplorerRunner::finalize(const QJsonObject&s){
     double last=-1;
     for(const auto&r:parsed.samples()){
         if(!std::isfinite(r.t)||!std::isfinite(r.soc)||!std::isfinite(r.current)||!std::isfinite(r.voltage)
-            ||r.t<last||r.soc<-1e-5||r.soc>1.00001||std::abs(r.current)>m_current+1e-4
-            ||(m_mode==1?r.current<-1e-4:r.current>1e-4)){
+            ||r.t<last||r.soc<-1e-5||r.soc>1.00001||std::abs(r.current)>(m_tuned?5.0:m_current)+1e-4
+            ||(!m_tuned&&(m_mode==1?r.current<-1e-4:r.current>1e-4))){
             fail(QString::fromUtf8("结果数据范围核验失败。"));return;
         }last=r.t;
     }
@@ -242,10 +273,14 @@ void SysplorerRunner::bestEffortStop(){
 }
 void SysplorerRunner::fail(const QString&message){
     if(!m_busy)return;trace("failed",{{"message",message}});bestEffortStop();m_busy=false;m_timer.stop();
-    m_pending.clear();m_control.clear();setPhase("Failed");m_log.close();
+    m_pending.clear();m_control.clear();m_tunePending=false;setPhase("Failed");m_log.close();
     emit finished(false,{},message);
 }
 void SysplorerRunner::pause(){if(m_busy&&m_phase=="Running"&&!controlPending())m_control="pause";}
+void SysplorerRunner::tune(const QJsonObject& params){
+    if(!m_busy||(m_phase!="Running"&&m_phase!="Paused")||controlPending()||m_tunePending)return;
+    m_tuneArgs=params;m_tunePending=true;m_control="tune";
+}
 void SysplorerRunner::resume(){if(m_busy&&m_phase=="Paused"&&!controlPending())m_control="resume";}
 void SysplorerRunner::stop(){if(m_busy&&(m_phase=="Running"||m_phase=="Paused"||m_phase=="Pausing"||m_phase=="Resuming")&&!controlPending())m_control="stop";}
 void SysplorerRunner::setSpeed(double s){

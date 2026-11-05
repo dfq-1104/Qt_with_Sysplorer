@@ -14,12 +14,15 @@
 build/
 dist/
 app/ui/runtime_udp/
+app/ui/runtime_tuning/
 
 # 忽略日志和测试证据
 logs/
 *.log
 tools/*/evidence*/
 tools/*/artifacts/
+tools/sysplorer_udp_plugin/runtime_host/
+tools/sysplorer_udp_plugin/__pycache__/
 
 # 忽略压缩包
 *.zip

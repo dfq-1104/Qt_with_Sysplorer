@@ -9,6 +9,7 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QJsonDocument>
+#include <QDoubleSpinBox>
 #include "main_window.h"
 #include "battery_view.h"
 #include "plot_widget.h"
@@ -17,6 +18,48 @@
 class UdpIntegration:public QObject {
  Q_OBJECT
 private slots:
+ void busyHostIsSkipped() {
+    SysplorerRunner occupied;
+    occupied.setSpeed(1);occupied.start(3.45,1,1,.5,120);
+    QTRY_VERIFY_WITH_TIMEOUT(occupied.phase()=="Running"&&occupied.liveSamples().size()>1,180000);
+    occupied.pause();QTRY_COMPARE_WITH_TIMEOUT(occupied.phase(),QString("Paused"),15000);
+    const auto firstTask=occupied.taskId();const auto held=occupied.liveSamples().last().t;
+    SysplorerRunner next;next.setSpeed(20);QSignalSpy done(&next,&SysplorerRunner::finished);
+    next.start(3.45,1,1,.5,6);
+    QTRY_COMPARE_WITH_TIMEOUT(done.count(),1,180000);
+    QVERIFY2(done.first()[0].toBool(),qPrintable(done.first()[2].toString()));
+    QVERIFY(next.taskId()!=firstTask);QCOMPARE(occupied.taskId(),firstTask);
+    QCOMPARE(occupied.phase(),QString("Paused"));QCOMPARE(occupied.liveSamples().last().t,held);
+    QSignalSpy stopped(&occupied,&SysplorerRunner::stopped);occupied.stop();
+    QTRY_COMPARE_WITH_TIMEOUT(stopped.count(),1,30000);
+ }
+ void runtimeTuningButtons() {
+    MainWindow window;window.show();QVERIFY(QTest::qWaitForWindowExposed(&window));
+    auto runner=window.findChild<SysplorerRunner*>();auto view=window.findChild<BatteryView*>("batteryView");
+    auto speed=window.findChild<QComboBox*>("cmbSpeed");speed->setCurrentIndex(1);
+    view->setInputs(3.45,1,1,.5);
+    QTest::mouseClick(view->findChild<QPushButton*>("btnApply"),Qt::LeftButton);
+    QTest::mouseClick(window.findChild<QPushButton*>("btnPlay"),Qt::LeftButton);
+    QTRY_VERIFY_WITH_TIMEOUT(runner->phase()=="Running"&&runner->liveSamples().size()>2,180000);
+    const auto task=runner->taskId();
+    auto tabs=window.findChild<QTabWidget*>();tabs->setCurrentIndex(2);
+    auto tune=window.findChild<QPushButton*>("btnTune");QVERIFY(tune->isEnabled());
+    window.findChild<QDoubleSpinBox*>("tuneCurrent")->setValue(2);
+    window.findChild<QDoubleSpinBox*>("tuneIMax")->setValue(.5);
+    window.findChild<QComboBox*>("tuneMode")->setCurrentIndex(2);
+    QSignalSpy applied(runner,&SysplorerRunner::tuneApplied);
+    QTest::mouseClick(tune,Qt::LeftButton);QVERIFY(!tune->isEnabled());
+    QTRY_COMPARE_WITH_TIMEOUT(applied.count(),1,15000);
+    QTRY_VERIFY_WITH_TIMEOUT(runner->liveSamples().last().current<-.49,15000);
+    QCOMPARE(runner->taskId(),task);QVERIFY(runner->hasRuntimeChanges());
+    QVERIFY(window.findChild<QLabel*>("tuneStatus")->text().contains(QString::fromUtf8("回读确认")));
+    const QString artifacts=qEnvironmentVariable("BATTERY_TEST_ARTIFACTS",QDir::tempPath()+"/BatteryUdpUiTests");QDir().mkpath(artifacts);
+    window.grab().save(artifacts+"/runtime_tuning.png");
+    QSignalSpy stopped(runner,&SysplorerRunner::stopped);
+    QTRY_VERIFY_WITH_TIMEOUT(!runner->controlPending(),10000);
+    runner->stop();QTRY_COMPARE_WITH_TIMEOUT(stopped.count(),1,30000);
+    QVERIFY(!runner->isRunning());
+ }
  void realButtonsAndTaskLifecycle() {
     MainWindow window;window.show();QVERIFY(QTest::qWaitForWindowExposed(&window));
     auto view=window.findChild<BatteryView*>("batteryView");

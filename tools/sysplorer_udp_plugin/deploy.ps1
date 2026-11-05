@@ -10,8 +10,12 @@ try {
         if(-not $Elevate){throw 'Administrator permission required. Run this script with -Elevate and accept Windows UAC, or open PowerShell as Administrator.'}
         Write-Host 'Requesting Windows administrator authorization for the dedicated plugin file...'
         $args='-NoProfile -ExecutionPolicy Bypass -File "'+$PSCommandPath+'" -SysplorerHome "'+$SysplorerHome+'"'
-        $child=Start-Process -FilePath "$env:SystemRoot\System32\WindowsPowerShell\v1.0\powershell.exe" -ArgumentList $args -Verb RunAs -WindowStyle Normal -PassThru -Wait
-        if($child.ExitCode -ne 0){throw "Elevated deployment failed, exit $($child.ExitCode). Read $report"}
+        $child=Start-Process -FilePath "$env:SystemRoot\System32\WindowsPowerShell\v1.0\powershell.exe" -ArgumentList $args -Verb RunAs -WindowStyle Hidden -PassThru -Wait
+        if($child.ExitCode -ne 0){
+            $detail=''
+            if(Test-Path -LiteralPath $report){$detail=(Get-Content -LiteralPath $report -Raw|ConvertFrom-Json).error}
+            throw "Elevated deployment failed, exit $($child.ExitCode): $detail"
+        }
         $result=Get-Content -LiteralPath $report -Raw|ConvertFrom-Json
         if(-not $result.ok){throw $result.error}
         Write-Host ("Deployed: "+$result.target)

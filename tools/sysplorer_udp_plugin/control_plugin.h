@@ -49,6 +49,7 @@ private:
     void beginTask(const QJsonObject&,const QString&,const QString&);
     void prepare();
     void startSolver();
+    void applyTune();
     void simulationStopped(int);
     void collect();
     void finish(int);
@@ -70,6 +71,11 @@ private:
     int mode=1;
     bool modelLoaded=false,stopRequested=false,listenerAttached=false,shutdown=false,preparing=false;
     QJsonObject verifiedParams;
+    QJsonObject pendingTune, runtimeParams;
+    QJsonArray tuneHistory;
+    bool resumeAfterTune=false;
+    bool tuneAwaitingSample=false;
+    QJsonObject tuneBoundary;
     QVector<LiveRow> live;
     QMap<QString,QByteArray> replies;
     QMap<QString,QByteArray> replyRequests;
