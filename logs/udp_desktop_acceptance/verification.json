@@ -1,0 +1,37 @@
+{
+  "date": "2026-11-04",
+  "method": "实际桌面 Qt 按钮；日志和结果仅作只读核验",
+  "clientPid": 3460,
+  "checks": {
+    "apply_updates_preview": true,
+    "pause_freezes_time": true,
+    "resume_advances_time": true,
+    "stop_keeps_partial": true,
+    "continue_disabled_after_stop": true,
+    "auto_start_and_complete": true
+  },
+  "tasks": [
+    {
+      "taskId": "63ba44b5-c447-48dc-83de-594c2f407024",
+      "hostPid": 9876,
+      "complete": false,
+      "points": 1084,
+      "lastTime": 1083,
+      "csvHashVerified": true
+    },
+    {
+      "taskId": "2b486d40-d9dd-4a95-9f8c-bc560904e0b6",
+      "hostPid": 18600,
+      "complete": true,
+      "points": 1571,
+      "lastTime": 1566.521728515625,
+      "csvHashVerified": true
+    }
+  ],
+  "ok": true,
+  "notes": [
+    "进程清单证实自动启动的 Sysplorer PID 18600 的父进程为 Qt PID 3460。",
+    "完成后的窗口被用户最小化，未取得最终截图；完成依据为客户端 verified 事件、后端清单及 CSV 哈希。",
+    "nativeResult 为宿主结果根目录，不是具体 MSR 文件。"
+  ]
+}

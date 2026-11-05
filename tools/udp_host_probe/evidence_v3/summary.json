@@ -1,0 +1,67 @@
+{
+  "probePassed": true,
+  "batteryPassed": true,
+  "pid": 21556,
+  "controller": "0x14e0483dc60",
+  "batteryData": "0x14e07109d10",
+  "batteryPausedTimes": [
+    2.0020000000000002,
+    2.0020000000000002
+  ],
+  "apiPausedState": "Paused",
+  "apiPausedTime": 2.0020000000000002,
+  "apiStoppedState": "Idle",
+  "variables": {
+    "SOC": {
+      "count": 2014,
+      "first": 0.5,
+      "last": 0.5,
+      "min": 0.5,
+      "max": 0.5
+    },
+    "current": {
+      "count": 2014,
+      "first": 0.0,
+      "last": 0.0,
+      "min": 0.0,
+      "max": 0.0
+    },
+    "voltage": {
+      "count": 2014,
+      "first": 3.259999990463257,
+      "last": 3.259999990463257,
+      "min": 3.259999990463257,
+      "max": 3.259999990463257
+    }
+  },
+  "files": {
+    "release/battery_udp_host_probe.dll": {
+      "sha256": "7cde29d56ad2ec86527ade3dd90c1535222dcd8658344949484f8134109f1e9d",
+      "bytes": 75264
+    },
+    "probe.cpp": {
+      "sha256": "7cc717476ca4193f1f9bbb9a41d24a48616999a939e935f5e6141a14db0debcc",
+      "bytes": 10148
+    },
+    "probe.h": {
+      "sha256": "b3ab3078b41eff8656ec41240a64706aaff7263e96c33ac48ee645485b8d149b",
+      "bytes": 1080
+    },
+    "probe.json": {
+      "sha256": "e1822cfb3ba041d50339d460c663f448c562f53f4ff30f342d190d1b1a1d5cf9",
+      "bytes": 295
+    },
+    "probe.qrc": {
+      "sha256": "dfcbb903271a86d3e55597910744417da8b6c24f90374cf48c3370fa85a57715",
+      "bytes": 111
+    },
+    "udp_host_probe.pro": {
+      "sha256": "6883412398fbfbd4b13c41aeb0fd264b5052f5cc45d97d17199160fbf7af10af",
+      "bytes": 446
+    },
+    "verify_udp.py": {
+      "sha256": "90b3ac1be177dca6428f22ccbb08dbb9161dd1a4a6fbbff404f0671806bd90cd",
+      "bytes": 3760
+    }
+  }
+}

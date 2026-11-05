@@ -1,0 +1,103 @@
+DECODE bytes=13196 sha256=4670d908273243caa2996f708ce1e2692b4012eac5c3107a4209eeea16f6feb9 codec=UTF-8 invalid=0 remaining=0 null=0 chars=10604
+MODEL sourceSha256=4670d908273243caa2996f708ce1e2692b4012eac5c3107a4209eeea16f6feb9 sdkSha256=1d4441f1ea1a6f3d4938cc6d5333a99284fd49ec1ed9279156f0a5827627bbb5 encoding=UTF-8-BOM
+Qt=5.14.2 exe=C:/Users/TR/Documents/ChatGPT/qt界面开发/tools/sdk_probe/release/sdk_probe.exe
+ENCODING ACP=936 console=936 output=65001 locale=C
+INSTALL=C:\Program Files\MWORKS\Sysplorer SDK 2026a(vs2017)\bin\win_msvc2017x64 BIN=C:\Program Files\MWORKS\Sysplorer SDK 2026a(vs2017)\bin\win_msvc2017x64\Release
+setting compiler=vc
+CORE ownership registered=0
+CORE compiler=vc name=Microsoft Visual Studio 2017 x86=C:/Program Files (x86)/Microsoft Visual Studio/2017/Professional/VC x64=C:/Program Files (x86)/Microsoft Visual Studio/2017/Professional/VC platform=2
+LoadMSL=1
+SDK #0 加载 C:\Users\TR\AppData\Local\Temp\BatteryConsole\diagnose_013810_a\sdk_input\BatterySim.mo...
+PARAM socStart=0.5
+PARAM runCurrent=2.5
+PARAM runMode=1
+PARAM runVoltage=3.45
+PARAM verified=1/1 requested SOC0=0.5 I_set=2.5
+SDK #0 ---- 检查模型: BatterySim.SingleRun ----
+
+SDK #0 正在解析模型...
+SDK #0 正在实例化模型...
+SDK #3631 [C:\Users\TR\AppData\Local\Temp\BatteryConsole\diagnose_013810_a\sdk_input\BatterySim.mo:91:7] 多次对变量 cell.SOC 使用 Reinit 操作符.
+SDK #0 
+模型有 0 个错误和 1 个警告.
+SDK #0 模型有 15 个变量和 15 个方程.
+SDK #0 
+检查模型用时: 00:00:00.017916.
+SDK #0 
+---- 检查完毕 ----
+SDK #0 ---- 翻译模型: BatterySim.SingleRun ----
+
+SDK #0 正在分析模型...
+
+SDK #0 
+原始模型
+SDK #0   参量:34
+SDK #0   变量:15
+SDK #0     微分变量:2
+SDK #0   方程:15
+SDK #0 约简后模型
+SDK #0   参量:34
+SDK #0     自由参量:29
+SDK #0     依赖参量:5
+SDK #0   时变变量:10
+SDK #0     状态变量:2
+SDK #0   别名变量:5
+SDK #0   线性方程系统撕裂前与撕裂后的变量数: { }
+SDK #0   非线性方程系统撕裂前与撕裂后的变量数: { }
+SDK #0 
+翻译模型用时: 00:00:00.001000
+
+SDK #0 正在生成仿真代码...
+
+SDK #0 生成代码耗时: 00:00:00.018317
+SDK #0 生成代码完成
+SDK #0 ---- 翻译完毕 ----
+SDK #0 ---- 生成求解器 ----
+
+**********************************************************************
+** Visual Studio 2017 Developer Command Prompt v15.9.27
+** Copyright (c) 2017 Microsoft Corporation
+**********************************************************************
+[vcvarsall.bat] Environment initialized for: 'x64'
+SDK #0 
+生成求解器耗时: 00:00:20.113232
+SDK #0 
+---- 生成求解器完毕 ----
+COMPILE=1 status=0 dll=1
+HDF5-DIAG: Error detected in HDF5 (1.14.4-3) thread 20104:
+  #000: E:\01_GitKernel\kernel2024_3\_10_third_party\hdf5-1.14.4-3\src\H5F.c line 502 in H5Fis_accessible(): unable to determine if file is accessible as HDF5
+    major: File accessibility
+    minor: Not an HDF5 file
+  #001: E:\01_GitKernel\kernel2024_3\_10_third_party\hdf5-1.14.4-3\src\H5VLcallback.c line 4098 in H5VL_file_specific(): file specific failed
+    major: Virtual Object Layer
+    minor: Can't operate on object
+  #002: E:\01_GitKernel\kernel2024_3\_10_third_party\hdf5-1.14.4-3\src\H5VLcallback.c line 4033 in H5VL__file_specific(): file specific failed
+    major: Virtual Object Layer
+    minor: Can't operate on object
+  #003: E:\01_GitKernel\kernel2024_3\_10_third_party\hdf5-1.14.4-3\src\H5VLnative_file.c line 346 in H5VL__native_file_specific(): error in HDF5 file check
+    major: File accessibility
+    minor: Can't get value
+  #004: E:\01_GitKernel\kernel2024_3\_10_third_party\hdf5-1.14.4-3\src\H5Fint.c line 1065 in H5F__is_hdf5(): unable to open file
+    major: File accessibility
+    minor: Unable to initialize object
+  #005: E:\01_GitKernel\kernel2024_3\_10_third_party\hdf5-1.14.4-3\src\H5FD.c line 768 in H5FD_open(): open failed
+    major: Virtual File Layer
+    minor: Unable to initialize object
+  #006: E:\01_GitKernel\kernel2024_3\_10_third_party\hdf5-1.14.4-3\src\H5FDsec2.c line 325 in H5FD__sec2_open(): unable to open file: name = 'C:\Users\TR\AppData\Local\Temp\BatteryConsole\diagnose_013810_a\Result.msr', errno = 2, error message = 'No such file or directory', flags = 0, o_flags = 0
+    major: File accessibility
+    minor: Unable to open file
+QT[1] Operation is not supported
+QT[1] Operation is not supported
+QT[1] Operation is not supported
+QT[1] Operation is not supported
+STOP done=1 error=0 t=2040
+RESULT PASS SOC0=0.5 I0=2.5 SOC600=1 voltage0=3.285 points=2044
+CLEANUP control
+CLEANUP data
+CLEANUP core
+CLEANUP manager
+CLEANUP done
+CLEANUP probe stack done
+CLEANUP license threads collector=1 queue=1
+CLEANUP application done
+QT[1] QObject::~QObject: Timers cannot be stopped from another thread

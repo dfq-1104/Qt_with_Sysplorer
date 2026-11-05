@@ -1,0 +1,19 @@
+{
+    "complete": false,
+    "csvHash": "aa4c762cc488379189fa30f814cf303f72feb6185a7de6ac7657a5e52fa24bc7",
+    "duration": 1566.521739130435,
+    "lastTime": 1083,
+    "model": "BatterySim.SingleRun",
+    "modelHash": "4670d908273243caa2996f708ce1e2692b4012eac5c3107a4209eeea16f6feb9",
+    "nativeResult": "C:\\Users\\TR\\AppData\\Local\\Temp\\BatteryConsoleUDP",
+    "params": {
+        "current": 2.3,
+        "mode": 1,
+        "soc0": 0.65,
+        "voltage": 3.43
+    },
+    "points": 1084,
+    "schema": 1,
+    "source": "sysplorer-host-udp",
+    "taskId": "63ba44b5-c447-48dc-83de-594c2f407024"
+}

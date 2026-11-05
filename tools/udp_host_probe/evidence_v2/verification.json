@@ -1,0 +1,182 @@
+{
+  "pid": 12440,
+  "port": 56861,
+  "executable": "C:/Program Files/MWORKS/Sysplorer 2026a/Bin64/mworks.exe",
+  "commands": [
+    {
+      "after": {
+        "controller": "0x1dbad636370",
+        "data": "0x0",
+        "model": "",
+        "panel": "0x1dbac2a5630",
+        "pid": 12440,
+        "sameAsHostPanel": true,
+        "state": "Idle",
+        "time": 0
+      },
+      "before": {
+        "controller": "0x1dbad636370",
+        "data": "0x0",
+        "model": "",
+        "panel": "0x1dbac2a5630",
+        "pid": 12440,
+        "sameAsHostPanel": true,
+        "state": "Idle",
+        "time": 0
+      },
+      "command": "status",
+      "id": "3ad670b0b47a45078140577e5d25313c",
+      "ok": true,
+      "pid": 12440
+    },
+    {
+      "after": {
+        "controller": "0x1dbad636370",
+        "data": "0x0",
+        "model": "UdpProbeModel",
+        "panel": "0x1dbac2a5630",
+        "pid": 12440,
+        "sameAsHostPanel": true,
+        "state": "Idle",
+        "time": 0
+      },
+      "before": {
+        "controller": "0x1dbad636370",
+        "data": "0x0",
+        "model": "",
+        "panel": "0x1dbac2a5630",
+        "pid": 12440,
+        "sameAsHostPanel": true,
+        "state": "Idle",
+        "time": 0
+      },
+      "command": "load",
+      "id": "02df7ea1c2904a86a956436b7e4f6f0e",
+      "ok": true,
+      "pid": 12440
+    },
+    {
+      "after": {
+        "controller": "0x1dbad636370",
+        "data": "0x0",
+        "model": "UdpProbeModel",
+        "panel": "0x1dbac2a5630",
+        "pid": 12440,
+        "sameAsHostPanel": true,
+        "state": "Idle",
+        "time": 0
+      },
+      "before": {
+        "controller": "0x1dbad636370",
+        "data": "0x0",
+        "model": "UdpProbeModel",
+        "panel": "0x1dbac2a5630",
+        "pid": 12440,
+        "sameAsHostPanel": true,
+        "state": "Idle",
+        "time": 0
+      },
+      "command": "translate",
+      "id": "72f236ca9eec4c0fa3f69b10b110eb5b",
+      "ok": true,
+      "pid": 12440
+    },
+    {
+      "after": {
+        "controller": "0x1dbad636370",
+        "data": "0x0",
+        "model": "UdpProbeModel",
+        "panel": "0x1dbac2a5630",
+        "pid": 12440,
+        "sameAsHostPanel": true,
+        "state": "Idle",
+        "time": 0
+      },
+      "before": {
+        "controller": "0x1dbad636370",
+        "data": "0x0",
+        "model": "UdpProbeModel",
+        "panel": "0x1dbac2a5630",
+        "pid": 12440,
+        "sameAsHostPanel": true,
+        "state": "Idle",
+        "time": 0
+      },
+      "command": "status",
+      "id": "ae3f25c867014bb2830fba6ab75045ff",
+      "ok": true,
+      "pid": 12440
+    },
+    {
+      "after": {
+        "controller": "0x1dbad636370",
+        "data": "0x1dbae01b2f0",
+        "model": "UdpProbeModel",
+        "panel": "0x1dbac2a5630",
+        "pid": 12440,
+        "sameAsHostPanel": true,
+        "solverPath": "C:/Users/TR/AppData/Local/Temp/BatteryUdpHostProbe/MwSolver_261104_151702_619",
+        "state": "Running",
+        "time": 0
+      },
+      "before": {
+        "controller": "0x1dbad636370",
+        "data": "0x0",
+        "model": "UdpProbeModel",
+        "panel": "0x1dbac2a5630",
+        "pid": 12440,
+        "sameAsHostPanel": true,
+        "state": "Idle",
+        "time": 0
+      },
+      "command": "start",
+      "id": "749911e9263142078ae2c6155345091d",
+      "ok": true,
+      "pid": 12440
+    },
+    {
+      "after": {
+        "controller": "0x1dbad636370",
+        "data": "0x1dbae01b2f0",
+        "model": "UdpProbeModel",
+        "panel": "0x1dbac2a5630",
+        "pid": 12440,
+        "sameAsHostPanel": true,
+        "solverPath": "C:/Users/TR/AppData/Local/Temp/BatteryUdpHostProbe/MwSolver_261104_151702_619",
+        "state": "Running",
+        "time": 0
+      },
+      "before": {
+        "controller": "0x1dbad636370",
+        "data": "0x1dbae01b2f0",
+        "model": "UdpProbeModel",
+        "panel": "0x1dbac2a5630",
+        "pid": 12440,
+        "sameAsHostPanel": true,
+        "solverPath": "C:/Users/TR/AppData/Local/Temp/BatteryUdpHostProbe/MwSolver_261104_151702_619",
+        "state": "Running",
+        "time": 0
+      },
+      "command": "status",
+      "id": "7a5d7721c3184d08a0773ba26f7bc633",
+      "ok": true,
+      "pid": 12440
+    },
+    {
+      "command": "pause",
+      "error": "pause requires Running",
+      "id": "6b5fc48827f546f6be8f719353b74136",
+      "ok": false,
+      "pid": 12440
+    }
+  ],
+  "ok": false,
+  "translation": {
+    "data": "0x1dbae01b2f0",
+    "event": "translated",
+    "ok": true,
+    "pid": 12440,
+    "utc": "2026-11-04T07:17:44.424Z"
+  },
+  "error": "Traceback (most recent call last):\n  File \"C:\\Users\\TR\\Documents\\ChatGPT\\qt界面开发\\tools\\udp_host_probe\\verify_udp.py\", line 51, in <module>\n    call('pause');a=wait_for('Paused')\n    ^^^^^^^^^^^^^\n  File \"C:\\Users\\TR\\Documents\\ChatGPT\\qt界面开发\\tools\\udp_host_probe\\verify_udp.py\", line 24, in call\n    assert result.get('ok'), result\nAssertionError: {'command': 'pause', 'error': 'pause requires Running', 'id': '6b5fc48827f546f6be8f719353b74136', 'ok': False, 'pid': 12440}\n"
+}

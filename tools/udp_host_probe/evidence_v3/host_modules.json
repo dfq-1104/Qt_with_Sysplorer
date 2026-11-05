@@ -1,0 +1,27 @@
+[
+  {
+    "ModuleName": "Qt5Core.dll",
+    "FileName": "C:\\Program Files\\MWORKS\\Sysplorer 2026a\\Bin64\\Qt5Core.dll",
+    "Version": "5.14.2.0"
+  },
+  {
+    "ModuleName": "mw_develop.dll",
+    "FileName": "C:\\Program Files\\MWORKS\\Sysplorer 2026a\\Bin64\\mw_develop.dll",
+    "Version": "26.3.0.749"
+  },
+  {
+    "ModuleName": "mw_sim_inst.dll",
+    "FileName": "C:\\Program Files\\MWORKS\\Sysplorer 2026a\\Bin64\\mw_sim_inst.dll",
+    "Version": null
+  },
+  {
+    "ModuleName": "modelica_post_processor.dll",
+    "FileName": "C:\\Program Files\\MWORKS\\Sysplorer 2026a\\Bin64\\modelica_post_processor.dll",
+    "Version": null
+  },
+  {
+    "ModuleName": "battery_udp_host_probe.dll",
+    "FileName": "C:\\Program Files\\MWORKS\\Sysplorer 2026a\\Bin64\\Addins\\BatteryUdpHostProbe\\battery_udp_host_probe.dll",
+    "Version": null
+  }
+]

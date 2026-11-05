@@ -1,0 +1,5 @@
+FAIL invalid model encoding; save the source as UTF-8. file=C:/Users/TR/Documents/ChatGPT/qt界面开发/logs/truncated_utf8.mo
+CLEANUP probe stack done
+CLEANUP license threads collector=1 queue=1
+CLEANUP application done
+QT[1] QObject::~QObject: Timers cannot be stopped from another thread

@@ -1,0 +1,586 @@
+{
+  "model": "BatterySim.SingleRun",
+  "pid": 21556,
+  "port": 63239,
+  "executable": "C:/Program Files/MWORKS/Sysplorer 2026a/Bin64/mworks.exe",
+  "commands": [
+    {
+      "after": {
+        "controller": "0x14e0483dc60",
+        "data": "0x14e0710a0d0",
+        "model": "UdpProbeModel",
+        "panel": "0x14e03698e40",
+        "pid": 21556,
+        "sameAsHostPanel": true,
+        "solverPath": "C:/Users/TR/AppData/Local/Temp/BatteryUdpHostProbe/MwSolver_261104_152046_220",
+        "state": "Idle",
+        "time": 120
+      },
+      "before": {
+        "controller": "0x14e0483dc60",
+        "data": "0x14e0710a0d0",
+        "model": "UdpProbeModel",
+        "panel": "0x14e03698e40",
+        "pid": 21556,
+        "sameAsHostPanel": true,
+        "solverPath": "C:/Users/TR/AppData/Local/Temp/BatteryUdpHostProbe/MwSolver_261104_152046_220",
+        "state": "Idle",
+        "time": 120
+      },
+      "command": "status",
+      "id": "106eb1ca8bd444be9afd5855c1b86427",
+      "ok": true,
+      "pid": 21556
+    },
+    {
+      "after": {
+        "controller": "0x14e0483dc60",
+        "data": "0x14e0710a0d0",
+        "model": "BatterySim.SingleRun",
+        "panel": "0x14e03698e40",
+        "pid": 21556,
+        "sameAsHostPanel": true,
+        "solverPath": "C:/Users/TR/AppData/Local/Temp/BatteryUdpHostProbe/MwSolver_261104_152046_220",
+        "state": "Idle",
+        "time": 120
+      },
+      "before": {
+        "controller": "0x14e0483dc60",
+        "data": "0x14e0710a0d0",
+        "model": "UdpProbeModel",
+        "panel": "0x14e03698e40",
+        "pid": 21556,
+        "sameAsHostPanel": true,
+        "solverPath": "C:/Users/TR/AppData/Local/Temp/BatteryUdpHostProbe/MwSolver_261104_152046_220",
+        "state": "Idle",
+        "time": 120
+      },
+      "command": "load",
+      "id": "f089eac21f2e42029867b082d6b6b181",
+      "ok": true,
+      "pid": 21556
+    },
+    {
+      "after": {
+        "controller": "0x14e0483dc60",
+        "data": "0x14e0710a0d0",
+        "model": "BatterySim.SingleRun",
+        "panel": "0x14e03698e40",
+        "pid": 21556,
+        "sameAsHostPanel": true,
+        "solverPath": "C:/Users/TR/AppData/Local/Temp/BatteryUdpHostProbe/MwSolver_261104_152046_220",
+        "state": "Idle",
+        "time": 120
+      },
+      "before": {
+        "controller": "0x14e0483dc60",
+        "data": "0x14e0710a0d0",
+        "model": "BatterySim.SingleRun",
+        "panel": "0x14e03698e40",
+        "pid": 21556,
+        "sameAsHostPanel": true,
+        "solverPath": "C:/Users/TR/AppData/Local/Temp/BatteryUdpHostProbe/MwSolver_261104_152046_220",
+        "state": "Idle",
+        "time": 120
+      },
+      "command": "translate",
+      "id": "05e1cacae6c44136a1061f473d65649a",
+      "ok": true,
+      "pid": 21556
+    },
+    {
+      "after": {
+        "controller": "0x14e0483dc60",
+        "data": "0x14e0710a0d0",
+        "model": "BatterySim.SingleRun",
+        "panel": "0x14e03698e40",
+        "pid": 21556,
+        "sameAsHostPanel": true,
+        "solverPath": "C:/Users/TR/AppData/Local/Temp/BatteryUdpHostProbe/MwSolver_261104_152046_220",
+        "state": "Idle",
+        "time": 120
+      },
+      "before": {
+        "controller": "0x14e0483dc60",
+        "data": "0x14e0710a0d0",
+        "model": "BatterySim.SingleRun",
+        "panel": "0x14e03698e40",
+        "pid": 21556,
+        "sameAsHostPanel": true,
+        "solverPath": "C:/Users/TR/AppData/Local/Temp/BatteryUdpHostProbe/MwSolver_261104_152046_220",
+        "state": "Idle",
+        "time": 120
+      },
+      "command": "status",
+      "id": "063d76f19f504d02bac114a091ef18a9",
+      "ok": true,
+      "pid": 21556
+    },
+    {
+      "after": {
+        "controller": "0x14e0483dc60",
+        "data": "0x14e07109d10",
+        "model": "BatterySim.SingleRun",
+        "panel": "0x14e03698e40",
+        "pid": 21556,
+        "sameAsHostPanel": true,
+        "solverPath": "C:/Users/TR/AppData/Local/Temp/BatteryUdpHostProbe/MwSolver_261104_152046_220",
+        "state": "Running",
+        "time": 0
+      },
+      "before": {
+        "controller": "0x14e0483dc60",
+        "data": "0x14e0710a0d0",
+        "model": "BatterySim.SingleRun",
+        "panel": "0x14e03698e40",
+        "pid": 21556,
+        "sameAsHostPanel": true,
+        "solverPath": "C:/Users/TR/AppData/Local/Temp/BatteryUdpHostProbe/MwSolver_261104_152046_220",
+        "state": "Idle",
+        "time": 120
+      },
+      "command": "start",
+      "id": "9e85058950d242d1aa269e4d648e9b4a",
+      "ok": true,
+      "pid": 21556,
+      "stopTime": 120
+    },
+    {
+      "after": {
+        "controller": "0x14e0483dc60",
+        "data": "0x14e07109d10",
+        "model": "BatterySim.SingleRun",
+        "panel": "0x14e03698e40",
+        "pid": 21556,
+        "sameAsHostPanel": true,
+        "solverPath": "C:/Users/TR/AppData/Local/Temp/BatteryUdpHostProbe/MwSolver_261104_152046_220",
+        "state": "Running",
+        "time": 0
+      },
+      "before": {
+        "controller": "0x14e0483dc60",
+        "data": "0x14e07109d10",
+        "model": "BatterySim.SingleRun",
+        "panel": "0x14e03698e40",
+        "pid": 21556,
+        "sameAsHostPanel": true,
+        "solverPath": "C:/Users/TR/AppData/Local/Temp/BatteryUdpHostProbe/MwSolver_261104_152046_220",
+        "state": "Running",
+        "time": 0
+      },
+      "command": "status",
+      "id": "ee0f7f9aa24d400f9ccac122c5a2fd56",
+      "ok": true,
+      "pid": 21556
+    },
+    {
+      "after": {
+        "controller": "0x14e0483dc60",
+        "data": "0x14e07109d10",
+        "model": "BatterySim.SingleRun",
+        "panel": "0x14e03698e40",
+        "pid": 21556,
+        "sameAsHostPanel": true,
+        "solverPath": "C:/Users/TR/AppData/Local/Temp/BatteryUdpHostProbe/MwSolver_261104_152046_220",
+        "state": "Pausing",
+        "time": 1.922
+      },
+      "before": {
+        "controller": "0x14e0483dc60",
+        "data": "0x14e07109d10",
+        "model": "BatterySim.SingleRun",
+        "panel": "0x14e03698e40",
+        "pid": 21556,
+        "sameAsHostPanel": true,
+        "solverPath": "C:/Users/TR/AppData/Local/Temp/BatteryUdpHostProbe/MwSolver_261104_152046_220",
+        "state": "Running",
+        "time": 1.922
+      },
+      "command": "pause",
+      "id": "f9aecb005e9e4f679c8ef7b904dc0a10",
+      "ok": true,
+      "pid": 21556
+    },
+    {
+      "after": {
+        "controller": "0x14e0483dc60",
+        "data": "0x14e07109d10",
+        "model": "BatterySim.SingleRun",
+        "panel": "0x14e03698e40",
+        "pid": 21556,
+        "sameAsHostPanel": true,
+        "solverPath": "C:/Users/TR/AppData/Local/Temp/BatteryUdpHostProbe/MwSolver_261104_152046_220",
+        "state": "Pausing",
+        "time": 1.97
+      },
+      "before": {
+        "controller": "0x14e0483dc60",
+        "data": "0x14e07109d10",
+        "model": "BatterySim.SingleRun",
+        "panel": "0x14e03698e40",
+        "pid": 21556,
+        "sameAsHostPanel": true,
+        "solverPath": "C:/Users/TR/AppData/Local/Temp/BatteryUdpHostProbe/MwSolver_261104_152046_220",
+        "state": "Pausing",
+        "time": 1.97
+      },
+      "command": "status",
+      "id": "f55606f46c17473988a729c58a176be8",
+      "ok": true,
+      "pid": 21556
+    },
+    {
+      "after": {
+        "controller": "0x14e0483dc60",
+        "data": "0x14e07109d10",
+        "model": "BatterySim.SingleRun",
+        "panel": "0x14e03698e40",
+        "pid": 21556,
+        "sameAsHostPanel": true,
+        "solverPath": "C:/Users/TR/AppData/Local/Temp/BatteryUdpHostProbe/MwSolver_261104_152046_220",
+        "state": "Paused",
+        "time": 2.0020000000000002
+      },
+      "before": {
+        "controller": "0x14e0483dc60",
+        "data": "0x14e07109d10",
+        "model": "BatterySim.SingleRun",
+        "panel": "0x14e03698e40",
+        "pid": 21556,
+        "sameAsHostPanel": true,
+        "solverPath": "C:/Users/TR/AppData/Local/Temp/BatteryUdpHostProbe/MwSolver_261104_152046_220",
+        "state": "Paused",
+        "time": 2.0020000000000002
+      },
+      "command": "status",
+      "id": "7c29166e0f2f486bbdec2e70ea1a9add",
+      "ok": true,
+      "pid": 21556
+    },
+    {
+      "after": {
+        "controller": "0x14e0483dc60",
+        "data": "0x14e07109d10",
+        "model": "BatterySim.SingleRun",
+        "panel": "0x14e03698e40",
+        "pid": 21556,
+        "sameAsHostPanel": true,
+        "solverPath": "C:/Users/TR/AppData/Local/Temp/BatteryUdpHostProbe/MwSolver_261104_152046_220",
+        "state": "Paused",
+        "time": 2.0020000000000002
+      },
+      "before": {
+        "controller": "0x14e0483dc60",
+        "data": "0x14e07109d10",
+        "model": "BatterySim.SingleRun",
+        "panel": "0x14e03698e40",
+        "pid": 21556,
+        "sameAsHostPanel": true,
+        "solverPath": "C:/Users/TR/AppData/Local/Temp/BatteryUdpHostProbe/MwSolver_261104_152046_220",
+        "state": "Paused",
+        "time": 2.0020000000000002
+      },
+      "command": "status",
+      "id": "1f3c1cafbd664035aece8cfaf32394be",
+      "ok": true,
+      "pid": 21556
+    },
+    {
+      "after": {
+        "controller": "0x14e0483dc60",
+        "data": "0x14e07109d10",
+        "model": "BatterySim.SingleRun",
+        "panel": "0x14e03698e40",
+        "pid": 21556,
+        "sameAsHostPanel": true,
+        "solverPath": "C:/Users/TR/AppData/Local/Temp/BatteryUdpHostProbe/MwSolver_261104_152046_220",
+        "state": "Running",
+        "time": 2.0020000000000002
+      },
+      "before": {
+        "controller": "0x14e0483dc60",
+        "data": "0x14e07109d10",
+        "model": "BatterySim.SingleRun",
+        "panel": "0x14e03698e40",
+        "pid": 21556,
+        "sameAsHostPanel": true,
+        "solverPath": "C:/Users/TR/AppData/Local/Temp/BatteryUdpHostProbe/MwSolver_261104_152046_220",
+        "state": "Paused",
+        "time": 2.0020000000000002
+      },
+      "command": "resume",
+      "id": "382146859c114ebdb53516056405b500",
+      "ok": true,
+      "pid": 21556
+    },
+    {
+      "after": {
+        "controller": "0x14e0483dc60",
+        "data": "0x14e07109d10",
+        "model": "BatterySim.SingleRun",
+        "panel": "0x14e03698e40",
+        "pid": 21556,
+        "sameAsHostPanel": true,
+        "solverPath": "C:/Users/TR/AppData/Local/Temp/BatteryUdpHostProbe/MwSolver_261104_152046_220",
+        "state": "Running",
+        "time": 2.0020000000000002
+      },
+      "before": {
+        "controller": "0x14e0483dc60",
+        "data": "0x14e07109d10",
+        "model": "BatterySim.SingleRun",
+        "panel": "0x14e03698e40",
+        "pid": 21556,
+        "sameAsHostPanel": true,
+        "solverPath": "C:/Users/TR/AppData/Local/Temp/BatteryUdpHostProbe/MwSolver_261104_152046_220",
+        "state": "Running",
+        "time": 2.0020000000000002
+      },
+      "command": "status",
+      "id": "70397b6af07445528c5dc0b0938dc2b1",
+      "ok": true,
+      "pid": 21556
+    },
+    {
+      "after": {
+        "controller": "0x14e0483dc60",
+        "data": "0x14e07109d10",
+        "model": "BatterySim.SingleRun",
+        "panel": "0x14e03698e40",
+        "pid": 21556,
+        "sameAsHostPanel": true,
+        "solverPath": "C:/Users/TR/AppData/Local/Temp/BatteryUdpHostProbe/MwSolver_261104_152046_220",
+        "state": "Running",
+        "time": 3.944
+      },
+      "before": {
+        "controller": "0x14e0483dc60",
+        "data": "0x14e07109d10",
+        "model": "BatterySim.SingleRun",
+        "panel": "0x14e03698e40",
+        "pid": 21556,
+        "sameAsHostPanel": true,
+        "solverPath": "C:/Users/TR/AppData/Local/Temp/BatteryUdpHostProbe/MwSolver_261104_152046_220",
+        "state": "Running",
+        "time": 3.944
+      },
+      "command": "status",
+      "id": "bdedc2ac07774c1b897f3108af27e159",
+      "ok": true,
+      "pid": 21556
+    },
+    {
+      "after": {
+        "controller": "0x14e0483dc60",
+        "data": "0x14e07109d10",
+        "model": "BatterySim.SingleRun",
+        "panel": "0x14e03698e40",
+        "pid": 21556,
+        "sameAsHostPanel": true,
+        "solverPath": "C:/Users/TR/AppData/Local/Temp/BatteryUdpHostProbe/MwSolver_261104_152046_220",
+        "state": "Stopping",
+        "time": 3.944
+      },
+      "before": {
+        "controller": "0x14e0483dc60",
+        "data": "0x14e07109d10",
+        "model": "BatterySim.SingleRun",
+        "panel": "0x14e03698e40",
+        "pid": 21556,
+        "sameAsHostPanel": true,
+        "solverPath": "C:/Users/TR/AppData/Local/Temp/BatteryUdpHostProbe/MwSolver_261104_152046_220",
+        "state": "Running",
+        "time": 3.944
+      },
+      "command": "stop",
+      "id": "421d77bef0f049d98720f926e8b18402",
+      "ok": true,
+      "pid": 21556
+    },
+    {
+      "after": {
+        "controller": "0x14e0483dc60",
+        "data": "0x14e07109d10",
+        "model": "BatterySim.SingleRun",
+        "panel": "0x14e03698e40",
+        "pid": 21556,
+        "sameAsHostPanel": true,
+        "solverPath": "C:/Users/TR/AppData/Local/Temp/BatteryUdpHostProbe/MwSolver_261104_152046_220",
+        "state": "Stopping",
+        "time": 3.974
+      },
+      "before": {
+        "controller": "0x14e0483dc60",
+        "data": "0x14e07109d10",
+        "model": "BatterySim.SingleRun",
+        "panel": "0x14e03698e40",
+        "pid": 21556,
+        "sameAsHostPanel": true,
+        "solverPath": "C:/Users/TR/AppData/Local/Temp/BatteryUdpHostProbe/MwSolver_261104_152046_220",
+        "state": "Stopping",
+        "time": 3.974
+      },
+      "command": "status",
+      "id": "537d308bff88426aaaffe6a5d8c1c0c3",
+      "ok": true,
+      "pid": 21556
+    },
+    {
+      "after": {
+        "controller": "0x14e0483dc60",
+        "data": "0x14e07109d10",
+        "model": "BatterySim.SingleRun",
+        "panel": "0x14e03698e40",
+        "pid": 21556,
+        "sameAsHostPanel": true,
+        "solverPath": "C:/Users/TR/AppData/Local/Temp/BatteryUdpHostProbe/MwSolver_261104_152046_220",
+        "state": "Stopping",
+        "time": 4.022
+      },
+      "before": {
+        "controller": "0x14e0483dc60",
+        "data": "0x14e07109d10",
+        "model": "BatterySim.SingleRun",
+        "panel": "0x14e03698e40",
+        "pid": 21556,
+        "sameAsHostPanel": true,
+        "solverPath": "C:/Users/TR/AppData/Local/Temp/BatteryUdpHostProbe/MwSolver_261104_152046_220",
+        "state": "Stopping",
+        "time": 4.022
+      },
+      "command": "status",
+      "id": "05f3e0b8c6694f3fb1495cba319820c9",
+      "ok": true,
+      "pid": 21556
+    },
+    {
+      "after": {
+        "controller": "0x14e0483dc60",
+        "data": "0x14e07109d10",
+        "model": "BatterySim.SingleRun",
+        "panel": "0x14e03698e40",
+        "pid": 21556,
+        "sameAsHostPanel": true,
+        "solverPath": "C:/Users/TR/AppData/Local/Temp/BatteryUdpHostProbe/MwSolver_261104_152046_220",
+        "state": "Stopping",
+        "time": 4.022
+      },
+      "before": {
+        "controller": "0x14e0483dc60",
+        "data": "0x14e07109d10",
+        "model": "BatterySim.SingleRun",
+        "panel": "0x14e03698e40",
+        "pid": 21556,
+        "sameAsHostPanel": true,
+        "solverPath": "C:/Users/TR/AppData/Local/Temp/BatteryUdpHostProbe/MwSolver_261104_152046_220",
+        "state": "Stopping",
+        "time": 4.022
+      },
+      "command": "status",
+      "id": "7b8bb5ecd7b142b595ba73163c278c59",
+      "ok": true,
+      "pid": 21556
+    },
+    {
+      "after": {
+        "controller": "0x14e0483dc60",
+        "data": "0x14e07109d10",
+        "model": "BatterySim.SingleRun",
+        "panel": "0x14e03698e40",
+        "pid": 21556,
+        "sameAsHostPanel": true,
+        "solverPath": "C:/Users/TR/AppData/Local/Temp/BatteryUdpHostProbe/MwSolver_261104_152046_220",
+        "state": "Stopping",
+        "time": 4.022
+      },
+      "before": {
+        "controller": "0x14e0483dc60",
+        "data": "0x14e07109d10",
+        "model": "BatterySim.SingleRun",
+        "panel": "0x14e03698e40",
+        "pid": 21556,
+        "sameAsHostPanel": true,
+        "solverPath": "C:/Users/TR/AppData/Local/Temp/BatteryUdpHostProbe/MwSolver_261104_152046_220",
+        "state": "Stopping",
+        "time": 4.022
+      },
+      "command": "status",
+      "id": "d3824bb8fa2a4abe92d28e11027a01d5",
+      "ok": true,
+      "pid": 21556
+    },
+    {
+      "after": {
+        "controller": "0x14e0483dc60",
+        "data": "0x14e07109d10",
+        "model": "BatterySim.SingleRun",
+        "panel": "0x14e03698e40",
+        "pid": 21556,
+        "sameAsHostPanel": true,
+        "solverPath": "C:/Users/TR/AppData/Local/Temp/BatteryUdpHostProbe/MwSolver_261104_152046_220",
+        "state": "Stopping",
+        "time": 4.022
+      },
+      "before": {
+        "controller": "0x14e0483dc60",
+        "data": "0x14e07109d10",
+        "model": "BatterySim.SingleRun",
+        "panel": "0x14e03698e40",
+        "pid": 21556,
+        "sameAsHostPanel": true,
+        "solverPath": "C:/Users/TR/AppData/Local/Temp/BatteryUdpHostProbe/MwSolver_261104_152046_220",
+        "state": "Stopping",
+        "time": 4.022
+      },
+      "command": "status",
+      "id": "2482fd28eb67490f85615cf6061b4859",
+      "ok": true,
+      "pid": 21556
+    },
+    {
+      "after": {
+        "controller": "0x14e0483dc60",
+        "data": "0x14e07109d10",
+        "model": "BatterySim.SingleRun",
+        "panel": "0x14e03698e40",
+        "pid": 21556,
+        "sameAsHostPanel": true,
+        "solverPath": "C:/Users/TR/AppData/Local/Temp/BatteryUdpHostProbe/MwSolver_261104_152046_220",
+        "state": "Idle",
+        "time": 120
+      },
+      "before": {
+        "controller": "0x14e0483dc60",
+        "data": "0x14e07109d10",
+        "model": "BatterySim.SingleRun",
+        "panel": "0x14e03698e40",
+        "pid": 21556,
+        "sameAsHostPanel": true,
+        "solverPath": "C:/Users/TR/AppData/Local/Temp/BatteryUdpHostProbe/MwSolver_261104_152046_220",
+        "state": "Idle",
+        "time": 120
+      },
+      "command": "status",
+      "id": "33271183aaaa42009fcb9b134bb38cff",
+      "ok": true,
+      "pid": 21556
+    }
+  ],
+  "ok": true,
+  "translation": {
+    "data": "0x14e07109d10",
+    "event": "translated",
+    "ok": true,
+    "pid": 21556,
+    "utc": "2026-11-04T07:23:17.983Z"
+  },
+  "pausedTimeStable": [
+    2.0020000000000002,
+    2.0020000000000002
+  ],
+  "officialApiPausedState": "Paused",
+  "officialApiPausedTime": 2.0020000000000002,
+  "officialApiStoppedState": "Idle",
+  "controller": "0x14e0483dc60",
+  "data": "0x14e07109d10"
+}

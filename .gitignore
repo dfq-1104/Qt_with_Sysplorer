@@ -1,0 +1,10 @@
+tools/sdk_probe/.qmake.stash
+tools/sdk_probe/Makefile*
+tools/sdk_probe/release/
+tools/sdk_probe/debug/
+tools/sdk_probe/*.pdb
+runs/
+app/ui/build/
+app/ui/runtime/
+app/ui/probe_runtime/
+app/ui/tests/build/

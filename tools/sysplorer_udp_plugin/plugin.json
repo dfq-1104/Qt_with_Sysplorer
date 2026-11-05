@@ -1,0 +1,11 @@
+{
+  "Name": "Battery UDP Control",
+  "Version": "1.0",
+  "CompatVersion": "1.0",
+  "Vendor": "BatteryConsole",
+  "Category": "SDK",
+  "Description": "Local task-controlled battery simulation",
+  "License": [],
+  "Options": [],
+  "Dependencies": []
+}

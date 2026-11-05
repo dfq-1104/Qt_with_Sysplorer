@@ -1,0 +1,5 @@
+evidence*/session.private.json
+.qmake.stash
+Makefile*
+release/
+debug/

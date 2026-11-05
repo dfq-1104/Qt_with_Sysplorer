@@ -1,0 +1,7 @@
+Makefile*
+.qmake.stash
+release/
+debug/
+versions/
+deployment.json
+build.log

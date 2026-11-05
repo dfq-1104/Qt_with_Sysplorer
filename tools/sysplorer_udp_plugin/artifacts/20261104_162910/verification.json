@@ -1,0 +1,3911 @@
+{
+  "ok": true,
+  "cases": [
+    {
+      "taskId": "371b783a-8cd7-4c56-8584-3c02111c7142",
+      "partial": true,
+      "args": {
+        "modelHash": "4670d908273243caa2996f708ce1e2692b4012eac5c3107a4209eeea16f6feb9",
+        "mode": 1,
+        "voltage": 3.45,
+        "current": 1.0,
+        "soc0": 0.5,
+        "duration": 12,
+        "speed": 1
+      },
+      "statuses": [
+        {
+          "phase": "Preparing",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Running",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d107530"
+        },
+        {
+          "phase": "Running",
+          "time": 0.014,
+          "total": 1,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d107530"
+        },
+        {
+          "phase": "Running",
+          "time": 0.182,
+          "total": 3,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d107530"
+        },
+        {
+          "phase": "Running",
+          "time": 0.294,
+          "total": 5,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d107530"
+        },
+        {
+          "phase": "Running",
+          "time": 0.386,
+          "total": 7,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d107530"
+        },
+        {
+          "phase": "Running",
+          "time": 0.496,
+          "total": 9,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d107530"
+        },
+        {
+          "phase": "Running",
+          "time": 0.73,
+          "total": 12,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d107530"
+        },
+        {
+          "phase": "Running",
+          "time": 0.838,
+          "total": 14,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d107530"
+        },
+        {
+          "phase": "Running",
+          "time": 0.932,
+          "total": 15,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d107530"
+        },
+        {
+          "phase": "Running",
+          "time": 1.056,
+          "total": 17,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d107530"
+        },
+        {
+          "phase": "Paused",
+          "time": 1.12,
+          "total": 18,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d107530"
+        },
+        {
+          "phase": "Running",
+          "time": 1.194,
+          "total": 20,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d107530"
+        },
+        {
+          "phase": "Running",
+          "time": 1.274,
+          "total": 22,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d107530"
+        },
+        {
+          "phase": "Running",
+          "time": 1.482,
+          "total": 25,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d107530"
+        },
+        {
+          "phase": "Running",
+          "time": 1.586,
+          "total": 27,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d107530"
+        },
+        {
+          "phase": "Running",
+          "time": 1.712,
+          "total": 30,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d107530"
+        },
+        {
+          "phase": "Running",
+          "time": 1.828,
+          "total": 32,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d107530"
+        },
+        {
+          "phase": "Running",
+          "time": 1.928,
+          "total": 33,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d107530"
+        },
+        {
+          "phase": "Running",
+          "time": 2.02,
+          "total": 34,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d107530"
+        },
+        {
+          "phase": "Running",
+          "time": 2.132,
+          "total": 36,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d107530"
+        },
+        {
+          "phase": "Stopping",
+          "time": 2.208,
+          "total": 37,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d107530"
+        },
+        {
+          "phase": "Stopping",
+          "time": 2.208,
+          "total": 37,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d107530"
+        },
+        {
+          "phase": "Stopping",
+          "time": 2.208,
+          "total": 37,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d107530"
+        },
+        {
+          "phase": "Stopping",
+          "time": 2.208,
+          "total": 37,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d107530"
+        },
+        {
+          "phase": "Stopping",
+          "time": 2.208,
+          "total": 37,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d107530"
+        },
+        {
+          "phase": "Stopping",
+          "time": 2.208,
+          "total": 37,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d107530"
+        },
+        {
+          "phase": "Stopping",
+          "time": 2.208,
+          "total": 37,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d107530"
+        },
+        {
+          "phase": "Stopping",
+          "time": 2.208,
+          "total": 37,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d107530"
+        },
+        {
+          "phase": "Stopping",
+          "time": 2.208,
+          "total": 37,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d107530"
+        },
+        {
+          "phase": "Stopping",
+          "time": 2.208,
+          "total": 37,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d107530"
+        },
+        {
+          "phase": "Stopping",
+          "time": 2.208,
+          "total": 37,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d107530"
+        },
+        {
+          "phase": "Stopping",
+          "time": 2.208,
+          "total": 37,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d107530"
+        },
+        {
+          "phase": "Stopping",
+          "time": 2.208,
+          "total": 37,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d107530"
+        },
+        {
+          "phase": "Stopping",
+          "time": 2.208,
+          "total": 37,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d107530"
+        },
+        {
+          "phase": "Stopping",
+          "time": 2.208,
+          "total": 37,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d107530"
+        },
+        {
+          "phase": "Stopping",
+          "time": 2.208,
+          "total": 37,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d107530"
+        },
+        {
+          "phase": "Stopping",
+          "time": 2.208,
+          "total": 37,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d107530"
+        },
+        {
+          "phase": "Stopping",
+          "time": 2.208,
+          "total": 37,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d107530"
+        },
+        {
+          "phase": "Stopping",
+          "time": 2.208,
+          "total": 37,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d107530"
+        },
+        {
+          "phase": "Stopping",
+          "time": 2.208,
+          "total": 37,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d107530"
+        },
+        {
+          "phase": "Finalizing",
+          "time": 2.208,
+          "total": 37,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d107530"
+        },
+        {
+          "phase": "Finalizing",
+          "time": 2.208,
+          "total": 37,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d107530"
+        },
+        {
+          "phase": "Stopped",
+          "time": 2.208,
+          "total": 37,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d107530"
+        }
+      ],
+      "begin": {
+        "command": "begin",
+        "id": "273fe648-1cea-4391-9123-0434f558cb35",
+        "ok": true,
+        "schema": 1,
+        "session": "bd4882ea-34a9-498a-a4cc-e381bc10ef0e",
+        "status": {
+          "code": "",
+          "controller": "0x19b69001780",
+          "csvHash": "",
+          "cursor": 0,
+          "data": "0x0",
+          "duration": 12,
+          "jobDir": "C:/Users/TR/AppData/Local/Temp/BatteryConsoleUDP/371b783a-8cd7-4c56-8584-3c02111c7142",
+          "message": "",
+          "modelHash": "4670d908273243caa2996f708ce1e2692b4012eac5c3107a4209eeea16f6feb9",
+          "nativeResult": "",
+          "next": 0,
+          "owner": "31a3fa86-f2a8-4787-a5c0-804617106550",
+          "params": {},
+          "phase": "Preparing",
+          "pid": 15668,
+          "rows": [],
+          "taskId": "371b783a-8cd7-4c56-8584-3c02111c7142",
+          "time": 0,
+          "total": 0,
+          "viewerMessage": ""
+        },
+        "taskId": "371b783a-8cd7-4c56-8584-3c02111c7142"
+      },
+      "pausedAt": 1.12,
+      "terminal": {
+        "code": "",
+        "controller": "0x19b69001780",
+        "csvHash": "4fdb27f4372ec2f7d9362c23dff740702eb50d1f2cda984ffc044d71b2deffc8",
+        "cursor": 37,
+        "data": "0x19b6d107530",
+        "duration": 12,
+        "jobDir": "C:/Users/TR/AppData/Local/Temp/BatteryConsoleUDP/371b783a-8cd7-4c56-8584-3c02111c7142",
+        "message": "",
+        "modelHash": "4670d908273243caa2996f708ce1e2692b4012eac5c3107a4209eeea16f6feb9",
+        "nativeResult": "C:\\Users\\TR\\AppData\\Local\\Temp\\BatteryConsoleUDP",
+        "next": 37,
+        "owner": "31a3fa86-f2a8-4787-a5c0-804617106550",
+        "params": {
+          "current": 1,
+          "mode": 1,
+          "soc0": 0.5,
+          "voltage": 3.45
+        },
+        "phase": "Stopped",
+        "pid": 15668,
+        "rows": [],
+        "taskId": "371b783a-8cd7-4c56-8584-3c02111c7142",
+        "time": 2.208,
+        "total": 37,
+        "viewerMessage": "Sysplorer 已显示本次原生结果"
+      },
+      "manifest": {
+        "complete": false,
+        "csvHash": "4fdb27f4372ec2f7d9362c23dff740702eb50d1f2cda984ffc044d71b2deffc8",
+        "duration": 12,
+        "lastTime": 2.208,
+        "model": "BatterySim.SingleRun",
+        "modelHash": "4670d908273243caa2996f708ce1e2692b4012eac5c3107a4209eeea16f6feb9",
+        "nativeResult": "C:\\Users\\TR\\AppData\\Local\\Temp\\BatteryConsoleUDP",
+        "params": {
+          "current": 1,
+          "mode": 1,
+          "soc0": 0.5,
+          "voltage": 3.45
+        },
+        "points": 1106,
+        "schema": 1,
+        "source": "sysplorer-host-udp",
+        "taskId": "371b783a-8cd7-4c56-8584-3c02111c7142"
+      },
+      "liveRows": [
+        [
+          0.014,
+          0.5000066333333334,
+          1,
+          3.270000663333333
+        ],
+        [
+          0.168,
+          0.5000185733333333,
+          1,
+          3.270001857333333
+        ],
+        [
+          0.182,
+          0.5000201211111112,
+          1,
+          3.270002012111111
+        ],
+        [
+          0.26,
+          0.5000287444444445,
+          1,
+          3.2700028744444443
+        ],
+        [
+          0.294,
+          0.5000325033333334,
+          1,
+          3.270003250333333
+        ],
+        [
+          0.37,
+          0.5000409055555556,
+          1,
+          3.270004090555555
+        ],
+        [
+          0.386,
+          0.5000426744444445,
+          1,
+          3.270004267444444
+        ],
+        [
+          0.48,
+          0.5000530666666666,
+          1,
+          3.2700053066666666
+        ],
+        [
+          0.496,
+          0.5000548355555555,
+          1,
+          3.2700054835555554
+        ],
+        [
+          0.606,
+          0.5000669966666667,
+          1,
+          3.2700066996666663
+        ],
+        [
+          0.682,
+          0.5000789366666667,
+          1,
+          3.2700078936666666
+        ],
+        [
+          0.73,
+          0.5000807055555555,
+          1,
+          3.2700080705555554
+        ],
+        [
+          0.806,
+          0.5000891077777777,
+          1,
+          3.2700089107777774
+        ],
+        [
+          0.838,
+          0.5000926455555555,
+          1,
+          3.270009264555555
+        ],
+        [
+          0.932,
+          0.5001030377777778,
+          1,
+          3.2700103037777777
+        ],
+        [
+          1.04,
+          0.5001149777777777,
+          1,
+          3.2700114977777774
+        ],
+        [
+          1.056,
+          0.5001167466666666,
+          1,
+          3.2700116746666663
+        ],
+        [
+          1.12,
+          0.5001236011111111,
+          1,
+          3.270012360111111
+        ],
+        [
+          1.158,
+          0.5001278022222222,
+          1,
+          3.270012780222222
+        ],
+        [
+          1.194,
+          0.5001317822222222,
+          1,
+          3.270013178222222
+        ],
+        [
+          1.258,
+          0.5001390788888889,
+          1,
+          3.2700139078888886
+        ],
+        [
+          1.274,
+          0.5001441644444444,
+          1,
+          3.270014416444444
+        ],
+        [
+          1.368,
+          0.50015124,
+          1,
+          3.270015124
+        ],
+        [
+          1.3840000000000001,
+          0.5001530088888888,
+          1,
+          3.270015300888889
+        ],
+        [
+          1.482,
+          0.5001636222222222,
+          1,
+          3.270016362222222
+        ],
+        [
+          1.51,
+          0.5001669388888889,
+          1,
+          3.2700166938888886
+        ],
+        [
+          1.586,
+          0.5001753411111111,
+          1,
+          3.270017534111111
+        ],
+        [
+          1.606,
+          0.5001775522222223,
+          1,
+          3.270017755222222
+        ],
+        [
+          1.696,
+          0.5001875022222222,
+          1,
+          3.270018750222222
+        ],
+        [
+          1.712,
+          0.5001892711111111,
+          1,
+          3.270018927111111
+        ],
+        [
+          1.804,
+          0.5001994422222222,
+          1,
+          3.270019944222222
+        ],
+        [
+          1.828,
+          0.5002018744444444,
+          1,
+          3.270020187444444
+        ],
+        [
+          1.928,
+          0.5002131511111111,
+          1,
+          3.270021315111111
+        ],
+        [
+          2.02,
+          0.5002233222222222,
+          1,
+          3.270022332222222
+        ],
+        [
+          2.13,
+          0.5002354833333333,
+          1,
+          3.270023548333333
+        ],
+        [
+          2.132,
+          0.5002403477777778,
+          1,
+          3.2700240347777774
+        ],
+        [
+          2.208,
+          0.5002441066666666,
+          1,
+          3.2700244106666663
+        ]
+      ],
+      "foreignTaskRejected": true
+    },
+    {
+      "taskId": "d026c1ff-bdfb-4ed0-b55f-8dbe541de436",
+      "partial": false,
+      "args": {
+        "modelHash": "4670d908273243caa2996f708ce1e2692b4012eac5c3107a4209eeea16f6feb9",
+        "mode": 2,
+        "voltage": 2.5,
+        "current": 2.0,
+        "soc0": 0.6,
+        "duration": 6,
+        "speed": 1
+      },
+      "statuses": [
+        {
+          "phase": "Preparing",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x0"
+        },
+        {
+          "phase": "Running",
+          "time": 0,
+          "total": 0,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d108e30"
+        },
+        {
+          "phase": "Running",
+          "time": 0.06,
+          "total": 2,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d108e30"
+        },
+        {
+          "phase": "Running",
+          "time": 0.17,
+          "total": 4,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d108e30"
+        },
+        {
+          "phase": "Running",
+          "time": 0.264,
+          "total": 5,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d108e30"
+        },
+        {
+          "phase": "Running",
+          "time": 0.388,
+          "total": 7,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d108e30"
+        },
+        {
+          "phase": "Running",
+          "time": 0.498,
+          "total": 9,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d108e30"
+        },
+        {
+          "phase": "Running",
+          "time": 0.684,
+          "total": 11,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d108e30"
+        },
+        {
+          "phase": "Running",
+          "time": 0.8260000000000001,
+          "total": 14,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d108e30"
+        },
+        {
+          "phase": "Running",
+          "time": 0.934,
+          "total": 16,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d108e30"
+        },
+        {
+          "phase": "Running",
+          "time": 1.042,
+          "total": 18,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d108e30"
+        },
+        {
+          "phase": "Running",
+          "time": 1.1360000000000001,
+          "total": 20,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d108e30"
+        },
+        {
+          "phase": "Running",
+          "time": 1.244,
+          "total": 21,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d108e30"
+        },
+        {
+          "phase": "Running",
+          "time": 1.37,
+          "total": 23,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d108e30"
+        },
+        {
+          "phase": "Running",
+          "time": 1.478,
+          "total": 25,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d108e30"
+        },
+        {
+          "phase": "Running",
+          "time": 1.59,
+          "total": 27,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d108e30"
+        },
+        {
+          "phase": "Running",
+          "time": 1.804,
+          "total": 30,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d108e30"
+        },
+        {
+          "phase": "Running",
+          "time": 1.93,
+          "total": 32,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d108e30"
+        },
+        {
+          "phase": "Running",
+          "time": 2.0220000000000002,
+          "total": 34,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d108e30"
+        },
+        {
+          "phase": "Running",
+          "time": 2.132,
+          "total": 36,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d108e30"
+        },
+        {
+          "phase": "Running",
+          "time": 2.242,
+          "total": 37,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d108e30"
+        },
+        {
+          "phase": "Running",
+          "time": 2.366,
+          "total": 39,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d108e30"
+        },
+        {
+          "phase": "Running",
+          "time": 2.458,
+          "total": 41,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d108e30"
+        },
+        {
+          "phase": "Running",
+          "time": 2.566,
+          "total": 43,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d108e30"
+        },
+        {
+          "phase": "Running",
+          "time": 2.678,
+          "total": 44,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d108e30"
+        },
+        {
+          "phase": "Running",
+          "time": 2.894,
+          "total": 47,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d108e30"
+        },
+        {
+          "phase": "Running",
+          "time": 3.02,
+          "total": 50,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d108e30"
+        },
+        {
+          "phase": "Running",
+          "time": 3.118,
+          "total": 52,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d108e30"
+        },
+        {
+          "phase": "Running",
+          "time": 3.2520000000000002,
+          "total": 54,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d108e30"
+        },
+        {
+          "phase": "Running",
+          "time": 3.33,
+          "total": 56,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d108e30"
+        },
+        {
+          "phase": "Running",
+          "time": 3.438,
+          "total": 57,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d108e30"
+        },
+        {
+          "phase": "Running",
+          "time": 3.56,
+          "total": 59,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d108e30"
+        },
+        {
+          "phase": "Running",
+          "time": 3.67,
+          "total": 61,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d108e30"
+        },
+        {
+          "phase": "Running",
+          "time": 3.7640000000000002,
+          "total": 63,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d108e30"
+        },
+        {
+          "phase": "Running",
+          "time": 3.982,
+          "total": 65,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d108e30"
+        },
+        {
+          "phase": "Running",
+          "time": 4.108,
+          "total": 68,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d108e30"
+        },
+        {
+          "phase": "Running",
+          "time": 4.2,
+          "total": 69,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d108e30"
+        },
+        {
+          "phase": "Running",
+          "time": 4.308,
+          "total": 70,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d108e30"
+        },
+        {
+          "phase": "Running",
+          "time": 4.432,
+          "total": 72,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d108e30"
+        },
+        {
+          "phase": "Running",
+          "time": 4.542,
+          "total": 74,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d108e30"
+        },
+        {
+          "phase": "Running",
+          "time": 4.652,
+          "total": 75,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d108e30"
+        },
+        {
+          "phase": "Running",
+          "time": 4.758,
+          "total": 76,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d108e30"
+        },
+        {
+          "phase": "Running",
+          "time": 4.882,
+          "total": 78,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d108e30"
+        },
+        {
+          "phase": "Running",
+          "time": 5.072,
+          "total": 81,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d108e30"
+        },
+        {
+          "phase": "Running",
+          "time": 5.196,
+          "total": 82,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d108e30"
+        },
+        {
+          "phase": "Running",
+          "time": 5.32,
+          "total": 84,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d108e30"
+        },
+        {
+          "phase": "Running",
+          "time": 5.416,
+          "total": 86,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d108e30"
+        },
+        {
+          "phase": "Running",
+          "time": 5.508,
+          "total": 87,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d108e30"
+        },
+        {
+          "phase": "Running",
+          "time": 5.634,
+          "total": 88,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d108e30"
+        },
+        {
+          "phase": "Running",
+          "time": 5.758,
+          "total": 90,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d108e30"
+        },
+        {
+          "phase": "Running",
+          "time": 5.854,
+          "total": 92,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d108e30"
+        },
+        {
+          "phase": "Finalizing",
+          "time": 6,
+          "total": 94,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d108e30"
+        },
+        {
+          "phase": "Finalizing",
+          "time": 6,
+          "total": 94,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d108e30"
+        },
+        {
+          "phase": "Finalizing",
+          "time": 6,
+          "total": 94,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d108e30"
+        },
+        {
+          "phase": "Completed",
+          "time": 6,
+          "total": 94,
+          "controller": "0x19b69001780",
+          "data": "0x19b6d108e30"
+        }
+      ],
+      "begin": {
+        "command": "begin",
+        "id": "d58faffc-d08d-4e2c-9136-796f20bbb68b",
+        "ok": true,
+        "schema": 1,
+        "session": "bd4882ea-34a9-498a-a4cc-e381bc10ef0e",
+        "status": {
+          "code": "",
+          "controller": "0x19b69001780",
+          "csvHash": "",
+          "cursor": 0,
+          "data": "0x0",
+          "duration": 6,
+          "jobDir": "C:/Users/TR/AppData/Local/Temp/BatteryConsoleUDP/d026c1ff-bdfb-4ed0-b55f-8dbe541de436",
+          "message": "",
+          "modelHash": "4670d908273243caa2996f708ce1e2692b4012eac5c3107a4209eeea16f6feb9",
+          "nativeResult": "",
+          "next": 0,
+          "owner": "31a3fa86-f2a8-4787-a5c0-804617106550",
+          "params": {},
+          "phase": "Preparing",
+          "pid": 15668,
+          "rows": [],
+          "taskId": "d026c1ff-bdfb-4ed0-b55f-8dbe541de436",
+          "time": 0,
+          "total": 0,
+          "viewerMessage": ""
+        },
+        "taskId": "d026c1ff-bdfb-4ed0-b55f-8dbe541de436"
+      },
+      "terminal": {
+        "code": "",
+        "controller": "0x19b69001780",
+        "csvHash": "01fb6b0c0bc72cf1e2962dd8c8c0240b4852f0673866000ef2df8f869fcf1ec0",
+        "cursor": 94,
+        "data": "0x19b6d108e30",
+        "duration": 6,
+        "jobDir": "C:/Users/TR/AppData/Local/Temp/BatteryConsoleUDP/d026c1ff-bdfb-4ed0-b55f-8dbe541de436",
+        "message": "",
+        "modelHash": "4670d908273243caa2996f708ce1e2692b4012eac5c3107a4209eeea16f6feb9",
+        "nativeResult": "C:\\Users\\TR\\AppData\\Local\\Temp\\BatteryConsoleUDP",
+        "next": 94,
+        "owner": "31a3fa86-f2a8-4787-a5c0-804617106550",
+        "params": {
+          "current": 2,
+          "mode": 2,
+          "soc0": 0.6,
+          "voltage": 2.5
+        },
+        "phase": "Completed",
+        "pid": 15668,
+        "rows": [],
+        "taskId": "d026c1ff-bdfb-4ed0-b55f-8dbe541de436",
+        "time": 6,
+        "total": 94,
+        "viewerMessage": "Sysplorer 已显示本次原生结果"
+      },
+      "manifest": {
+        "complete": true,
+        "csvHash": "01fb6b0c0bc72cf1e2962dd8c8c0240b4852f0673866000ef2df8f869fcf1ec0",
+        "duration": 6,
+        "lastTime": 6,
+        "model": "BatterySim.SingleRun",
+        "modelHash": "4670d908273243caa2996f708ce1e2692b4012eac5c3107a4209eeea16f6feb9",
+        "nativeResult": "C:\\Users\\TR\\AppData\\Local\\Temp\\BatteryConsoleUDP",
+        "params": {
+          "current": 2,
+          "mode": 2,
+          "soc0": 0.6,
+          "voltage": 2.5
+        },
+        "points": 3002,
+        "schema": 1,
+        "source": "sysplorer-host-udp",
+        "taskId": "d026c1ff-bdfb-4ed0-b55f-8dbe541de436"
+      },
+      "liveRows": [
+        [
+          0.044,
+          0.5999902222222222,
+          -2,
+          3.249999022222222
+        ],
+        [
+          0.06,
+          0.5999866666666667,
+          -2,
+          3.2499986666666665
+        ],
+        [
+          0.138,
+          0.5999693333333335,
+          -2,
+          3.249996933333333
+        ],
+        [
+          0.17,
+          0.5999622222222223,
+          -2,
+          3.2499962222222223
+        ],
+        [
+          0.264,
+          0.5999413333333334,
+          -2,
+          3.2499941333333333
+        ],
+        [
+          0.372,
+          0.5999173333333334,
+          -2,
+          3.2499917333333332
+        ],
+        [
+          0.388,
+          0.5999137777777779,
+          -2,
+          3.2499913777777776
+        ],
+        [
+          0.482,
+          0.599892888888889,
+          -2,
+          3.249989288888889
+        ],
+        [
+          0.498,
+          0.599885777777778,
+          -2,
+          3.2499885777777777
+        ],
+        [
+          0.608,
+          0.599864888888889,
+          -2,
+          3.2499864888888887
+        ],
+        [
+          0.684,
+          0.5998480000000002,
+          -2,
+          3.2499848
+        ],
+        [
+          0.7000000000000001,
+          0.5998444444444446,
+          -2,
+          3.2499844444444443
+        ],
+        [
+          0.81,
+          0.5998200000000001,
+          -2,
+          3.249982
+        ],
+        [
+          0.8260000000000001,
+          0.5998164444444446,
+          -2,
+          3.2499816444444445
+        ],
+        [
+          0.918,
+          0.5997960000000001,
+          -2,
+          3.2499796
+        ],
+        [
+          0.934,
+          0.5997924444444446,
+          -2,
+          3.2499792444444444
+        ],
+        [
+          1.012,
+          0.5997751111111113,
+          -2,
+          3.249977511111111
+        ],
+        [
+          1.042,
+          0.5997684444444445,
+          -2,
+          3.2499768444444443
+        ],
+        [
+          1.12,
+          0.5997511111111112,
+          -2,
+          3.249975111111111
+        ],
+        [
+          1.1360000000000001,
+          0.5997475555555557,
+          -2,
+          3.2499747555555554
+        ],
+        [
+          1.244,
+          0.5997235555555557,
+          -2,
+          3.2499723555555557
+        ],
+        [
+          1.354,
+          0.5996991111111113,
+          -2,
+          3.249969911111111
+        ],
+        [
+          1.37,
+          0.5996955555555558,
+          -2,
+          3.2499695555555554
+        ],
+        [
+          1.462,
+          0.5996751111111113,
+          -2,
+          3.249967511111111
+        ],
+        [
+          1.478,
+          0.5996715555555557,
+          -2,
+          3.2499671555555554
+        ],
+        [
+          1.572,
+          0.5996506666666669,
+          -2,
+          3.249965066666667
+        ],
+        [
+          1.59,
+          0.5996466666666669,
+          -2,
+          3.2499646666666666
+        ],
+        [
+          1.68,
+          0.5996266666666669,
+          -2,
+          3.2499626666666668
+        ],
+        [
+          1.696,
+          0.5996231111111113,
+          -2,
+          3.249962311111111
+        ],
+        [
+          1.804,
+          0.5995991111111113,
+          -2,
+          3.249959911111111
+        ],
+        [
+          1.8980000000000001,
+          0.5995782222222223,
+          -2,
+          3.249957822222222
+        ],
+        [
+          1.93,
+          0.5995711111111113,
+          -2,
+          3.249957111111111
+        ],
+        [
+          2.0060000000000002,
+          0.5995542222222224,
+          -2,
+          3.2499554222222224
+        ],
+        [
+          2.0220000000000002,
+          0.5995506666666668,
+          -2,
+          3.249955066666667
+        ],
+        [
+          2.116,
+          0.5995297777777779,
+          -2,
+          3.249952977777778
+        ],
+        [
+          2.132,
+          0.5995226666666669,
+          -2,
+          3.2499522666666665
+        ],
+        [
+          2.242,
+          0.5995017777777779,
+          -2,
+          3.249950177777778
+        ],
+        [
+          2.336,
+          0.5994808888888891,
+          -2,
+          3.249948088888889
+        ],
+        [
+          2.366,
+          0.5994742222222224,
+          -2,
+          3.249947422222222
+        ],
+        [
+          2.444,
+          0.599456888888889,
+          -2,
+          3.249945688888889
+        ],
+        [
+          2.458,
+          0.599453777777778,
+          -2,
+          3.249945377777778
+        ],
+        [
+          2.552,
+          0.599432888888889,
+          -2,
+          3.249943288888889
+        ],
+        [
+          2.566,
+          0.599429777777778,
+          -2,
+          3.2499429777777777
+        ],
+        [
+          2.678,
+          0.5994048888888891,
+          -2,
+          3.249940488888889
+        ],
+        [
+          2.7840000000000003,
+          0.5993813333333335,
+          -2,
+          3.2499381333333335
+        ],
+        [
+          2.8000000000000003,
+          0.5993777777777779,
+          -2,
+          3.249937777777778
+        ],
+        [
+          2.894,
+          0.599356888888889,
+          -2,
+          3.249935688888889
+        ],
+        [
+          2.91,
+          0.5993533333333335,
+          -2,
+          3.249935333333333
+        ],
+        [
+          2.988,
+          0.5993360000000002,
+          -2,
+          3.2499336
+        ],
+        [
+          3.02,
+          0.599328888888889,
+          -2,
+          3.249932888888889
+        ],
+        [
+          3.096,
+          0.5993120000000002,
+          -2,
+          3.2499312000000002
+        ],
+        [
+          3.118,
+          0.5993075555555557,
+          -2,
+          3.2499307555555554
+        ],
+        [
+          3.204,
+          0.5992880000000002,
+          -2,
+          3.2499288
+        ],
+        [
+          3.2520000000000002,
+          0.5992773333333336,
+          -2,
+          3.249927733333333
+        ],
+        [
+          3.314,
+          0.5992635555555558,
+          -2,
+          3.2499263555555555
+        ],
+        [
+          3.33,
+          0.5992600000000001,
+          -2,
+          3.249926
+        ],
+        [
+          3.438,
+          0.5992360000000002,
+          -2,
+          3.2499236000000002
+        ],
+        [
+          3.5460000000000003,
+          0.5992120000000002,
+          -2,
+          3.2499212
+        ],
+        [
+          3.56,
+          0.599208888888889,
+          -2,
+          3.249920888888889
+        ],
+        [
+          3.64,
+          0.5991911111111112,
+          -2,
+          3.249919111111111
+        ],
+        [
+          3.67,
+          0.5991844444444446,
+          -2,
+          3.2499184444444444
+        ],
+        [
+          3.748,
+          0.5991671111111113,
+          -2,
+          3.249916711111111
+        ],
+        [
+          3.7640000000000002,
+          0.5991635555555557,
+          -2,
+          3.2499163555555555
+        ],
+        [
+          3.872,
+          0.5991395555555558,
+          -2,
+          3.2499139555555554
+        ],
+        [
+          3.982,
+          0.5991151111111113,
+          -2,
+          3.249911511111111
+        ],
+        [
+          3.996,
+          0.5991120000000002,
+          -2,
+          3.2499112
+        ],
+        [
+          4.09,
+          0.5990911111111112,
+          -2,
+          3.249909111111111
+        ],
+        [
+          4.108,
+          0.5990871111111112,
+          -2,
+          3.2499087111111113
+        ],
+        [
+          4.2,
+          0.5990666666666669,
+          -2,
+          3.2499066666666665
+        ],
+        [
+          4.308,
+          0.5990426666666668,
+          -2,
+          3.249904266666667
+        ],
+        [
+          4.416,
+          0.5990186666666668,
+          -2,
+          3.249901866666667
+        ],
+        [
+          4.432,
+          0.5990151111111113,
+          -2,
+          3.249901511111111
+        ],
+        [
+          4.514,
+          0.5989973333333335,
+          -2,
+          3.2498997333333333
+        ],
+        [
+          4.542,
+          0.5989906666666668,
+          -2,
+          3.2498990666666665
+        ],
+        [
+          4.652,
+          0.5989662222222224,
+          -2,
+          3.2498966222222223
+        ],
+        [
+          4.758,
+          0.5989426666666668,
+          -2,
+          3.249894266666667
+        ],
+        [
+          4.852,
+          0.5989217777777779,
+          -2,
+          3.249892177777778
+        ],
+        [
+          4.882,
+          0.5989151111111113,
+          -2,
+          3.249891511111111
+        ],
+        [
+          4.96,
+          0.5988977777777779,
+          -2,
+          3.2498897777777778
+        ],
+        [
+          4.976,
+          0.5988942222222223,
+          -2,
+          3.249889422222222
+        ],
+        [
+          5.072,
+          0.598869777777778,
+          -2,
+          3.249886977777778
+        ],
+        [
+          5.196,
+          0.5988453333333335,
+          -2,
+          3.2498845333333333
+        ],
+        [
+          5.288,
+          0.598824888888889,
+          -2,
+          3.249882488888889
+        ],
+        [
+          5.32,
+          0.5988177777777779,
+          -2,
+          3.249881777777778
+        ],
+        [
+          5.4,
+          0.5988000000000001,
+          -2,
+          3.24988
+        ],
+        [
+          5.416,
+          0.5987964444444446,
+          -2,
+          3.2498796444444444
+        ],
+        [
+          5.508,
+          0.5987724444444446,
+          -2,
+          3.2498772444444444
+        ],
+        [
+          5.634,
+          0.5987480000000002,
+          -2,
+          3.2498748
+        ],
+        [
+          5.73,
+          0.5987266666666667,
+          -2,
+          3.2498726666666666
+        ],
+        [
+          5.758,
+          0.5987204444444446,
+          -2,
+          3.2498720444444444
+        ],
+        [
+          5.838,
+          0.5987026666666668,
+          -2,
+          3.2498702666666666
+        ],
+        [
+          5.854,
+          0.5986991111111112,
+          -2,
+          3.249869911111111
+        ],
+        [
+          5.962,
+          0.5986751111111113,
+          -2,
+          3.2498675111111113
+        ],
+        [
+          6,
+          0.5986666666666668,
+          -2,
+          3.2498666666666667
+        ]
+      ],
+      "foreignTaskRejected": true
+    }
+  ],
+  "pid": 15668,
+  "session": {
+    "bound": true,
+    "executable": "C:/Program Files/MWORKS/Sysplorer 2026a/Bin64/mworks.exe",
+    "modelHash": "4670d908273243caa2996f708ce1e2692b4012eac5c3107a4209eeea16f6feb9",
+    "pid": 15668,
+    "port": 62137,
+    "protocol": "battery-udp/1",
+    "schema": 1,
+    "session": "bd4882ea-34a9-498a-a4cc-e381bc10ef0e",
+    "updated": "2026-11-04T08:29:50.943Z"
+  }
+}

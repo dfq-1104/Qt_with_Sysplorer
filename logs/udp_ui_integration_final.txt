@@ -1,0 +1,26 @@
+********* Start testing of UdpIntegration *********
+Config: Using QtTest library 5.14.2, Qt 5.14.2 (x86_64-little_endian-llp64 shared (dynamic) release build; by MSVC 2017)
+PASS   : UdpIntegration::initTestCase()
+QINFO  : UdpIntegration::realButtonsAndTaskLifecycle() Phase "Connecting"
+QINFO  : UdpIntegration::realButtonsAndTaskLifecycle() Phase "Preparing"
+QINFO  : UdpIntegration::realButtonsAndTaskLifecycle() Phase "Translating"
+QINFO  : UdpIntegration::realButtonsAndTaskLifecycle() Phase "Running"
+QINFO  : UdpIntegration::realButtonsAndTaskLifecycle() Phase "Finalizing"
+QINFO  : UdpIntegration::realButtonsAndTaskLifecycle() Phase "Completed"
+QINFO  : UdpIntegration::realButtonsAndTaskLifecycle() Phase "Connecting"
+QINFO  : UdpIntegration::realButtonsAndTaskLifecycle() Phase "Preparing"
+QINFO  : UdpIntegration::realButtonsAndTaskLifecycle() Phase "Translating"
+QINFO  : UdpIntegration::realButtonsAndTaskLifecycle() Phase "Running"
+QINFO  : UdpIntegration::realButtonsAndTaskLifecycle() Phase "Pausing"
+QINFO  : UdpIntegration::realButtonsAndTaskLifecycle() Phase "Paused"
+QINFO  : UdpIntegration::realButtonsAndTaskLifecycle() Phase "Running"
+QINFO  : UdpIntegration::realButtonsAndTaskLifecycle() Phase "Stopping"
+QINFO  : UdpIntegration::realButtonsAndTaskLifecycle() Phase "Finalizing"
+QINFO  : UdpIntegration::realButtonsAndTaskLifecycle() Phase "Stopped"
+FAIL!  : UdpIntegration::realButtonsAndTaskLifecycle() Compared doubles are not the same (fuzzy compare)
+   Actual   (player->samples().first().soc): 0.800000011921
+   Expected (.8)                           : 0.8
+..\udp_integration_test.cpp(125) : failure location
+PASS   : UdpIntegration::cleanupTestCase()
+Totals: 2 passed, 1 failed, 0 skipped, 0 blacklisted, 59593ms
+********* Finished testing of UdpIntegration *********

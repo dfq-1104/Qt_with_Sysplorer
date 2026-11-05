@@ -1,0 +1,17 @@
+********* Start testing of IntegrationTest *********
+Config: Using QtTest library 5.14.2, Qt 5.14.2 (x86_64-little_endian-llp64 shared (dynamic) release build; by MSVC 2017)
+INFO   : IntegrationTest::initTestCase() entering
+PASS   : IntegrationTest::initTestCase()
+INFO   : IntegrationTest::customSdkFlow() entering
+QWARN  : IntegrationTest::customSdkFlow() This plugin does not support propagateSizeHints()
+QWARN  : IntegrationTest::customSdkFlow() This plugin does not support propagateSizeHints()
+QWARN  : IntegrationTest::customSdkFlow() This plugin does not support propagateSizeHints()
+QWARN  : IntegrationTest::customSdkFlow() This plugin does not support propagateSizeHints()
+QWARN  : IntegrationTest::customSdkFlow() This plugin does not support propagateSizeHints()
+QWARN  : IntegrationTest::customSdkFlow() This plugin does not support propagateSizeHints()
+QINFO  : IntegrationTest::customSdkFlow() SDK jobs: "C:/Users/TR/.codex/visualizations/2026/11/03/01a1a14e-d533-7a73-8c71-2fa02f587ae3/battery_ui_tests/20261104_031607_4b619f03-3b0e-4307-b4eb-b125718dca51" "C:/Users/TR/.codex/visualizations/2026/11/03/01a1a14e-d533-7a73-8c71-2fa02f587ae3/battery_ui_tests/20261104_031629_c1cac035-8b6c-42b3-adc1-c3e097058715" "C:/Users/TR/.codex/visualizations/2026/11/03/01a1a14e-d533-7a73-8c71-2fa02f587ae3/battery_ui_tests/20261104_031649_042eee2c-f147-4212-ae19-c10876ed48ee"
+PASS   : IntegrationTest::customSdkFlow()
+INFO   : IntegrationTest::cleanupTestCase() entering
+PASS   : IntegrationTest::cleanupTestCase()
+Totals: 3 passed, 0 failed, 0 skipped, 0 blacklisted, 89188ms
+********* Finished testing of IntegrationTest *********

@@ -1,0 +1,6 @@
+**********************************************************************
+** Visual Studio 2017 Developer Command Prompt v15.9.27
+** Copyright (c) 2017 Microsoft Corporation
+**********************************************************************
+[vcvarsall.bat] Environment initialized for: 'x64'
+	"C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\VC\Tools\MSVC\14.16.27023\bin\HostX64\x64\nmake.exe" -f Makefile.Release

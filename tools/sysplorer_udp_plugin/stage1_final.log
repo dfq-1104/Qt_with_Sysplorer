@@ -1,0 +1,25 @@
+Test host PID 11548
+c97b07c9 Preparing 0 live 0
+c97b07c9 Translating 0 live 0
+c97b07c9 Running 0 live 0
+c97b07c9 Pausing 1 live 2
+c97b07c9 Paused 1 live 2
+c97b07c9 Running 2 live 3
+c97b07c9 Stopping 3 live 4
+c97b07c9 Finalizing 3 live 4
+c97b07c9 Stopped 3 live 4
+a8dce7c0 Preparing 0 live 0
+a8dce7c0 Translating 0 live 0
+a8dce7c0 Running 0 live 0
+a8dce7c0 Finalizing 6 live 7
+a8dce7c0 Completed 6 live 7
+f4343ddc Preparing 0 live 0
+f4343ddc Translating 0 live 0
+f4343ddc Running 0 live 0
+Traceback (most recent call last):
+  File "C:\Users\TR\Documents\ChatGPT\qt���濪��\tools\sysplorer_udp_plugin\verify_stage1.py", line 60, in <module>
+    request('stop',task);raise AssertionError('60x solver speed did not take effect')
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 60x solver speed did not take effect
+
+Evidence C:\Users\TR\Documents\ChatGPT\qt���濪��\tools\sysplorer_udp_plugin\artifacts\20261104_164414

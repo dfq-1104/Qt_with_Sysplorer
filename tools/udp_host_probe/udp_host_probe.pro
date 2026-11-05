@@ -1,0 +1,12 @@
+QT += core gui widgets network
+TEMPLATE = lib
+CONFIG += plugin c++11 release
+TARGET = battery_udp_host_probe
+SDK = "C:/Program Files/MWORKS/Sysplorer SDK 2026a(vs2017)"
+INCLUDEPATH += $$SDK/interface $$SDK/include
+LIBS += -L$$SDK/bin/win_msvc2017x64/lib -lmw_extension_system -lmw_develop -lmw_class_manager -lmw_sim_inst
+QMAKE_CXXFLAGS += /utf-8 /wd4828
+DEFINES += UNICODE _UNICODE
+HEADERS += probe.h
+SOURCES += probe.cpp
+RESOURCES += probe.qrc

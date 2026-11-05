@@ -1,0 +1,56 @@
+EXCEPTION c0000409 at \\?\C:\Program Files\MWORKS\Sysplorer SDK 2026a(vs2017)\bin\win_msvc2017x64\Release\Qt5Core.dll+0x250d8 info=0700000000000000000000000000000000000000000000000000000000000000
+RIP \\?\C:\Program Files\MWORKS\Sysplorer SDK 2026a(vs2017)\bin\win_msvc2017x64\Release\Qt5Core.dll+0x250d8 RSP 0x10c2f0f7b0
+  stack+28: \\?\C:\Program Files\MWORKS\Sysplorer SDK 2026a(vs2017)\bin\win_msvc2017x64\Release\Qt5Core.dll+0x23383
+  stack+40: \\?\C:\Program Files\MWORKS\Sysplorer SDK 2026a(vs2017)\bin\win_msvc2017x64\Release\mw_license_ui.dll+0x532fd8
+  stack+60: \\?\C:\Program Files\MWORKS\Sysplorer SDK 2026a(vs2017)\bin\win_msvc2017x64\Release\Qt5Core.dll+0x2f9218
+  stack+78: \\?\C:\Windows\System32\ucrtbase.dll+0x12d7b
+  stack+88: \\?\C:\Program Files\MWORKS\Sysplorer SDK 2026a(vs2017)\bin\win_msvc2017x64\Release\Qt5Core.dll+0x2845d
+  stack+98: \\?\C:\Program Files\MWORKS\Sysplorer SDK 2026a(vs2017)\bin\win_msvc2017x64\Release\Qt5Core.dll+0x2f7248
+  stack+d0: \\?\C:\Program Files\MWORKS\Sysplorer SDK 2026a(vs2017)\bin\win_msvc2017x64\Release\Qt5Core.dll+0x2eef50
+  stack+e8: \\?\C:\Windows\System32\ucrtbase.dll+0x49c85
+  stack+108: \\?\C:\Windows\System32\ucrtbase.dll+0x9341
+  stack+118: \\?\C:\Program Files\MWORKS\Sysplorer SDK 2026a(vs2017)\bin\win_msvc2017x64\Release\mw_class_manager.dll+0x0
+  stack+120: \\?\C:\Program Files\MWORKS\Sysplorer SDK 2026a(vs2017)\bin\win_msvc2017x64\Release\mw_license_ui.dll+0x0
+  stack+128: \\?\C:\Program Files\MWORKS\Sysplorer SDK 2026a(vs2017)\bin\win_msvc2017x64\Release\mw_license_ui.dll+0x0
+  stack+138: \\?\C:\Windows\System32\ucrtbase.dll+0x498a7
+  stack+158: \\?\C:\Windows\System32\ucrtbase.dll+0x1398c0
+  stack+168: \\?\C:\Windows\System32\ucrtbase.dll+0x4985d
+  stack+198: \\?\C:\Windows\System32\ntdll.dll+0x1b34f
+  stack+1a8: \\?\C:\Program Files\MWORKS\Sysplorer SDK 2026a(vs2017)\bin\win_msvc2017x64\Release\mw_license_ui.dll+0x3c367e
+  stack+1b0: \\?\C:\Program Files\MWORKS\Sysplorer SDK 2026a(vs2017)\bin\win_msvc2017x64\Release\mw_license_ui.dll+0x5360c0
+  stack+1d8: \\?\C:\Program Files\MWORKS\Sysplorer SDK 2026a(vs2017)\bin\win_msvc2017x64\Release\mw_license_ui.dll+0x3c37c8
+  stack+208: \\?\C:\Windows\System32\sspicli.dll+0xec3b
+  stack+228: \\?\C:\Program Files\MWORKS\Sysplorer SDK 2026a(vs2017)\bin\win_msvc2017x64\Release\mw_license_ui.dll+0x7586
+  stack+238: \\?\C:\Windows\System32\ntdll.dll+0x11ef6a
+  stack+240: \\?\C:\Program Files\MWORKS\Sysplorer SDK 2026a(vs2017)\bin\win_msvc2017x64\Release\mw_license_ui.dll+0x0
+  stack+268: \\?\C:\Windows\System32\ntdll.dll+0x1b2e3
+  stack+2b0: \\?\C:\Program Files\MWORKS\Sysplorer SDK 2026a(vs2017)\bin\win_msvc2017x64\Release\mw_license_ui.dll+0x0
+  stack+2b8: \\?\C:\Windows\System32\ntdll.dll+0x37db7
+  stack+378: \\?\C:\Windows\System32\ntdll.dll+0x7fb10
+  stack+388: \\?\C:\Windows\System32\ntdll.dll+0x278b0
+  stack+418: \\?\C:\Windows\System32\ucrtbase.dll+0x9341
+  stack+420: \\?\C:\Windows\System32\ntdll.dll+0x1ceeb0
+  stack+428: \\?\C:\Windows\System32\ntdll.dll+0x1d34b8
+  stack+440: \\?\C:\Windows\System32\ntdll.dll+0x1d34b8
+  stack+448: \\?\C:\Windows\System32\ntdll.dll+0x179960
+  stack+460: \\?\C:\Program Files\MWORKS\Sysplorer SDK 2026a(vs2017)\bin\win_msvc2017x64\Release\mw_license_ui.dll+0x3c3ac0
+  stack+468: \\?\C:\Windows\System32\ntdll.dll+0x1b69b
+  stack+470: \\?\C:\Program Files\MWORKS\Sysplorer SDK 2026a(vs2017)\bin\win_msvc2017x64\Release\mw_license_ui.dll+0x3e4c00
+  stack+490: \\?\C:\Windows\System32\ntdll.dll+0x179960
+  stack+498: \\?\C:\Program Files\MWORKS\Sysplorer SDK 2026a(vs2017)\bin\win_msvc2017x64\Release\mw_license_ui.dll+0x3c3ac0
+  stack+4a8: \\?\C:\Program Files\MWORKS\Sysplorer SDK 2026a(vs2017)\bin\win_msvc2017x64\Release\mw_license_ui.dll+0x0
+  stack+4c0: \\?\C:\Program Files\MWORKS\Sysplorer SDK 2026a(vs2017)\bin\win_msvc2017x64\Release\mw_license_ui.dll+0x3e4c00
+  stack+510: \\?\C:\Program Files\MWORKS\Sysplorer SDK 2026a(vs2017)\bin\win_msvc2017x64\Release\mw_license_ui.dll+0x7586
+  stack+538: \\?\C:\Windows\System32\ntdll.dll+0x8027f
+  stack+550: \\?\C:\Program Files\MWORKS\Sysplorer SDK 2026a(vs2017)\bin\win_msvc2017x64\Release\mw_license_ui.dll+0x3c3ac0
+  stack+558: \\?\C:\Program Files\MWORKS\Sysplorer SDK 2026a(vs2017)\bin\win_msvc2017x64\Release\mw_class_manager.dll+0x1beae0
+  stack+560: \\?\C:\Windows\System32\ntdll.dll+0x17d148
+  stack+5c8: \\?\C:\Windows\System32\ntdll.dll+0x80255
+  stack+618: \\?\C:\Windows\System32\ntdll.dll+0x7d8d4
+  stack+648: \\?\C:\Windows\System32\ntdll.dll+0x7ef8e
+  stack+678: \\?\C:\Windows\System32\kernel32.dll+0x417ab
+  stack+6a8: \\?\C:\Windows\System32\ucrtbase.dll+0xa0813
+  stack+708: \\?\C:\Users\TR\Documents\ChatGPT\qt���濪��\tools\sdk_probe\release\sdk_probe.exe+0xaf47
+  stack+748: \\?\C:\Windows\System32\kernel32.dll+0x2dda7
+  stack+778: \\?\C:\Windows\System32\ntdll.dll+0x7ee4c
+DEBUG EXIT 0xc0000409

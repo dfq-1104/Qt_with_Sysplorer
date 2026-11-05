@@ -1,0 +1,12 @@
+********* Start testing of UdpIntegration *********
+Config: Using QtTest library 5.14.2, Qt 5.14.2 (x86_64-little_endian-llp64 shared (dynamic) release build; by MSVC 2017)
+PASS   : UdpIntegration::initTestCase()
+QINFO  : UdpIntegration::realButtonsAndTaskLifecycle() Phase "Connecting"
+QINFO  : UdpIntegration::realButtonsAndTaskLifecycle() Phase "Preparing"
+QINFO  : UdpIntegration::realButtonsAndTaskLifecycle() Phase "Translating"
+QINFO  : UdpIntegration::realButtonsAndTaskLifecycle() Phase "Running"
+QFATAL : UdpIntegration::realButtonsAndTaskLifecycle() Test function timed out
+FAIL!  : UdpIntegration::realButtonsAndTaskLifecycle() Received a fatal error.
+Unknown file(0) : failure location
+Totals: 1 passed, 1 failed, 0 skipped, 0 blacklisted, 300005ms
+********* Finished testing of UdpIntegration *********

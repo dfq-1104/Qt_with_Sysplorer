@@ -1,0 +1,1 @@
+<RCC><qresource prefix="/probe"><file alias="BatterySim.mo">../../model/BatterySim.mo</file></qresource></RCC>
