@@ -1,7 +1,0 @@
-HELPER exe=C:/Users/TR/Documents/ChatGPT/qt界面开发/tools/sdk_probe/release/sdk_probe.exe sha256=3517c6433ece74ab36e0f0fbc260c0b172cd46750c2c6f327fd5d9296856c9c9 qt=C:\Program Files\MWORKS\Sysplorer SDK 2026a(vs2017)\bin\win_msvc2017x64\Release\Qt5Core.dll model=C:/Users/TR/Documents/ChatGPT/qt界面开发/logs/truncated_utf8.mo
-DECODE bytes=9 sha256=433a704ffebb048bed26e3d7a9fc1988b4a83b30ce85710d5ae247e20d695152 codec=UTF-8 invalid=0 remaining=1 null=0 chars=8
-FAIL model decode rejected: invalid=0 remaining=1 null=0 empty=0 winUtf8Chars=0 head=7061636b61676520c3 tail=7061636b61676520c3 file=C:/Users/TR/Documents/ChatGPT/qt界面开发/logs/truncated_utf8.mo
-CLEANUP probe stack done
-CLEANUP license threads collector=1 queue=1
-CLEANUP application done
-QT[1] QObject::~QObject: Timers cannot be stopped from another thread

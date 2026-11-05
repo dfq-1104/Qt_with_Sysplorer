@@ -1,10 +1,43 @@
-tools/sdk_probe/.qmake.stash
-tools/sdk_probe/Makefile*
-tools/sdk_probe/release/
-tools/sdk_probe/debug/
-tools/sdk_probe/*.pdb
+# 忽略 Visual Studio / IDE 配置
+.vs/
+.vscode/
+*.sln
+*.vcxproj*
+*.ipch
+*.db
+
+# 忽略编译产物
+*.exe
+*.dll
+*.obj
+*.pdb
+build/
+dist/
+app/ui/runtime_udp/
+
+# 忽略日志和测试证据
+logs/
+*.log
+tools/*/evidence*/
+tools/*/artifacts/
+
+# 忽略压缩包
+*.zip
+*.tar.gz
+*.7z
+
+# 忽略系统文件
+.DS_Store
+Thumbs.db
+
+# 补充忽略 Modelica/Sysplorer 编译产物
 runs/
-app/ui/build/
-app/ui/runtime/
+
+# 补充忽略 Qt 的 Makefile
+Makefile
+Makefile.*
+.qmake.stash
+
+# 补充忽略其他 runtime 目录
 app/ui/probe_runtime/
-app/ui/tests/build/
+app/ui/runtime/
