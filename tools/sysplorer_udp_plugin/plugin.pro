@@ -1,0 +1,12 @@
+QT += core gui widgets network
+TEMPLATE = lib
+CONFIG += plugin c++11 release
+TARGET = battery_udp_control
+SDK = "C:/Program Files/MWORKS/Sysplorer SDK 2026a(vs2017)"
+INCLUDEPATH += $$SDK/interface $$SDK/include
+LIBS += -L$$SDK/bin/win_msvc2017x64/lib -lmw_extension_system -lmw_develop -lmw_class_manager -lmw_sim_inst -lmw_global -lmw_sim_plot -lmw_model_var_tree -lmodelica_post_processor
+QMAKE_CXXFLAGS += /utf-8 /wd4828
+DEFINES += UNICODE _UNICODE
+HEADERS += control_plugin.h
+SOURCES += control_plugin.cpp
+RESOURCES += models.qrc

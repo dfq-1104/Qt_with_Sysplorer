@@ -1,0 +1,84 @@
+{
+  "status": "passed",
+  "checkedAtUtc": "2026-11-04T04:38:44.750040+00:00",
+  "formalDocuments": 6,
+  "files": [
+    {
+      "file": "00_事实清单与文档规划.md",
+      "lines": 318,
+      "characters": 13036,
+      "mermaidDiagrams": 1,
+      "sha256": "e0503bba519b4c0ccd34bdc1b5337eeba9836a8a1f69f66ee28e5f766081f490"
+    },
+    {
+      "file": "01_数据通信文档.md",
+      "lines": 307,
+      "characters": 8693,
+      "mermaidDiagrams": 2,
+      "sha256": "9545e3e3d4ac9f459cb84996022185c5a32e958a91836da9b11cd7e0f4c19e31"
+    },
+    {
+      "file": "02_开发流程文档.md",
+      "lines": 229,
+      "characters": 7312,
+      "mermaidDiagrams": 1,
+      "sha256": "5c604020c70a8299ca160738773cf752190a9feab2edaf66c1fc56708808393d"
+    },
+    {
+      "file": "03_错误总结文档.md",
+      "lines": 236,
+      "characters": 8378,
+      "mermaidDiagrams": 2,
+      "sha256": "774595d8f8fcf3d830f31b16b568d47c29a8b2561976936a8cb592315f021476"
+    },
+    {
+      "file": "04_界面开发文档.md",
+      "lines": 243,
+      "characters": 7340,
+      "mermaidDiagrams": 3,
+      "sha256": "122dcc1b9aac845870e7f9247522a5c3e79a82d3e071e9b50bddbf6e5eca37ee"
+    },
+    {
+      "file": "05_最终文档与开发借鉴.md",
+      "lines": 147,
+      "characters": 4698,
+      "mermaidDiagrams": 1,
+      "sha256": "df6ba5ddd1271abee03987689ead99823791968ebe3bcca0676205ac4b75485e"
+    },
+    {
+      "file": "06_提示词评价与后续建议.md",
+      "lines": 215,
+      "characters": 6636,
+      "mermaidDiagrams": 1,
+      "sha256": "5c3b262928a0a24fc5cad0ef9969e6b910598c1122a296c9edf9be87fd6bd3c5"
+    }
+  ],
+  "assets": [
+    {
+      "file": "assets/ERR-06_历史模型读取失败.png",
+      "width": 1172,
+      "height": 820,
+      "sha256": "f02b2cc450742c198a46f9b6f523206b17fd111965c7c4dd62a47bfbdd82c049"
+    },
+    {
+      "file": "assets/ERR-10_历史重复打开提示.png",
+      "width": 1167,
+      "height": 817,
+      "sha256": "f5cd247ffac0fd0393fd5b153a0f2bff0ca5485db5cf364ecacf76e112f6b32c"
+    }
+  ],
+  "coverage": {
+    "visiblePromptGroups": 14,
+    "promptTemplates": 6,
+    "errorCases": 12
+  },
+  "manualReview": [
+    "Current implementation distinguished from historical/intermediate solutions and proposals.",
+    "Unique detailed ownership reviewed for protocols, features, cases, UI state, ADRs and prompt evaluation."
+  ],
+  "errors": [],
+  "limitations": [
+    "Mermaid renderer/parser unavailable locally: structural checks only, no render acceptance claimed."
+  ],
+  "duplicateCheck": "Exact normalized prose paragraphs >=120 characters, excluding boilerplate/tables/code; manual ownership review also required."
+}

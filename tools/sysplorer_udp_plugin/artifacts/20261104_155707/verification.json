@@ -1,0 +1,1974 @@
+{
+  "ok": false,
+  "cases": [
+    {
+      "taskId": "7fc02c37-43fd-4006-9d93-f205e1a95b2a",
+      "partial": true,
+      "args": {
+        "modelHash": "4670d908273243caa2996f708ce1e2692b4012eac5c3107a4209eeea16f6feb9",
+        "mode": 1,
+        "voltage": 3.45,
+        "current": 1.0,
+        "soc0": 0.5,
+        "duration": 12,
+        "speed": 1
+      },
+      "statuses": [
+        {
+          "phase": "Preparing",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x0"
+        },
+        {
+          "phase": "Running",
+          "time": 0,
+          "total": 0,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Running",
+          "time": 0.026000000000000002,
+          "total": 2,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Running",
+          "time": 0.136,
+          "total": 4,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Running",
+          "time": 0.244,
+          "total": 6,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Running",
+          "time": 0.446,
+          "total": 9,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Running",
+          "time": 0.556,
+          "total": 11,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Running",
+          "time": 0.6960000000000001,
+          "total": 14,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Running",
+          "time": 0.804,
+          "total": 16,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Running",
+          "time": 0.912,
+          "total": 18,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Running",
+          "time": 1.006,
+          "total": 20,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Paused",
+          "time": 1.068,
+          "total": 21,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 1.232,
+          "total": 24,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 1.342,
+          "total": 26,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 1.478,
+          "total": 29,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 1.586,
+          "total": 31,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 1.694,
+          "total": 33,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 1.788,
+          "total": 35,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 1.926,
+          "total": 37,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 2.02,
+          "total": 39,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 2.128,
+          "total": 41,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 2.316,
+          "total": 44,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 2.44,
+          "total": 46,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 2.564,
+          "total": 49,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 2.69,
+          "total": 51,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 2.8000000000000003,
+          "total": 53,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 2.894,
+          "total": 55,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 3.004,
+          "total": 57,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 3.128,
+          "total": 59,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 3.3160000000000003,
+          "total": 62,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 3.424,
+          "total": 64,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 3.5300000000000002,
+          "total": 66,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 3.67,
+          "total": 69,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 3.778,
+          "total": 71,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 3.902,
+          "total": 73,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 3.996,
+          "total": 75,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 4.106,
+          "total": 77,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 4.2,
+          "total": 79,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 4.3260000000000005,
+          "total": 81,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 4.514,
+          "total": 84,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 4.622,
+          "total": 86,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 4.7620000000000005,
+          "total": 89,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 4.87,
+          "total": 91,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 4.98,
+          "total": 93,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 5.104,
+          "total": 95,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 5.198,
+          "total": 97,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 5.306,
+          "total": 99,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 5.416,
+          "total": 101,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 5.618,
+          "total": 104,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 5.726,
+          "total": 106,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 5.8500000000000005,
+          "total": 109,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 5.976,
+          "total": 111,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 6.0680000000000005,
+          "total": 113,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 6.18,
+          "total": 115,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 6.304,
+          "total": 117,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 6.412,
+          "total": 119,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 6.598,
+          "total": 122,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 6.708,
+          "total": 124,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 6.8,
+          "total": 126,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 6.954,
+          "total": 129,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 7.048,
+          "total": 131,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 7.174,
+          "total": 133,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 7.266,
+          "total": 135,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 7.390000000000001,
+          "total": 137,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 7.514,
+          "total": 139,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 7.684,
+          "total": 141,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 7.776,
+          "total": 143,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 7.882000000000001,
+          "total": 145,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 8.052,
+          "total": 148,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 8.16,
+          "total": 150,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 8.256,
+          "total": 152,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 8.364,
+          "total": 154,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 8.49,
+          "total": 156,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 8.584,
+          "total": 158,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 8.692,
+          "total": 160,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 8.878,
+          "total": 163,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 9.004,
+          "total": 165,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 9.126,
+          "total": 168,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 9.252,
+          "total": 170,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 9.36,
+          "total": 172,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 9.454,
+          "total": 174,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 9.564,
+          "total": 176,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 9.752,
+          "total": 179,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 9.872,
+          "total": 181,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 9.998,
+          "total": 184,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 10.122,
+          "total": 186,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 10.23,
+          "total": 188,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 10.338000000000001,
+          "total": 190,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 10.432,
+          "total": 192,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 10.558,
+          "total": 194,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 10.666,
+          "total": 196,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 10.852,
+          "total": 199,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 10.96,
+          "total": 201,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 11.1,
+          "total": 204,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 11.208,
+          "total": 206,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 11.316,
+          "total": 208,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 11.38,
+          "total": 209,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 11.55,
+          "total": 211,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 11.628,
+          "total": 213,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 11.752,
+          "total": 215,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Resuming",
+          "time": 11.954,
+          "total": 218,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Finalizing",
+          "time": 12,
+          "total": 220,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Finalizing",
+          "time": 12,
+          "total": 220,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Finalizing",
+          "time": 12,
+          "total": 220,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        },
+        {
+          "phase": "Completed",
+          "time": 12,
+          "total": 220,
+          "controller": "0x2b60ad9c250",
+          "data": "0x2b60d1fcec0"
+        }
+      ],
+      "begin": {
+        "command": "begin",
+        "id": "297b74fc-26e1-45ca-a5d9-4394043d3ca1",
+        "ok": true,
+        "schema": 1,
+        "session": "c741803b-c102-4a01-88a7-45b7841ff9c4",
+        "status": {
+          "code": "",
+          "controller": "0x2b60ad9c250",
+          "csvHash": "",
+          "cursor": 0,
+          "data": "0x0",
+          "duration": 12,
+          "jobDir": "C:/Users/TR/AppData/Local/Temp/BatteryConsoleUDP/7fc02c37-43fd-4006-9d93-f205e1a95b2a",
+          "message": "",
+          "modelHash": "4670d908273243caa2996f708ce1e2692b4012eac5c3107a4209eeea16f6feb9",
+          "nativeResult": "",
+          "next": 0,
+          "owner": "0cd8df75-6b57-4327-bab5-36407be04317",
+          "params": {},
+          "phase": "Preparing",
+          "pid": 13508,
+          "rows": [],
+          "taskId": "7fc02c37-43fd-4006-9d93-f205e1a95b2a",
+          "time": 0,
+          "total": 0,
+          "viewerMessage": ""
+        },
+        "taskId": "7fc02c37-43fd-4006-9d93-f205e1a95b2a"
+      },
+      "pausedAt": 1.068,
+      "terminal": {
+        "code": "",
+        "controller": "0x2b60ad9c250",
+        "csvHash": "66db8f44bee320107cf325167f6c563ba432540dd2ff5947c870a94818e55d95",
+        "cursor": 220,
+        "data": "0x2b60d1fcec0",
+        "duration": 12,
+        "jobDir": "C:/Users/TR/AppData/Local/Temp/BatteryConsoleUDP/7fc02c37-43fd-4006-9d93-f205e1a95b2a",
+        "message": "",
+        "modelHash": "4670d908273243caa2996f708ce1e2692b4012eac5c3107a4209eeea16f6feb9",
+        "nativeResult": "C:\\Users\\TR\\AppData\\Local\\Temp\\BatteryConsoleUDP",
+        "next": 220,
+        "owner": "0cd8df75-6b57-4327-bab5-36407be04317",
+        "params": {
+          "current": 1,
+          "mode": 1,
+          "soc0": 0.5,
+          "voltage": 3.45
+        },
+        "phase": "Completed",
+        "pid": 13508,
+        "rows": [],
+        "taskId": "7fc02c37-43fd-4006-9d93-f205e1a95b2a",
+        "time": 12,
+        "total": 220,
+        "viewerMessage": "Sysplorer 已显示本次原生结果"
+      }
+    }
+  ],
+  "pid": 13508,
+  "session": {
+    "bound": true,
+    "executable": "C:/Program Files/MWORKS/Sysplorer 2026a/Bin64/mworks.exe",
+    "modelHash": "4670d908273243caa2996f708ce1e2692b4012eac5c3107a4209eeea16f6feb9",
+    "pid": 13508,
+    "port": 54417,
+    "protocol": "battery-udp/1",
+    "schema": 1,
+    "session": "c741803b-c102-4a01-88a7-45b7841ff9c4",
+    "updated": "2026-11-04T07:57:43.676Z"
+  },
+  "error": "Traceback (most recent call last):\n  File \"C:\\Users\\TR\\Documents\\ChatGPT\\qt界面开发\\tools\\sysplorer_udp_plugin\\verify_stage1.py\", line 80, in <module>\n    assert case['terminal']['phase']==('Stopped' if partial else 'Completed')\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+}

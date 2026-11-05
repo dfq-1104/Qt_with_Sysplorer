@@ -1,0 +1,4885 @@
+{
+  "ok": true,
+  "cases": [
+    {
+      "taskId": "fd059e0c-cae7-4901-8ed5-7ed69f4b837d",
+      "partial": true,
+      "fast": false,
+      "args": {
+        "modelHash": "4670d908273243caa2996f708ce1e2692b4012eac5c3107a4209eeea16f6feb9",
+        "mode": 1,
+        "voltage": 3.45,
+        "current": 1.0,
+        "soc0": 0.5,
+        "duration": 12,
+        "speed": 1
+      },
+      "statuses": [
+        {
+          "phase": "Preparing",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105210"
+        },
+        {
+          "phase": "Running",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105210"
+        },
+        {
+          "phase": "Running",
+          "time": 0,
+          "total": 1,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105210"
+        },
+        {
+          "phase": "Running",
+          "time": 0,
+          "total": 1,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105210"
+        },
+        {
+          "phase": "Running",
+          "time": 0,
+          "total": 1,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105210"
+        },
+        {
+          "phase": "Running",
+          "time": 0,
+          "total": 1,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105210"
+        },
+        {
+          "phase": "Running",
+          "time": 0,
+          "total": 1,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105210"
+        },
+        {
+          "phase": "Running",
+          "time": 0,
+          "total": 1,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105210"
+        },
+        {
+          "phase": "Running",
+          "time": 0,
+          "total": 1,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105210"
+        },
+        {
+          "phase": "Running",
+          "time": 0,
+          "total": 1,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105210"
+        },
+        {
+          "phase": "Running",
+          "time": 1,
+          "total": 2,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105210"
+        },
+        {
+          "phase": "Pausing",
+          "time": 1,
+          "total": 2,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105210"
+        },
+        {
+          "phase": "Pausing",
+          "time": 1,
+          "total": 2,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105210"
+        },
+        {
+          "phase": "Pausing",
+          "time": 1,
+          "total": 2,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105210"
+        },
+        {
+          "phase": "Pausing",
+          "time": 1,
+          "total": 2,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105210"
+        },
+        {
+          "phase": "Pausing",
+          "time": 1,
+          "total": 2,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105210"
+        },
+        {
+          "phase": "Pausing",
+          "time": 1,
+          "total": 2,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105210"
+        },
+        {
+          "phase": "Pausing",
+          "time": 1,
+          "total": 2,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105210"
+        },
+        {
+          "phase": "Paused",
+          "time": 1,
+          "total": 2,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105210"
+        },
+        {
+          "phase": "Running",
+          "time": 2,
+          "total": 3,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105210"
+        },
+        {
+          "phase": "Running",
+          "time": 2,
+          "total": 3,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105210"
+        },
+        {
+          "phase": "Running",
+          "time": 2,
+          "total": 3,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105210"
+        },
+        {
+          "phase": "Running",
+          "time": 2,
+          "total": 3,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105210"
+        },
+        {
+          "phase": "Running",
+          "time": 2,
+          "total": 3,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105210"
+        },
+        {
+          "phase": "Running",
+          "time": 2,
+          "total": 3,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105210"
+        },
+        {
+          "phase": "Running",
+          "time": 2,
+          "total": 3,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105210"
+        },
+        {
+          "phase": "Running",
+          "time": 2,
+          "total": 3,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105210"
+        },
+        {
+          "phase": "Running",
+          "time": 2,
+          "total": 3,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105210"
+        },
+        {
+          "phase": "Running",
+          "time": 2,
+          "total": 3,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105210"
+        },
+        {
+          "phase": "Running",
+          "time": 2,
+          "total": 3,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105210"
+        },
+        {
+          "phase": "Running",
+          "time": 2,
+          "total": 3,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105210"
+        },
+        {
+          "phase": "Running",
+          "time": 2,
+          "total": 3,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105210"
+        },
+        {
+          "phase": "Running",
+          "time": 2,
+          "total": 3,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105210"
+        },
+        {
+          "phase": "Running",
+          "time": 2,
+          "total": 3,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105210"
+        },
+        {
+          "phase": "Running",
+          "time": 3,
+          "total": 4,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105210"
+        },
+        {
+          "phase": "Stopping",
+          "time": 3,
+          "total": 4,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105210"
+        },
+        {
+          "phase": "Stopping",
+          "time": 3,
+          "total": 4,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105210"
+        },
+        {
+          "phase": "Stopping",
+          "time": 3,
+          "total": 4,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105210"
+        },
+        {
+          "phase": "Stopping",
+          "time": 3,
+          "total": 4,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105210"
+        },
+        {
+          "phase": "Stopping",
+          "time": 3,
+          "total": 4,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105210"
+        },
+        {
+          "phase": "Stopping",
+          "time": 3,
+          "total": 4,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105210"
+        },
+        {
+          "phase": "Stopping",
+          "time": 3,
+          "total": 4,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105210"
+        },
+        {
+          "phase": "Stopping",
+          "time": 3,
+          "total": 4,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105210"
+        },
+        {
+          "phase": "Stopping",
+          "time": 3,
+          "total": 4,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105210"
+        },
+        {
+          "phase": "Stopping",
+          "time": 3,
+          "total": 4,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105210"
+        },
+        {
+          "phase": "Stopping",
+          "time": 3,
+          "total": 4,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105210"
+        },
+        {
+          "phase": "Stopping",
+          "time": 3,
+          "total": 4,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105210"
+        },
+        {
+          "phase": "Stopping",
+          "time": 3,
+          "total": 4,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105210"
+        },
+        {
+          "phase": "Stopping",
+          "time": 3,
+          "total": 4,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105210"
+        },
+        {
+          "phase": "Stopping",
+          "time": 3,
+          "total": 4,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105210"
+        },
+        {
+          "phase": "Stopping",
+          "time": 3,
+          "total": 4,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105210"
+        },
+        {
+          "phase": "Stopping",
+          "time": 3,
+          "total": 4,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105210"
+        },
+        {
+          "phase": "Stopping",
+          "time": 3,
+          "total": 4,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105210"
+        },
+        {
+          "phase": "Stopping",
+          "time": 3,
+          "total": 4,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105210"
+        },
+        {
+          "phase": "Stopping",
+          "time": 3,
+          "total": 4,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105210"
+        },
+        {
+          "phase": "Finalizing",
+          "time": 3,
+          "total": 4,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105210"
+        },
+        {
+          "phase": "Finalizing",
+          "time": 3,
+          "total": 4,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105210"
+        },
+        {
+          "phase": "Finalizing",
+          "time": 3,
+          "total": 4,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105210"
+        },
+        {
+          "phase": "Stopped",
+          "time": 3,
+          "total": 4,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105210"
+        }
+      ],
+      "begin": {
+        "command": "begin",
+        "id": "f730ae1f-8bb6-4041-bde1-55687653c5fb",
+        "ok": true,
+        "schema": 1,
+        "session": "7d1fd0af-f003-4bf4-970a-c57a21fd9954",
+        "status": {
+          "code": "",
+          "controller": "0x24ac868e940",
+          "csvHash": "",
+          "cursor": 0,
+          "data": "0x0",
+          "duration": 12,
+          "jobDir": "C:/Users/TR/AppData/Local/Temp/BatteryConsoleUDP/fd059e0c-cae7-4901-8ed5-7ed69f4b837d",
+          "message": "",
+          "modelHash": "4670d908273243caa2996f708ce1e2692b4012eac5c3107a4209eeea16f6feb9",
+          "nativeResult": "",
+          "next": 0,
+          "owner": "be5a0d1f-e9d6-4930-8729-db1397a6cfab",
+          "params": {},
+          "phase": "Preparing",
+          "pid": 9876,
+          "rows": [],
+          "taskId": "fd059e0c-cae7-4901-8ed5-7ed69f4b837d",
+          "time": 0,
+          "total": 0,
+          "viewerMessage": ""
+        },
+        "taskId": "fd059e0c-cae7-4901-8ed5-7ed69f4b837d"
+      },
+      "pausedAt": 1,
+      "terminal": {
+        "code": "",
+        "controller": "0x24ac868e940",
+        "csvHash": "4afa6e4fefae79677553e2aaa111ee066780c72dbbbe6cff3666326a7aa23854",
+        "cursor": 4,
+        "data": "0x24acb105210",
+        "duration": 12,
+        "jobDir": "C:/Users/TR/AppData/Local/Temp/BatteryConsoleUDP/fd059e0c-cae7-4901-8ed5-7ed69f4b837d",
+        "message": "",
+        "modelHash": "4670d908273243caa2996f708ce1e2692b4012eac5c3107a4209eeea16f6feb9",
+        "nativeResult": "C:\\Users\\TR\\AppData\\Local\\Temp\\BatteryConsoleUDP",
+        "next": 4,
+        "owner": "be5a0d1f-e9d6-4930-8729-db1397a6cfab",
+        "params": {
+          "current": 1,
+          "mode": 1,
+          "soc0": 0.5,
+          "voltage": 3.45
+        },
+        "phase": "Stopped",
+        "pid": 9876,
+        "rows": [],
+        "taskId": "fd059e0c-cae7-4901-8ed5-7ed69f4b837d",
+        "time": 3,
+        "total": 4,
+        "viewerMessage": "Sysplorer 已显示本次原生结果"
+      },
+      "runningWallSeconds": 9.015999999945052,
+      "manifest": {
+        "complete": false,
+        "csvHash": "4afa6e4fefae79677553e2aaa111ee066780c72dbbbe6cff3666326a7aa23854",
+        "duration": 12,
+        "lastTime": 3,
+        "model": "BatterySim.SingleRun",
+        "modelHash": "4670d908273243caa2996f708ce1e2692b4012eac5c3107a4209eeea16f6feb9",
+        "nativeResult": "C:\\Users\\TR\\AppData\\Local\\Temp\\BatteryConsoleUDP",
+        "params": {
+          "current": 1,
+          "mode": 1,
+          "soc0": 0.5,
+          "voltage": 3.45
+        },
+        "points": 4,
+        "schema": 1,
+        "source": "sysplorer-host-udp",
+        "taskId": "fd059e0c-cae7-4901-8ed5-7ed69f4b837d"
+      },
+      "liveRows": [
+        [
+          0,
+          0.5,
+          1,
+          3.2699999999999996
+        ],
+        [
+          1,
+          0.5001105555555555,
+          1,
+          3.2700110555555555
+        ],
+        [
+          2,
+          0.5002211111111111,
+          1,
+          3.270022111111111
+        ],
+        [
+          3,
+          0.5003316666666667,
+          1,
+          3.2700331666666664
+        ]
+      ],
+      "foreignTaskRejected": true
+    },
+    {
+      "taskId": "05640f9e-a988-464c-92c3-c9551155d5b5",
+      "partial": false,
+      "fast": false,
+      "args": {
+        "modelHash": "4670d908273243caa2996f708ce1e2692b4012eac5c3107a4209eeea16f6feb9",
+        "mode": 2,
+        "voltage": 2.5,
+        "current": 2.0,
+        "soc0": 0.6,
+        "duration": 6,
+        "speed": 1
+      },
+      "statuses": [
+        {
+          "phase": "Preparing",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Running",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105490"
+        },
+        {
+          "phase": "Running",
+          "time": 0,
+          "total": 1,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105490"
+        },
+        {
+          "phase": "Running",
+          "time": 0,
+          "total": 1,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105490"
+        },
+        {
+          "phase": "Running",
+          "time": 0,
+          "total": 1,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105490"
+        },
+        {
+          "phase": "Running",
+          "time": 0,
+          "total": 1,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105490"
+        },
+        {
+          "phase": "Running",
+          "time": 0,
+          "total": 1,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105490"
+        },
+        {
+          "phase": "Running",
+          "time": 0,
+          "total": 1,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105490"
+        },
+        {
+          "phase": "Running",
+          "time": 0,
+          "total": 1,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105490"
+        },
+        {
+          "phase": "Running",
+          "time": 0,
+          "total": 1,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105490"
+        },
+        {
+          "phase": "Running",
+          "time": 1,
+          "total": 2,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105490"
+        },
+        {
+          "phase": "Running",
+          "time": 1,
+          "total": 2,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105490"
+        },
+        {
+          "phase": "Running",
+          "time": 1,
+          "total": 2,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105490"
+        },
+        {
+          "phase": "Running",
+          "time": 1,
+          "total": 2,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105490"
+        },
+        {
+          "phase": "Running",
+          "time": 1,
+          "total": 2,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105490"
+        },
+        {
+          "phase": "Running",
+          "time": 1,
+          "total": 2,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105490"
+        },
+        {
+          "phase": "Running",
+          "time": 1,
+          "total": 2,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105490"
+        },
+        {
+          "phase": "Running",
+          "time": 1,
+          "total": 2,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105490"
+        },
+        {
+          "phase": "Running",
+          "time": 2,
+          "total": 3,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105490"
+        },
+        {
+          "phase": "Running",
+          "time": 2,
+          "total": 3,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105490"
+        },
+        {
+          "phase": "Running",
+          "time": 2,
+          "total": 3,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105490"
+        },
+        {
+          "phase": "Running",
+          "time": 2,
+          "total": 3,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105490"
+        },
+        {
+          "phase": "Running",
+          "time": 2,
+          "total": 3,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105490"
+        },
+        {
+          "phase": "Running",
+          "time": 2,
+          "total": 3,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105490"
+        },
+        {
+          "phase": "Running",
+          "time": 2,
+          "total": 3,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105490"
+        },
+        {
+          "phase": "Running",
+          "time": 2,
+          "total": 3,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105490"
+        },
+        {
+          "phase": "Running",
+          "time": 3,
+          "total": 4,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105490"
+        },
+        {
+          "phase": "Running",
+          "time": 3,
+          "total": 4,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105490"
+        },
+        {
+          "phase": "Running",
+          "time": 3,
+          "total": 4,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105490"
+        },
+        {
+          "phase": "Running",
+          "time": 3,
+          "total": 4,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105490"
+        },
+        {
+          "phase": "Running",
+          "time": 3,
+          "total": 4,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105490"
+        },
+        {
+          "phase": "Running",
+          "time": 3,
+          "total": 4,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105490"
+        },
+        {
+          "phase": "Running",
+          "time": 3,
+          "total": 4,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105490"
+        },
+        {
+          "phase": "Running",
+          "time": 3,
+          "total": 4,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105490"
+        },
+        {
+          "phase": "Running",
+          "time": 3,
+          "total": 4,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105490"
+        },
+        {
+          "phase": "Running",
+          "time": 4,
+          "total": 5,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105490"
+        },
+        {
+          "phase": "Running",
+          "time": 4,
+          "total": 5,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105490"
+        },
+        {
+          "phase": "Running",
+          "time": 4,
+          "total": 5,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105490"
+        },
+        {
+          "phase": "Running",
+          "time": 4,
+          "total": 5,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105490"
+        },
+        {
+          "phase": "Running",
+          "time": 4,
+          "total": 5,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105490"
+        },
+        {
+          "phase": "Running",
+          "time": 4,
+          "total": 5,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105490"
+        },
+        {
+          "phase": "Running",
+          "time": 4,
+          "total": 5,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105490"
+        },
+        {
+          "phase": "Running",
+          "time": 4,
+          "total": 5,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105490"
+        },
+        {
+          "phase": "Running",
+          "time": 5,
+          "total": 6,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105490"
+        },
+        {
+          "phase": "Running",
+          "time": 5,
+          "total": 6,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105490"
+        },
+        {
+          "phase": "Running",
+          "time": 5,
+          "total": 6,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105490"
+        },
+        {
+          "phase": "Running",
+          "time": 5,
+          "total": 6,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105490"
+        },
+        {
+          "phase": "Running",
+          "time": 5,
+          "total": 6,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105490"
+        },
+        {
+          "phase": "Running",
+          "time": 5,
+          "total": 6,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105490"
+        },
+        {
+          "phase": "Running",
+          "time": 5,
+          "total": 6,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105490"
+        },
+        {
+          "phase": "Running",
+          "time": 5,
+          "total": 6,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105490"
+        },
+        {
+          "phase": "Finalizing",
+          "time": 6,
+          "total": 7,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105490"
+        },
+        {
+          "phase": "Finalizing",
+          "time": 6,
+          "total": 7,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105490"
+        },
+        {
+          "phase": "Finalizing",
+          "time": 6,
+          "total": 7,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105490"
+        },
+        {
+          "phase": "Completed",
+          "time": 6,
+          "total": 7,
+          "controller": "0x24ac868e940",
+          "data": "0x24acb105490"
+        }
+      ],
+      "begin": {
+        "command": "begin",
+        "id": "36e6fb9a-11db-4834-969c-2502e916b716",
+        "ok": true,
+        "schema": 1,
+        "session": "7d1fd0af-f003-4bf4-970a-c57a21fd9954",
+        "status": {
+          "code": "",
+          "controller": "0x24ac868e940",
+          "csvHash": "",
+          "cursor": 0,
+          "data": "0x0",
+          "duration": 6,
+          "jobDir": "C:/Users/TR/AppData/Local/Temp/BatteryConsoleUDP/05640f9e-a988-464c-92c3-c9551155d5b5",
+          "message": "",
+          "modelHash": "4670d908273243caa2996f708ce1e2692b4012eac5c3107a4209eeea16f6feb9",
+          "nativeResult": "",
+          "next": 0,
+          "owner": "be5a0d1f-e9d6-4930-8729-db1397a6cfab",
+          "params": {},
+          "phase": "Preparing",
+          "pid": 9876,
+          "rows": [],
+          "taskId": "05640f9e-a988-464c-92c3-c9551155d5b5",
+          "time": 0,
+          "total": 0,
+          "viewerMessage": ""
+        },
+        "taskId": "05640f9e-a988-464c-92c3-c9551155d5b5"
+      },
+      "terminal": {
+        "code": "",
+        "controller": "0x24ac868e940",
+        "csvHash": "6c6e0f8dd2ddb23d30e38640d0b1532daa60017ecb4b25c912d414a259808899",
+        "cursor": 7,
+        "data": "0x24acb105490",
+        "duration": 6,
+        "jobDir": "C:/Users/TR/AppData/Local/Temp/BatteryConsoleUDP/05640f9e-a988-464c-92c3-c9551155d5b5",
+        "message": "",
+        "modelHash": "4670d908273243caa2996f708ce1e2692b4012eac5c3107a4209eeea16f6feb9",
+        "nativeResult": "C:\\Users\\TR\\AppData\\Local\\Temp\\BatteryConsoleUDP",
+        "next": 7,
+        "owner": "be5a0d1f-e9d6-4930-8729-db1397a6cfab",
+        "params": {
+          "current": 2,
+          "mode": 2,
+          "soc0": 0.6,
+          "voltage": 2.5
+        },
+        "phase": "Completed",
+        "pid": 9876,
+        "rows": [],
+        "taskId": "05640f9e-a988-464c-92c3-c9551155d5b5",
+        "time": 6,
+        "total": 7,
+        "viewerMessage": "Sysplorer 已显示本次原生结果"
+      },
+      "runningWallSeconds": 6.891000000061467,
+      "manifest": {
+        "complete": true,
+        "csvHash": "6c6e0f8dd2ddb23d30e38640d0b1532daa60017ecb4b25c912d414a259808899",
+        "duration": 6,
+        "lastTime": 6,
+        "model": "BatterySim.SingleRun",
+        "modelHash": "4670d908273243caa2996f708ce1e2692b4012eac5c3107a4209eeea16f6feb9",
+        "nativeResult": "C:\\Users\\TR\\AppData\\Local\\Temp\\BatteryConsoleUDP",
+        "params": {
+          "current": 2,
+          "mode": 2,
+          "soc0": 0.6,
+          "voltage": 2.5
+        },
+        "points": 8,
+        "schema": 1,
+        "source": "sysplorer-host-udp",
+        "taskId": "05640f9e-a988-464c-92c3-c9551155d5b5"
+      },
+      "liveRows": [
+        [
+          0,
+          0.6,
+          -2,
+          3.25
+        ],
+        [
+          1,
+          0.5997777777777779,
+          -2,
+          3.2499777777777776
+        ],
+        [
+          2,
+          0.5995555555555557,
+          -2,
+          3.2499555555555557
+        ],
+        [
+          3,
+          0.5993333333333335,
+          -2,
+          3.2499333333333333
+        ],
+        [
+          4,
+          0.5991111111111113,
+          -2,
+          3.249911111111111
+        ],
+        [
+          5,
+          0.598888888888889,
+          -2,
+          3.249888888888889
+        ],
+        [
+          6,
+          0.5986666666666668,
+          -2,
+          3.2498666666666667
+        ]
+      ],
+      "foreignTaskRejected": true
+    },
+    {
+      "taskId": "17745cb8-9402-48fd-987a-f3153993747c",
+      "partial": false,
+      "fast": true,
+      "args": {
+        "modelHash": "4670d908273243caa2996f708ce1e2692b4012eac5c3107a4209eeea16f6feb9",
+        "mode": 2,
+        "voltage": 2.5,
+        "current": 2.0,
+        "soc0": 0.6,
+        "duration": 120,
+        "speed": 60
+      },
+      "statuses": [
+        {
+          "phase": "Preparing",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Translating",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x0"
+        },
+        {
+          "phase": "Running",
+          "time": 0,
+          "total": 0,
+          "controller": "0x24ac868e940",
+          "data": "0x24aee3cdb50"
+        },
+        {
+          "phase": "Running",
+          "time": 0,
+          "total": 1,
+          "controller": "0x24ac868e940",
+          "data": "0x24aee3cdb50"
+        },
+        {
+          "phase": "Running",
+          "time": 0,
+          "total": 1,
+          "controller": "0x24ac868e940",
+          "data": "0x24aee3cdb50"
+        },
+        {
+          "phase": "Running",
+          "time": 0,
+          "total": 1,
+          "controller": "0x24ac868e940",
+          "data": "0x24aee3cdb50"
+        },
+        {
+          "phase": "Running",
+          "time": 0,
+          "total": 1,
+          "controller": "0x24ac868e940",
+          "data": "0x24aee3cdb50"
+        },
+        {
+          "phase": "Running",
+          "time": 0,
+          "total": 1,
+          "controller": "0x24ac868e940",
+          "data": "0x24aee3cdb50"
+        },
+        {
+          "phase": "Running",
+          "time": 0,
+          "total": 1,
+          "controller": "0x24ac868e940",
+          "data": "0x24aee3cdb50"
+        },
+        {
+          "phase": "Running",
+          "time": 0,
+          "total": 1,
+          "controller": "0x24ac868e940",
+          "data": "0x24aee3cdb50"
+        },
+        {
+          "phase": "Running",
+          "time": 0,
+          "total": 1,
+          "controller": "0x24ac868e940",
+          "data": "0x24aee3cdb50"
+        },
+        {
+          "phase": "Running",
+          "time": 3,
+          "total": 2,
+          "controller": "0x24ac868e940",
+          "data": "0x24aee3cdb50"
+        },
+        {
+          "phase": "Running",
+          "time": 10,
+          "total": 4,
+          "controller": "0x24ac868e940",
+          "data": "0x24aee3cdb50"
+        },
+        {
+          "phase": "Running",
+          "time": 15,
+          "total": 5,
+          "controller": "0x24ac868e940",
+          "data": "0x24aee3cdb50"
+        },
+        {
+          "phase": "Running",
+          "time": 27,
+          "total": 8,
+          "controller": "0x24ac868e940",
+          "data": "0x24aee3cdb50"
+        },
+        {
+          "phase": "Running",
+          "time": 33,
+          "total": 10,
+          "controller": "0x24ac868e940",
+          "data": "0x24aee3cdb50"
+        },
+        {
+          "phase": "Running",
+          "time": 40,
+          "total": 12,
+          "controller": "0x24ac868e940",
+          "data": "0x24aee3cdb50"
+        },
+        {
+          "phase": "Running",
+          "time": 46,
+          "total": 14,
+          "controller": "0x24ac868e940",
+          "data": "0x24aee3cdb50"
+        },
+        {
+          "phase": "Running",
+          "time": 54,
+          "total": 17,
+          "controller": "0x24ac868e940",
+          "data": "0x24aee3cdb50"
+        },
+        {
+          "phase": "Running",
+          "time": 62,
+          "total": 19,
+          "controller": "0x24ac868e940",
+          "data": "0x24aee3cdb50"
+        },
+        {
+          "phase": "Running",
+          "time": 68,
+          "total": 21,
+          "controller": "0x24ac868e940",
+          "data": "0x24aee3cdb50"
+        },
+        {
+          "phase": "Running",
+          "time": 74,
+          "total": 23,
+          "controller": "0x24ac868e940",
+          "data": "0x24aee3cdb50"
+        },
+        {
+          "phase": "Running",
+          "time": 82,
+          "total": 25,
+          "controller": "0x24ac868e940",
+          "data": "0x24aee3cdb50"
+        },
+        {
+          "phase": "Running",
+          "time": 93,
+          "total": 28,
+          "controller": "0x24ac868e940",
+          "data": "0x24aee3cdb50"
+        },
+        {
+          "phase": "Running",
+          "time": 98,
+          "total": 30,
+          "controller": "0x24ac868e940",
+          "data": "0x24aee3cdb50"
+        },
+        {
+          "phase": "Running",
+          "time": 104,
+          "total": 32,
+          "controller": "0x24ac868e940",
+          "data": "0x24aee3cdb50"
+        },
+        {
+          "phase": "Running",
+          "time": 111,
+          "total": 34,
+          "controller": "0x24ac868e940",
+          "data": "0x24aee3cdb50"
+        },
+        {
+          "phase": "Running",
+          "time": 120,
+          "total": 37,
+          "controller": "0x24ac868e940",
+          "data": "0x24aee3cdb50"
+        },
+        {
+          "phase": "Finalizing",
+          "time": 120,
+          "total": 37,
+          "controller": "0x24ac868e940",
+          "data": "0x24aee3cdb50"
+        },
+        {
+          "phase": "Finalizing",
+          "time": 120,
+          "total": 37,
+          "controller": "0x24ac868e940",
+          "data": "0x24aee3cdb50"
+        },
+        {
+          "phase": "Finalizing",
+          "time": 120,
+          "total": 37,
+          "controller": "0x24ac868e940",
+          "data": "0x24aee3cdb50"
+        },
+        {
+          "phase": "Completed",
+          "time": 120,
+          "total": 37,
+          "controller": "0x24ac868e940",
+          "data": "0x24aee3cdb50"
+        }
+      ],
+      "begin": {
+        "command": "begin",
+        "id": "d0dc3a66-9b18-4114-8a5c-bfa65873d744",
+        "ok": true,
+        "schema": 1,
+        "session": "7d1fd0af-f003-4bf4-970a-c57a21fd9954",
+        "status": {
+          "code": "",
+          "controller": "0x24ac868e940",
+          "csvHash": "",
+          "cursor": 0,
+          "data": "0x0",
+          "duration": 120,
+          "jobDir": "C:/Users/TR/AppData/Local/Temp/BatteryConsoleUDP/17745cb8-9402-48fd-987a-f3153993747c",
+          "message": "",
+          "modelHash": "4670d908273243caa2996f708ce1e2692b4012eac5c3107a4209eeea16f6feb9",
+          "nativeResult": "",
+          "next": 0,
+          "owner": "be5a0d1f-e9d6-4930-8729-db1397a6cfab",
+          "params": {},
+          "phase": "Preparing",
+          "pid": 9876,
+          "rows": [],
+          "taskId": "17745cb8-9402-48fd-987a-f3153993747c",
+          "time": 0,
+          "total": 0,
+          "viewerMessage": ""
+        },
+        "taskId": "17745cb8-9402-48fd-987a-f3153993747c"
+      },
+      "terminal": {
+        "code": "",
+        "controller": "0x24ac868e940",
+        "csvHash": "44fe930b771e9a0ea4d1334b286e20eb76fe82e43c84dae5025093e0e4d4d279",
+        "cursor": 37,
+        "data": "0x24aee3cdb50",
+        "duration": 120,
+        "jobDir": "C:/Users/TR/AppData/Local/Temp/BatteryConsoleUDP/17745cb8-9402-48fd-987a-f3153993747c",
+        "message": "",
+        "modelHash": "4670d908273243caa2996f708ce1e2692b4012eac5c3107a4209eeea16f6feb9",
+        "nativeResult": "C:\\Users\\TR\\AppData\\Local\\Temp\\BatteryConsoleUDP",
+        "next": 37,
+        "owner": "be5a0d1f-e9d6-4930-8729-db1397a6cfab",
+        "params": {
+          "current": 2,
+          "mode": 2,
+          "soc0": 0.6,
+          "voltage": 2.5
+        },
+        "phase": "Completed",
+        "pid": 9876,
+        "rows": [],
+        "taskId": "17745cb8-9402-48fd-987a-f3153993747c",
+        "time": 120,
+        "total": 37,
+        "viewerMessage": "Sysplorer 已显示本次原生结果"
+      },
+      "runningWallSeconds": 4.218999999924563,
+      "manifest": {
+        "complete": true,
+        "csvHash": "44fe930b771e9a0ea4d1334b286e20eb76fe82e43c84dae5025093e0e4d4d279",
+        "duration": 120,
+        "lastTime": 120,
+        "model": "BatterySim.SingleRun",
+        "modelHash": "4670d908273243caa2996f708ce1e2692b4012eac5c3107a4209eeea16f6feb9",
+        "nativeResult": "C:\\Users\\TR\\AppData\\Local\\Temp\\BatteryConsoleUDP",
+        "params": {
+          "current": 2,
+          "mode": 2,
+          "soc0": 0.6,
+          "voltage": 2.5
+        },
+        "points": 122,
+        "schema": 1,
+        "source": "sysplorer-host-udp",
+        "taskId": "17745cb8-9402-48fd-987a-f3153993747c"
+      },
+      "liveRows": [
+        [
+          0,
+          0.6,
+          -2,
+          3.25
+        ],
+        [
+          3,
+          0.5993333333333335,
+          -2,
+          3.2499333333333333
+        ],
+        [
+          7,
+          0.5984444444444447,
+          -2,
+          3.2498444444444443
+        ],
+        [
+          10,
+          0.597777777777778,
+          -2,
+          3.2497777777777777
+        ],
+        [
+          15,
+          0.5966666666666668,
+          -2,
+          3.2496666666666667
+        ],
+        [
+          21,
+          0.5953333333333335,
+          -2,
+          3.2495333333333334
+        ],
+        [
+          23,
+          0.594888888888889,
+          -2,
+          3.249488888888889
+        ],
+        [
+          27,
+          0.5940000000000001,
+          -2,
+          3.2494
+        ],
+        [
+          30,
+          0.5933333333333335,
+          -2,
+          3.2493333333333334
+        ],
+        [
+          33,
+          0.5924444444444446,
+          -2,
+          3.2492444444444444
+        ],
+        [
+          37,
+          0.591777777777778,
+          -2,
+          3.2491777777777777
+        ],
+        [
+          40,
+          0.5911111111111113,
+          -2,
+          3.249111111111111
+        ],
+        [
+          43,
+          0.5904444444444445,
+          -2,
+          3.2490444444444444
+        ],
+        [
+          46,
+          0.5897777777777778,
+          -2,
+          3.2489777777777777
+        ],
+        [
+          48,
+          0.5893333333333335,
+          -2,
+          3.2489333333333335
+        ],
+        [
+          52,
+          0.5884444444444445,
+          -2,
+          3.2488444444444444
+        ],
+        [
+          54,
+          0.5880000000000001,
+          -2,
+          3.2488
+        ],
+        [
+          58,
+          0.5871111111111113,
+          -2,
+          3.248711111111111
+        ],
+        [
+          62,
+          0.5862222222222223,
+          -2,
+          3.248622222222222
+        ],
+        [
+          66,
+          0.5853333333333334,
+          -2,
+          3.2485333333333335
+        ],
+        [
+          68,
+          0.584888888888889,
+          -2,
+          3.2484888888888888
+        ],
+        [
+          72,
+          0.5840000000000001,
+          -2,
+          3.2484
+        ],
+        [
+          74,
+          0.5835555555555556,
+          -2,
+          3.2483555555555554
+        ],
+        [
+          78,
+          0.5826666666666668,
+          -2,
+          3.248266666666667
+        ],
+        [
+          82,
+          0.5817777777777778,
+          -2,
+          3.248177777777778
+        ],
+        [
+          85,
+          0.5811111111111112,
+          -2,
+          3.248111111111111
+        ],
+        [
+          88,
+          0.5804444444444445,
+          -2,
+          3.2480444444444445
+        ],
+        [
+          93,
+          0.5793333333333334,
+          -2,
+          3.2479333333333336
+        ],
+        [
+          96,
+          0.5786666666666668,
+          -2,
+          3.2478666666666665
+        ],
+        [
+          98,
+          0.5782222222222223,
+          -2,
+          3.247822222222222
+        ],
+        [
+          100,
+          0.5777777777777778,
+          -2,
+          3.247777777777778
+        ],
+        [
+          104,
+          0.576888888888889,
+          -2,
+          3.247688888888889
+        ],
+        [
+          108,
+          0.5760000000000001,
+          -2,
+          3.2476
+        ],
+        [
+          111,
+          0.5753333333333334,
+          -2,
+          3.247533333333333
+        ],
+        [
+          114,
+          0.5746666666666668,
+          -2,
+          3.2474666666666665
+        ],
+        [
+          118,
+          0.5737777777777779,
+          -2,
+          3.247377777777778
+        ],
+        [
+          120,
+          0.5733333333333334,
+          -2,
+          3.247333333333333
+        ]
+      ],
+      "foreignTaskRejected": true
+    }
+  ],
+  "pid": 9876,
+  "session": {
+    "bound": true,
+    "executable": "C:/Program Files/MWORKS/Sysplorer 2026a/Bin64/mworks.exe",
+    "modelHash": "4670d908273243caa2996f708ce1e2692b4012eac5c3107a4209eeea16f6feb9",
+    "pid": 9876,
+    "port": 51780,
+    "protocol": "battery-udp/1",
+    "schema": 1,
+    "session": "7d1fd0af-f003-4bf4-970a-c57a21fd9954",
+    "updated": "2026-11-04T08:55:30.656Z"
+  }
+}

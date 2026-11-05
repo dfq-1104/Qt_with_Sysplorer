@@ -1,0 +1,9 @@
+{
+  "Name": "Battery UDP Host Probe",
+  "Version": "1.0",
+  "CompatVersion": "1.0",
+  "Vendor": "Local verification",
+  "Category": "SDK",
+  "Description": "Loopback-only, token-authenticated verification of the host simulation controller.",
+  "License": [], "Options": [], "Dependencies": []
+}

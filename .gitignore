@@ -1,0 +1,57 @@
+# Local Codex environment
+/.codex/
+
+# IDE and editor caches
+.vs/
+.vscode/
+*.user
+*.suo
+*.VC.db
+*.VC.opendb
+*.ipch
+
+# Qt / C++ build products
+build/
+debug/
+release/
+.qmake.stash
+Makefile*
+*.obj
+*.o
+*.pdb
+*.ilk
+*.pch
+*.idb
+*.tlog
+*.dll
+*.exe
+*.lib
+*.exp
+
+# Generated runtime deployments and simulation runs
+/app/ui/runtime/
+/app/ui/runtime_udp/
+/app/ui/probe_runtime/
+/runs/
+
+# Python caches and local environments
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Logs, temporary files and generated document archives
+*.log
+*.tmp
+*.bak
+*.zip
+/logs/*.txt
+/logs/probe_open_result.py
+/logs/truncated_utf8.mo
+/tools/udp_host_probe/deploy*_status.json
+
+# Credentials and machine-specific settings
+.env
+.env.*
+!.env.example
+*.private.json
