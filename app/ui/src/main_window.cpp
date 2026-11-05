@@ -49,7 +49,7 @@ struct Scenario
 
 const Scenario kScenarios[] = {
     { "自定义充放电", 2.5,
-      "按设定电流充电或放电，电压用作充电上限或放电下限。相同参数直接回放内存结果，参数变化后调用本地 Sysplorer 计算。",
+      "按设定电流充电或放电，电压用作充电上限或放电下限。应用参数后准备模型，再开始仿真；最近有效结果可独立回放。",
       true,  1, 3.45, 2.5 },
 };
 const int kScenarioCount = static_cast<int>(sizeof(kScenarios) / sizeof(kScenarios[0]));
@@ -90,7 +90,12 @@ MainWindow::MainWindow(QWidget* parent)
     applyScenario(0);
 
     setWindowTitle(QString::fromUtf8("电池充放电仿真操作台"));
-    resize(1180, 780);
+    resize(1280, 780);
+    connect(m_runner,&SysplorerRunner::hostConnectionFailed,this,[this](const QString& message){
+        setStateText(QString::fromUtf8("等待手动启动 Sysplorer"));
+        showWarning(this,QString::fromUtf8("Sysplorer 未就绪"),message);
+    });
+    QTimer::singleShot(0,m_runner,&SysplorerRunner::connectHost);
 }
 
 MainWindow::~MainWindow() = default;
@@ -114,13 +119,17 @@ void MainWindow::buildUi()
     h->setContentsMargins(12, 8, 12, 8);
     h->setSpacing(10);
 
-    m_btnPlay = new QPushButton(QString::fromUtf8("仿真"), bar);
+    m_btnPrepare = new QPushButton(QString::fromUtf8("准备仿真"),bar);
+    m_btnPrepare->setObjectName("btnPrepare");
+    m_btnReplay = new QPushButton(QString::fromUtf8("回放最近结果"),bar);
+    m_btnReplay->setObjectName("btnReplay");
+    m_btnPlay = new QPushButton(QString::fromUtf8("开始仿真"), bar);
     m_btnPause = new QPushButton(QString::fromUtf8("暂停"), bar);
-    m_btnResume = new QPushButton(QString::fromUtf8("继续"), bar);
+
     m_btnStop = new QPushButton(QString::fromUtf8("停止"), bar);
     m_btnPlay->setObjectName(QStringLiteral("btnPlay"));
     m_btnPause->setObjectName(QStringLiteral("btnPause"));
-    m_btnResume->setObjectName(QStringLiteral("btnResume"));
+
     m_btnStop->setObjectName(QStringLiteral("btnStop"));
 
     m_cmbSpeed = new QComboBox(bar);
@@ -142,10 +151,13 @@ void MainWindow::buildUi()
     m_lblState->setMinimumWidth(70);
     m_lblState->setObjectName(QStringLiteral("lblState"));
 
+    h->addWidget(m_btnPrepare);
     h->addWidget(m_btnPlay);
     h->addWidget(m_btnPause);
-    h->addWidget(m_btnResume);
+
     h->addWidget(m_btnStop);
+    h->addSpacing(14);
+    h->addWidget(m_btnReplay);
     h->addSpacing(14);
     h->addWidget(new QLabel(QString::fromUtf8("速度："), bar));
     h->addWidget(m_cmbSpeed);
@@ -250,9 +262,11 @@ void MainWindow::buildUi()
     m_lblHint->setTextInteractionFlags(Qt::TextSelectableByMouse);
     statusBar()->addWidget(m_lblHint, 1);
 
+    connect(m_btnPrepare,&QPushButton::clicked,this,&MainWindow::onPrepare);
+    connect(m_btnReplay,&QPushButton::clicked,this,&MainWindow::onReplay);
     connect(m_btnPlay, &QPushButton::clicked, this, &MainWindow::onPlay);
-    connect(m_btnPause, &QPushButton::clicked, this, &MainWindow::onPause);
-    connect(m_btnResume, &QPushButton::clicked, this, &MainWindow::onResume);
+    connect(m_btnPause, &QPushButton::clicked, this, [this]{if(m_runner->phase()=="Paused"||( !m_runner->isRunning()&&!m_player->isPlaying()))onResume();else onPause();});
+
     connect(m_btnStop, &QPushButton::clicked, this, &MainWindow::onStop);
     connect(m_cmbSpeed, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, [this](int index) {
@@ -318,7 +332,7 @@ void MainWindow::applyScenario(int index)
         m_sideBattery->setSoc(st.uiSoc0); m_sideBattery->setCurrent(0);
         m_lblState->setText(st.errorText.isEmpty()?QString::fromUtf8("就绪"):QString::fromUtf8("仿真失败"));
         m_lblTime->setText("0.0 / 0.0 s");
-        m_lblHint->setText(st.hint.isEmpty()?QString::fromUtf8("尚无自定义仿真结果。设置参数后点击应用参数，再点击仿真。"):st.hint);
+        m_lblHint->setText(st.hint.isEmpty()?QString::fromUtf8("尚无仿真结果。设置并应用参数后，点击准备仿真。"):st.hint);
         if(st.savedPreview) showSavedPreview();
         refreshButtons();
         return;
@@ -366,25 +380,22 @@ void MainWindow::setStateText(const QString& phase)
 }
 
 void MainWindow::refreshButtons() {
-    const bool busy=m_runner->isRunning();
-    m_tuneControls->setEnabled(busy&&(m_runner->phase()=="Running"||m_runner->phase()=="Paused")&&!m_runner->controlPending()&&!m_runner->tunePending());
-    m_batteryView->setParametersEnabled(!busy);
-    if(m_resultSelector)m_resultSelector->setEnabled(!busy);
-    if(busy) {
-        const auto p=m_runner->phase();const bool pending=m_runner->controlPending();
-        m_btnPlay->setEnabled(false);m_btnPause->setEnabled(p=="Running"&&!pending);
-        m_btnResume->setEnabled(p=="Paused"&&!pending);
-        m_btnStop->setEnabled((p=="Running"||p=="Paused"||p=="Pausing"||p=="Resuming")&&!pending);
-        m_cmbSpeed->setEnabled((p=="Running"||p=="Paused")&&!pending);return;
-    }
-    m_cmbSpeed->setEnabled(true);
-    const bool playing=m_player->isPlaying();
-    const bool atEnd=m_player->isLoaded()&&m_player->currentTime()>=m_player->duration()-1e-6;
-    const bool paused=m_player->isLoaded()&&!playing&&!atEnd&&m_player->currentTime()>1e-9&&!m_stopped&&m_display=="cache";
-    m_btnPlay->setEnabled(!playing);m_btnPause->setEnabled(playing);
-    m_btnResume->setEnabled(paused);m_btnStop->setEnabled(playing||paused);
-}
+    const bool busy=m_runner->isRunning(),prepared=m_runner->isPrepared();
+    const auto phase=m_runner->phase();const bool pending=m_runner->controlPending();
+    m_batteryView->setParametersEnabled(!busy||prepared);
+    m_batteryView->setApplyEnabled(!busy||prepared);
+    m_resultSelector->setEnabled(!busy);
+    m_btnPrepare->setEnabled(!busy&&!m_runner->isConnecting()&&!m_player->isPlaying());
+    m_btnPlay->setEnabled(prepared&&!pending);
+    m_btnReplay->setEnabled(!busy&&!m_latestSamples.isEmpty()&&!m_player->isPlaying());
+    bool paused=busy?phase=="Paused":!m_stopped&&m_player->isLoaded()&&!m_player->isPlaying()&&m_player->currentTime()<m_player->duration()-1e-6;
+    m_btnPause->setText(QString::fromUtf8(paused?"继续":"暂停"));
+    m_btnPause->setEnabled(busy?((phase=="Running"||phase=="Paused")&&!pending):(m_player->isPlaying()||paused));
+    m_tuneControls->setEnabled(busy&&(phase=="Running"||phase=="Paused")&&!pending&&!m_runner->tunePending());
 
+    m_btnStop->setEnabled(busy?((phase=="Running"||phase=="Paused")&&!pending):(m_player->isPlaying()||paused));
+    m_cmbSpeed->setEnabled(!busy||((phase=="Running"||phase=="Paused")&&!pending));
+}
 void MainWindow::showSavedPreview()
 {
     const auto& st=m_states[m_activeIndex];
@@ -394,45 +405,31 @@ void MainWindow::showSavedPreview()
 }
 
 
-void MainWindow::onPlay()
-{
-    if (m_runner && m_runner->isRunning()) return;   // Sysplorer 未算完，点仿真无反应
-
-    const int index = m_activeIndex;
-    if (index < 0 || index >= kScenarioCount) return;
-
-    // 参数与当前曲线不一致（改过没重算）→ 先算再播；一致 → 直接复用内存里的结果
-    const auto& st=m_states[index];
-    if(qAbs(m_batteryView->voltage()-st.uiVoltage)>1e-8
-       ||qAbs(m_batteryView->current()-st.uiCurrent)>1e-8
-       ||m_batteryView->mode()!=st.uiMode||qAbs(m_batteryView->soc0()-st.uiSoc0)>1e-8) {
-        m_lblHint->setText(QString::fromUtf8("参数已编辑，请先点击应用参数，校验并保存后再仿真。"));return;
+void MainWindow::onPrepare(){
+    if(m_runner->isRunning()||m_runner->isConnecting())return;
+    const auto&st=m_states[0];
+    if(qAbs(m_batteryView->voltage()-st.uiVoltage)>1e-8||qAbs(m_batteryView->current()-st.uiCurrent)>1e-8
+       ||m_batteryView->mode()!=st.uiMode||qAbs(m_batteryView->soc0()-st.uiSoc0)>1e-8){
+        m_lblHint->setText(QString::fromUtf8("参数已编辑，请先应用参数，再准备仿真。"));return;
     }
-    const double v=st.uiVoltage,i=st.uiCurrent,s0=st.uiSoc0;
-    const int md=st.uiMode;
-    if (needsRecompute(index, v, i, md, s0)) {
-        startRecompute(index, v, i, md, s0);
-        return;
-    }
-
-    m_display="cache";
-    m_player->loadFromSamples(st.samples);
-    m_plotWidget->setDuration(m_player->duration());
-    m_plotWidget->setSamples(st.samples,0,0);
-    refreshResultSelector();
-    // Complete successful cache only.
-    m_states[index].savedPreview=false;
-    m_stopped=false;
-    m_player->seek(0.0);
-    m_plotWidget->clearDrawn();
-    m_plotWidget->setProgress(0.0);
-
-    m_player->play();
-    setStateText(QString::fromUtf8("内存结果回放中"));
-    m_lblHint->setText(QString::fromUtf8("正在回放上次仿真的内存结果。"));
-    refreshButtons();
+    startSysplorerRun(st.uiVoltage,st.uiCurrent,st.uiMode,st.uiSoc0);
 }
-
+void MainWindow::onPlay(){
+    const auto&st=m_states[0];
+    if(qAbs(m_batteryView->voltage()-st.uiVoltage)>1e-8||qAbs(m_batteryView->current()-st.uiCurrent)>1e-8
+       ||m_batteryView->mode()!=st.uiMode||qAbs(m_batteryView->soc0()-st.uiSoc0)>1e-8){
+        m_lblHint->setText(QString::fromUtf8("参数已编辑，请应用参数并重新准备。"));return;
+    }
+    m_runner->beginSimulation();refreshButtons();
+}
+void MainWindow::onReplay(){
+    if(m_runner->isRunning()||m_latestSamples.isEmpty())return;
+    m_player->loadFromSamples(m_latestSamples);m_display="cache";m_stopped=false;
+    m_plotWidget->setDuration(m_player->duration());m_plotWidget->setSamples(m_latestSamples,0,0);
+    m_player->seek(0);m_player->play();
+    m_lblHint->setText(QString::fromUtf8(m_latestPartial?"回放最近有效结果（已停止／未完成）":"回放最近有效结果（完整）"));
+    setStateText(QString::fromUtf8("结果回放中"));refreshButtons();
+}
 void MainWindow::onPause() {
     if(m_runner->isRunning()){m_runner->pause();setStateText(QString::fromUtf8("正在请求暂停"));refreshButtons();return;}
     if(!m_player->isPlaying())return;
@@ -474,13 +471,14 @@ void MainWindow::onTick(double t, double soc, double current, double voltage)
 
 void MainWindow::onFinished()
 {
+    m_stopped=true;
     saveActiveState();
     setStateText(QString::fromUtf8("已结束"));
     refreshButtons();
 }
 
 void MainWindow::onApplyCustom(double voltage, double current, int mode, double soc0)
-{    if(m_runner->isRunning()) return;
+{    if(m_runner->isRunning()&&!m_runner->isPrepared()) return;
     QStringList problems;
 
     if (!std::isfinite(voltage) || voltage < kVMin || voltage > kVMax) {
@@ -515,14 +513,14 @@ void MainWindow::onApplyCustom(double voltage, double current, int mode, double 
     const int index = m_activeIndex;
     if (index < 0 || index >= kScenarioCount) return;
 
-    // 「应用参数」只保存设置：不启动仿真，也不改变当前曲线。
-    // 曲线要不要重算，交给「仿真」按参数一致性判断。
+    // Applying parameters invalidates the prepared instance; results remain available for replay.
+    m_runner->invalidatePreparation();
     ScenarioState& st = m_states[index];
     st.uiVoltage = voltage;
     st.uiCurrent = current;
     st.uiMode = mode;
     st.uiSoc0 = soc0;
-    st.hint = QString::fromUtf8("参数已保存：起点 %1%、%2 A %3。点「仿真」开始使用。")
+    st.hint = QString::fromUtf8("参数已保存：起点 %1%、%2 A %3。请点击「准备仿真」。")
                   .arg(soc0 * 100.0, 0, 'f', 0)
                   .arg(current, 0, 'f', 2)
                   .arg(mode == 1 ? QString::fromUtf8("充电") : QString::fromUtf8("放电"));
@@ -539,27 +537,6 @@ void MainWindow::onApplyCustom(double voltage, double current, int mode, double 
     refreshButtons();
 }
 
-bool MainWindow::needsRecompute(int index, double voltage, double current,
-                                int mode, double soc0) const
-{
-    if (index < 0 || index >= m_states.size()) return false;
-    const ScenarioState& st = m_states[index];
-    if (!st.loaded || st.samples.isEmpty()) return true;
-    if(index==0&&(!st.realSdk||st.modelHash.isEmpty()||st.modelHash!=m_runner->modelFingerprint())) return true;
-
-    return qAbs(st.voltage - voltage) > 1e-8
-        || qAbs(st.current - current) > 1e-8
-        || st.mode != mode
-        || qAbs(st.soc0 - soc0) > 1e-8;
-}
-
-void MainWindow::startRecompute(int index, double voltage, double current,
-                                int mode, double soc0)
-{
-    if(index!=0) return;
-    startSysplorerRun(voltage, current, mode, soc0);
-}
-
 void MainWindow::startSysplorerRun(double voltage,double current,int mode,double soc0) {
     if(m_runner->isRunning())return;
     const double delta=mode==1?1-soc0:soc0;
@@ -570,12 +547,12 @@ void MainWindow::startSysplorerRun(double voltage,double current,int mode,double
     m_plotWidget->clearData();m_plotWidget->setDuration(duration);
     m_tabs->setCurrentIndex(1);
     m_batteryView->setApplyEnabled(false);
-    m_lblHint->setText(QString::fromUtf8("新任务通过 UDP 调用本地 Sysplorer；运行中实时绘图，完成后更新成功缓存。"));
+    m_lblHint->setText(QString::fromUtf8("正在准备模型；翻译完成后请点击开始仿真。"));
     m_lblTime->setText(QString::fromUtf8("等待连接…"));
     m_tuneMode->setCurrentIndex(mode);m_tuneCurrent->setValue(current);m_tuneVoltage->setValue(voltage);
     m_tuneMin->setValue(mode==2?voltage:2.5);m_tuneMax->setValue(mode==1?voltage:3.45);m_tuneLimit->setValue(5);
     m_tuneStatus->setText(QString::fromUtf8("等待求解器开始运行。"));
-    m_runner->start(voltage,current,mode,soc0,duration);
+    m_runner->prepareSimulation(voltage,current,mode,soc0,duration);
     refreshResultSelector();refreshButtons();
 }
 
@@ -588,7 +565,7 @@ void MainWindow::onSysplorerFinished(bool ok,const QString&csvPath,const QString
             m_display="partial";m_partialIndex=m_partials.size()-1;refreshResultSelector();
             showStoredResult(m_resultSelector->findData("partial:"+QString::number(m_partialIndex)));
         }else {m_display="preview";applyScenario(0);}
-        auto &st=m_states[0];st.errorText=QString::fromUtf8("本次仿真失败；上次完整成功缓存仍保留。\n%1").arg(message);
+        auto &st=m_states[0];st.errorText=QString::fromUtf8("本次仿真失败；最近有效结果仍保留。\n%1").arg(message);
         st.hint=QString::fromUtf8("任务 %1 失败，请查看上方错误及任务日志。").arg(m_runner->taskId());
         m_errorPanel->setPlainText(st.errorText);m_errorPanel->show();m_lblHint->setText(st.hint);
         setStateText(QString::fromUtf8("仿真失败"));refreshResultSelector();refreshButtons();return;
@@ -629,6 +606,7 @@ void MainWindow::onViewerFinished(const QString& jobDir,bool ok,const QString& m
 // Only verified SDK results are committed as the last successful memory result.
 void MainWindow::applyComputedCurve(QVector<ReplaySample> samples,double voltage,double current,int mode,double soc0,const QString&hint) {
     if(samples.isEmpty())return;
+    m_latestSamples=samples;m_latestPartial=false;
     auto &st=m_states[0];st.samples=samples;st.loaded=true;st.customized=true;
     st.voltage=voltage;st.current=current;st.mode=mode;st.soc0=soc0;
     st.uiVoltage=voltage;st.uiCurrent=current;st.uiMode=mode;st.uiSoc0=soc0;
@@ -641,10 +619,12 @@ void MainWindow::applyComputedCurve(QVector<ReplaySample> samples,double voltage
 }
 
 void MainWindow::onHostStateChanged(const QString&phase) {
+    if(phase=="Connected") {setStateText(QString::fromUtf8("Sysplorer 已连接"));refreshButtons();return;}
+    if(phase=="Connecting"&&!m_runner->isRunning()){setStateText(QString::fromUtf8("后台连接 Sysplorer"));refreshButtons();return;}
     if(!m_runner->isRunning())return;
     const QMap<QString,QString> names{
         {"Connecting",QString::fromUtf8("连接 Sysplorer")},{"Preparing",QString::fromUtf8("加载与设置参数")},
-        {"Translating",QString::fromUtf8("翻译模型")},{"Starting",QString::fromUtf8("启动求解")},
+        {"Prepared",QString::fromUtf8("准备就绪")},{"Translating",QString::fromUtf8("翻译模型")},{"Starting",QString::fromUtf8("启动求解")},
         {"Running",QString::fromUtf8("实时仿真中")},{"Pausing",QString::fromUtf8("正在暂停")},
         {"Paused",QString::fromUtf8("仿真已暂停")},{"Resuming",QString::fromUtf8("正在继续")},
         {"Stopping",QString::fromUtf8("正在停止")},{"Finalizing",QString::fromUtf8("核验结果")},
@@ -669,6 +649,7 @@ void MainWindow::onLiveSamples(const QVector<ReplaySample>&samples) {
 void MainWindow::onSysplorerStopped(const QString&csvPath,const QString&message) {
     ReplayData result;QString error;
     if(!result.load(csvPath,&error)){onSysplorerFinished(false,{},error);return;}
+    m_latestSamples=result.samples();m_latestPartial=true;
     m_partials.append({m_runner->taskId(),result.samples(),csvPath,m_reqVoltage,m_reqCurrent,m_reqSoc0,m_reqMode});
     m_partialIndex=m_partials.size()-1;m_display="partial";m_stopped=true;
     m_batteryView->setApplyEnabled(true);m_errorPanel->hide();refreshResultSelector();

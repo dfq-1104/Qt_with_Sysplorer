@@ -14,7 +14,12 @@ class SysplorerRunner : public QObject {
 public:
     explicit SysplorerRunner(QObject* parent=nullptr);
     ~SysplorerRunner() override;
-    void start(double voltage,double current,int mode,double soc0,double duration,const QString& = QString());
+    void connectHost();
+    void beginSimulation();
+    void invalidatePreparation();
+    bool isPrepared() const {return m_busy && m_phase=="Prepared";}
+    bool isConnecting() const {return m_connectOnly;}
+    void prepareSimulation(double voltage,double current,int mode,double soc0,double duration,const QString& = QString());
     bool isRunning() const {return m_busy;}
     QString phase() const {return m_phase;}
     QString taskId() const {return m_taskId;}
@@ -34,6 +39,7 @@ public:
 signals:
     void tuneApplied(double time,const QJsonObject& params);
     void tuneRejected(const QString& message);
+    void hostConnectionFailed(const QString& message);
     void finished(bool ok,const QString& csvPath,const QString& message);
     void stopped(const QString& csvPath,const QString& message);
     void stateChanged(const QString& phase);
@@ -67,6 +73,7 @@ private:
     qint64 m_hostPid=0,m_launchedPid=0;
     QSet<qint64> m_busyHosts;
     int m_attempts=0,m_cursor=0,m_mode=1;
+    bool m_connectOnly=false,m_autoAttempted=false,m_connectionWarned=false;
     bool m_busy=false,m_launched=false,m_begun=false;
     double m_voltage=3.45,m_current=2.5,m_soc0=.5,m_duration=120,m_speed=20;
     QVector<ReplaySample> m_samples;

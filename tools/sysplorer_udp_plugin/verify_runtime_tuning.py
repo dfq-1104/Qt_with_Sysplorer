@@ -60,6 +60,9 @@ try:
             if predicate(): return
             time.sleep(.1)
         raise TimeoutError(str(state))
+    wait_for(lambda:state['phase']=='Prepared')
+    assert not rows, 'Preparation must not run the solver'
+    request('start',task)
     wait_for(lambda:state['phase']=='Running' and state['time']>=2)
     base=state['runtimeParams'];identity=(state['controller'],state['data'],state['taskId'])
     assert abs(rows[-1][2]-1)<1e-5,rows[-1]
