@@ -1,6 +1,6 @@
 # 电池客户端 UDP 版运行说明
 
-先构建部署 tools/sysplorer_udp_plugin，然后运行 app/ui/build.cmd 和 app/ui/deploy.ps1，启动 runtime/battery_console_ui.exe。隔离联调包位于 runtime_udp。
+先构建 tools/sysplorer_udp_plugin 和 app/ui，准备隔离宿主，再通过 app/ui/deploy.ps1 配置运行包。使用下述一键入口启动。
 
 新运行包只部署界面和 Qt 依赖。旧 sdk_probe.exe 和 sysplorer_view.py 不再参与正式运行。
 
@@ -16,8 +16,9 @@
 | 停止 | 结束求解或回放；真实求解需等停止、数据接收和结果校验完成后解锁回放 |
 | 回放最近结果 | 播放最近一次通过校验的完整或停止结果；不依赖 Sysplorer，不创建新任务 |
 | 结果选择 | 查看完整结果或各次停止结果；不改变默认回放的“最近有效”归属 |
+| 运行中调参 | 第三个页签修改电流、恒压目标、工作模式、上下截止电压及限流，以模型采样回读确认生效 |
 
-当前工作树在线调参版请使用 `run_runtime_tuning.bat`，使用 `%TEMP%/BatteryConsoleRuntime` 中的真实 Sysplorer 副本和本工作树 `runtime_tuning` 中的 Qt 包。主目录尚未合并本工作树的修改；安装目录可能被其他测试更新，不作为本轮验证入口。
+在线调参版使用 `run_runtime_tuning.bat`，通过本目录 `runtime_tuning/sysplorer.ini` 选择隔离的真实 Sysplorer 副本。合并验证使用 `%TEMP%/BatteryConsoleMergeValidation`；安装目录可能被其他测试更新，不作为本轮验证入口。
 两个工作树入口 `run_ui.bat` 和 `run_runtime_tuning.bat` 均启动该隔离包，不依赖安装目录中的旧插件。需要重建隔离宿主时运行 `tools/sysplorer_udp_plugin/prepare_isolated_host.ps1`，更新 Qt 包用 `deploy.ps1 -RuntimeDirectory <本目录>/runtime_tuning -SysplorerHome <隔离宿主目录>`。
 部署会校验隔离插件与工作树编译产物一致，并保存可执行程序旁的 `sysplorer.ini`；直接双击该包内的 exe 也能选择相同宿主。显式 `SYSPLORER_HOME` 环境变量仍可覆盖该配置。
 已有实例模型版本不符时会跳过并尝试其他实例；新启动宿主仍不符时明确报告宿主路径及两端模型哈希，保留版本保护。

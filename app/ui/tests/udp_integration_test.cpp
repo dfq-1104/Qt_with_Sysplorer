@@ -39,6 +39,7 @@ private slots:
     auto speed=window.findChild<QComboBox*>("cmbSpeed");speed->setCurrentIndex(1);
     view->setInputs(3.45,1,1,.5);
     QTest::mouseClick(view->findChild<QPushButton*>("btnApply"),Qt::LeftButton);
+    QTRY_VERIFY_WITH_TIMEOUT(window.findChild<QPushButton*>("btnPrepare")->isEnabled(),100000);
     QTest::mouseClick(window.findChild<QPushButton*>("btnPrepare"),Qt::LeftButton);
     QTRY_VERIFY_WITH_TIMEOUT(runner->isPrepared(),180000);
     QTest::mouseClick(window.findChild<QPushButton*>("btnPlay"),Qt::LeftButton);
