@@ -27,8 +27,10 @@
 
 | 命令 | 参数 | 作用 |
 |---|---|---|
-| hello | 无 | 查询宿主就绪、控制器状态、模型哈希 |
-| begin | modelHash、mode、voltage、current、soc0、duration、speed | 接受新任务，异步加载、设参、翻译和运行 |
+| hello | 无 | 查询宿主就绪、控制器状态、模型哈希及 splitLifecycle=true 能力 |
+| begin | modelHash、mode、voltage、current、soc0、duration、speed | 接受新准备任务，异步加载、设参、翻译，完成后停在 Prepared |
+| start | 无 | 从 Prepared 启动本任务求解 |
+| discard | 无 | 放弃本客户端的 Prepared 状态，重新应用参数时使用 |
 | poll | cursor | 获取任务状态及一批实时数据 |
 | pause | 无 | 请求暂停本任务求解 |
 | resume | 无 | 请求继续本任务求解 |
@@ -37,7 +39,7 @@
 
 mode 只允许 1 充电或 2 放电；voltage 2.5–3.45 V；current 0–5 A；soc0 0–1；duration 0.1–20000 秒；speed 0.5–60。界面时长按容量规则估算并限制为 120–20000 秒；零电流固定执行真实 120 秒静置任务。UI 倍速与 SDK 减速因子的映射为 slowdownFactor=1/speed，例如 60x 对应 1/60；倍速不是实时性能保证。
 
-begin 是组合业务命令，其状态明确区分加载/设参、翻译和求解，不代表收到后就已完成计算。现阶段不提供独立的任意模型加载、任意代码执行或用户自行控制翻译命令。
+begin 只负责准备，不启动求解；客户端必须在 Prepared 后单独发送 start。客户端拒绝缺少 splitLifecycle 能力的旧插件，防止准备动作意外启动仿真。discard 保留已有结果，仅释放准备状态。当前不提供任意模型加载或任意代码执行命令。
 
 ## 响应与实时数据
 
@@ -49,7 +51,7 @@ poll 返回 rows，每行固定为 [time, SOC, I_act, V_term]。cursor 为本批
 
 ## 状态
 
-Ready → Preparing → Translating → Starting → Running。
+Ready → Preparing → Translating → Prepared →（start）Starting → Running。Prepared 可通过 discard 返回 Ready。
 
 运行期间可能进入 Pausing → Paused → Resuming → Running；停止经过 Stopping → Finalizing → Stopped。自然结束经过 Finalizing → Completed。错误进入 Failed。
 
@@ -63,7 +65,7 @@ Ready → Preparing → Translating → Starting → Running。
 
 完整结果必须满足退出成功、实际结果末时间达到请求终点、初始 SOC 与参数一致、变量有限且满足电流方向/范围等要求，才产生 complete=true 清单。客户端再次核对任务、模型、参数、CSV 哈希、点数与数据范围。
 
-主动停止生成 complete=false，限制有效范围至停止时刻，保留真实已产生的样本；不使用停止后控制器回填的配置终止时间冒充有效数据时间。部分结果不写入完整成功缓存。
+主动停止生成 complete=false，限制有效范围至停止时刻，保留真实已产生的样本；不使用停止后控制器回填的配置终止时间冒充有效数据时间。部分结果不写入完整成功缓存，但通过客户端校验后成为最近有效结果，作为默认回放对象。失败任务不替换最近有效结果。
 
 原生查看通过宿主绘图对象进行，不启动额外常驻 Python 服务；缓存回放不重新触发原生查看。
 

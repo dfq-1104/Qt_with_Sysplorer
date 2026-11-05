@@ -15,6 +15,7 @@
 #include <cmath>
 #ifdef Q_OS_WIN
 #include <windows.h>
+#include <tlhelp32.h>
 #endif
 namespace {
 QString uid(){return QUuid::createUuid().toString(QUuid::WithoutBraces);}
@@ -52,9 +53,20 @@ void SysplorerRunner::trace(const QString&event,const QJsonObject&values){
 void SysplorerRunner::setPhase(const QString&p){
     if(m_phase==p)return;m_phase=p;m_phaseClock.restart();trace("phase",{{"phase",p}});emit stateChanged(p);
 }
-void SysplorerRunner::start(double voltage,double current,int mode,double soc0,double duration,const QString&){
+void SysplorerRunner::connectHost(){
     if(m_busy)return;
-    m_busy=true;m_begun=false;m_launched=false;m_launchedPid=0;m_hostPid=0;
+    m_connectOnly=true;m_port=0;m_pending.clear();m_clock.restart();
+    setPhase("Connecting");m_timer.start();pump();
+}
+void SysplorerRunner::beginSimulation(){
+    if(isPrepared()&&!controlPending()){m_control="start";setPhase("Starting");}
+}
+void SysplorerRunner::invalidatePreparation(){
+    if(isPrepared()&&!controlPending())m_control="discard";
+}
+void SysplorerRunner::prepareSimulation(double voltage,double current,int mode,double soc0,double duration,const QString&){
+    if(m_busy)return;
+    m_connectOnly=false;m_busy=true;m_begun=false;m_launched=false;m_launchedPid=0;m_hostPid=0;
     m_pending.clear();m_control.clear();m_cursor=0;m_samples.clear();m_port=0;m_session.clear();m_token.clear();
     m_taskId=uid();m_modelHash=modelFingerprint();m_phase.clear();m_voltage=voltage;m_current=current;m_mode=mode;
     m_soc0=soc0;m_duration=duration;m_clock.start();m_phaseClock.start();m_log.close();
@@ -95,10 +107,25 @@ bool SysplorerRunner::launchHost(){
     const auto plugin=QFileInfo(exe).absolutePath()+"/addins/BatteryUdpControl/battery_udp_control.dll";
     if(!QFileInfo::exists(exe)){fail(QString::fromUtf8("找不到本地 Sysplorer：%1").arg(exe));return false;}
     if(!QFileInfo::exists(plugin)){fail(QString::fromUtf8("未安装 BatteryUdpControl 插件，请先运行插件部署脚本。"));return false;}
+#ifdef Q_OS_WIN
+    // A process without an advertised plugin may still be starting. Do not open duplicates.
+    const HANDLE snapshot=CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS,0);
+    if(snapshot!=INVALID_HANDLE_VALUE){
+        PROCESSENTRY32W entry={};entry.dwSize=sizeof(entry);
+        if(Process32FirstW(snapshot,&entry))do {
+            if(QString::fromWCharArray(entry.szExeFile).compare(QFileInfo(exe).fileName(),Qt::CaseInsensitive)==0
+               &&processMatches(entry.th32ProcessID,exe)){
+                m_launched=true;m_launchedPid=entry.th32ProcessID;CloseHandle(snapshot);return true;
+            }
+        }while(Process32NextW(snapshot,&entry));
+        CloseHandle(snapshot);
+    }
+#endif
     auto env=QProcessEnvironment::systemEnvironment();
     for(const auto&key:{"QT_QPA_PLATFORM","QT_QPA_PLATFORM_PLUGIN_PATH","QT_PLUGIN_PATH","PYTHONHOME","PYTHONPATH"})env.remove(key);
     env.insert("PATH",QDir::toNativeSeparators(QFileInfo(exe).absolutePath())+";"+env.value("PATH"));
     auto work=qEnvironmentVariable("BATTERY_SIM_WORKSPACE",QDir::tempPath()+"/BatteryConsoleUDP");
+    if(!QDir().mkpath(work)){fail(QString::fromUtf8("无法创建 Sysplorer 工作目录。"));return false;}
     QProcess process;process.setProcessEnvironment(env);process.setProgram(exe);
     process.setArguments({"-d",work,"-w",work});process.setWorkingDirectory(work);
     if(!process.startDetached(&m_launchedPid)){fail(QString::fromUtf8("无法启动 Sysplorer：%1").arg(process.errorString()));return false;}
@@ -114,7 +141,20 @@ void SysplorerRunner::send(const QString&command,const QJsonObject&args){
     if(command!="poll")trace("send",{{"command",command},{"id",m_pendingId}});
 }
 void SysplorerRunner::pump(){
-    if(!m_busy)return;
+    if(!m_busy&&!m_connectOnly)return;
+    if(m_connectOnly){
+        if(!m_pending.isEmpty()){
+            if(m_pendingClock.elapsed()>3000){m_pending.clear();m_port=0;}
+            else return;
+        }
+        if(m_clock.elapsed()>90000&&!m_connectionWarned){
+            m_connectionWarned=true;m_launchedPid=0;
+            emit hostConnectionFailed(QString::fromUtf8("未能打开 Sysplorer，请自行启动。"));
+        }
+        if(discover())return;
+        if(!m_autoAttempted){m_autoAttempted=true;launchHost();}
+        return;
+    }
     if(!m_pending.isEmpty()){
         if(m_pendingClock.elapsed()>1500){
             if(m_attempts>=6){fail(QString::fromUtf8("UDP 通信超时，未收到 %1 的确认。任务 %2；日志 %3/client.log")
@@ -140,17 +180,26 @@ void SysplorerRunner::pump(){
 void SysplorerRunner::receive(){
     while(m_socket.hasPendingDatagrams()){
         auto d=m_socket.receiveDatagram(16384);
-        if(!m_busy||m_pending.isEmpty()||d.senderAddress()!=QHostAddress::LocalHost||d.senderPort()!=m_port)continue;
+        if((!m_busy&&!m_connectOnly)||m_pending.isEmpty()||d.senderAddress()!=QHostAddress::LocalHost||d.senderPort()!=m_port)continue;
         auto r=QJsonDocument::fromJson(d.data()).object();
         if(r["schema"].toInt()!=1||r["id"].toString()!=m_pendingId||r["session"].toString()!=m_session
             ||r["taskId"].toString()!=m_taskId)continue;
         const auto cmd=m_pendingCommand;m_pending.clear();m_pendingCommand.clear();
+        if(m_connectOnly){
+            if(r["ok"].toBool()&&r["ready"].toBool()){
+                m_connectOnly=false;m_timer.stop();setPhase("Connected");
+            }else m_port=0;
+            continue;
+        }
         if(!r["ok"].toBool()){
             auto code=r["code"].toString();
             if(cmd=="begin"&&code=="HOST_STARTING")continue;
             fail(QString::fromUtf8("Sysplorer 操作 %1 失败：%2。任务 %3；日志 %4/client.log").arg(cmd,r["message"].toString(),m_taskId,m_jobDir));continue;
         }
         if(cmd=="hello"){
+            if(!r["splitLifecycle"].toBool()){
+                fail(QString::fromUtf8("宿主插件版本过旧，请部署支持准备／开始分离的新插件后重启 Sysplorer。"));continue;
+            }
             if(r["modelHash"].toString()!=m_modelHash){fail(QString::fromUtf8("客户端与宿主插件的电池模型版本不一致，请重新构建部署插件。"));continue;}
             const auto st=r["status"].toObject();
             const auto p=st["phase"].toString();
@@ -160,6 +209,9 @@ void SysplorerRunner::receive(){
             send("begin",{{"modelHash",m_modelHash},{"mode",m_mode},{"voltage",m_voltage},{"current",m_current},
                 {"soc0",m_soc0},{"duration",m_duration},{"speed",m_speed}});
         }else{
+            if(cmd=="discard"){
+                m_busy=false;m_timer.stop();m_begun=false;setPhase("Connected");continue;
+            }
             if(cmd=="begin")m_begun=true;
             consume(r["status"].toObject());
             if(m_busy)emit stateChanged(m_phase);
@@ -236,11 +288,15 @@ void SysplorerRunner::finalize(const QJsonObject&s){
 void SysplorerRunner::bestEffortStop(){
     if(!m_busy||!m_begun||m_session.isEmpty())return;
     const QJsonObject r{{"schema",1},{"id",uid()},{"session",m_session},{"token",m_token},{"client",m_clientId},
-        {"taskId",m_taskId},{"command","stop"},{"args",QJsonObject{}}};
+        {"taskId",m_taskId},{"command",m_phase=="Prepared"?"discard":"stop"},{"args",QJsonObject{}}};
     auto bytes=QJsonDocument(r).toJson(QJsonDocument::Compact);
     for(int n=0;n<3;++n)m_socket.writeDatagram(bytes,QHostAddress::LocalHost,m_port);
 }
 void SysplorerRunner::fail(const QString&message){
+    if(m_connectOnly){
+        if(!m_connectionWarned){m_connectionWarned=true;emit hostConnectionFailed(QString::fromUtf8("未能打开 Sysplorer，请自行启动。\n%1").arg(message));}
+        return;
+    }
     if(!m_busy)return;trace("failed",{{"message",message}});bestEffortStop();m_busy=false;m_timer.stop();
     m_pending.clear();m_control.clear();setPhase("Failed");m_log.close();
     emit finished(false,{},message);

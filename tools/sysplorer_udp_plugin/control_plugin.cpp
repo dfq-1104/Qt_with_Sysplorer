@@ -92,7 +92,7 @@ MwPlugin::ShutdownFlag BatteryUdpControl::aboutToShutdown() {
     return SynchronousShutdown;
 }
 bool BatteryUdpControl::active() const {
-    return phase=="Preparing"||phase=="Translating"||phase=="Starting"||phase=="Running"
+    return phase=="Prepared"||phase=="Preparing"||phase=="Translating"||phase=="Starting"||phase=="Running"
         ||phase=="Pausing"||phase=="Paused"||phase=="Resuming"||phase=="Stopping"||phase=="Finalizing";
 }
 bool BatteryUdpControl::bindHost(QString &error) {
@@ -115,7 +115,7 @@ bool BatteryUdpControl::bindHost(QString &error) {
             connect(p,&MwSimInstPanel::SigTranslateFinished,this,[this](MwSimData *d,bool ok){
                 if(phase!="Translating")return;
                 if(!ok||!d){fail("TRANSLATE_FAILED","宿主模型翻译失败，请查看 Sysplorer 输出");return;}
-                data=d;preparing=false;QTimer::singleShot(0,this,&BatteryUdpControl::startSolver);
+                data=d;preparing=false;phase="Prepared";persist();
             });
         }
         return true;
@@ -211,7 +211,7 @@ void BatteryUdpControl::registerVariables(MwAniService *s,MwAniListener *l) {
     s->SetAnimationRefVars(l,d,reals,empty,empty);
 }
 void BatteryUdpControl::startSolver() {
-    if(phase!="Translating"||!data)return;
+    if(phase!="Prepared"||!data)return;
     try {
         auto c=static_cast<MwSimControl*>(control.data());auto d=static_cast<MwSimData*>(data.data());
         c->RebindSimData(d);
@@ -320,13 +320,22 @@ QJsonObject BatteryUdpControl::execute(const QJsonObject&r) {
     QString e;require(bindHost(e),qPrintable(e));
     const QString cmd=r["command"].toString(),client=r["client"].toString(),id=r["taskId"].toString();
     require(!client.isEmpty(),"Missing client identifier");
-    if(cmd=="hello")return {{"ok",true},{"status",snapshot()},{"modelHash",modelHash},{"ready",!MwAppPtr->GetTaskManager()->IsRunning()},{"controllerState",controllerState()}};
+    if(cmd=="hello")return {{"splitLifecycle",true},{"ok",true},{"status",snapshot()},{"modelHash",modelHash},{"ready",!MwAppPtr->GetTaskManager()->IsRunning()},{"controllerState",controllerState()}};
     if(cmd=="begin"){
         if(id==taskId&&client==owner)return {{"ok",true},{"status",snapshot()}};
         beginTask(r["args"].toObject(),client,id);return {{"ok",true},{"status",snapshot()}};
     }
     require(id==taskId&&client==owner,"TASK_OWNERSHIP_MISMATCH");lastClientMs=heartbeat.elapsed();
     if(cmd=="poll")return {{"ok",true},{"status",snapshot(r["args"].toObject()["cursor"].toInt())}};
+    if(cmd=="start"){
+        require(phase=="Prepared"&&controllerState()=="Idle","INVALID_STATE");
+        require(data&&panel&&control,"PREPARED_MODEL_REMOVED");
+        startSolver();return {{"ok",true},{"status",snapshot()}};
+    }
+    if(cmd=="discard"){
+        require(phase=="Prepared","INVALID_STATE");phase="Ready";data.clear();persist();
+        return {{"ok",true},{"status",snapshot()}};
+    }
     require(ownsController(),"HOST_TASK_CHANGED");auto c=static_cast<MwSimControl*>(control.data());
     if(cmd=="pause"){require(phase=="Running","INVALID_STATE");phase="Pausing";require(c->PauseSimulate(),"Pause rejected");}
     else if(cmd=="resume"){require(phase=="Paused","INVALID_STATE");phase="Resuming";require(c->ResumeSimulate(),"Resume rejected");}

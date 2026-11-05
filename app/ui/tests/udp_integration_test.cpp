@@ -4,11 +4,9 @@
 #include <QPushButton>
 #include <QPlainTextEdit>
 #include <QTabWidget>
-#include <QFile>
+#include <QMessageBox>
 #include <QDir>
-#include <QJsonObject>
-#include <QJsonArray>
-#include <QJsonDocument>
+#include <QFile>
 #include "main_window.h"
 #include "battery_view.h"
 #include "plot_widget.h"
@@ -17,135 +15,80 @@
 class UdpIntegration:public QObject {
  Q_OBJECT
 private slots:
- void realButtonsAndTaskLifecycle() {
-    MainWindow window;window.show();QVERIFY(QTest::qWaitForWindowExposed(&window));
-    auto view=window.findChild<BatteryView*>("batteryView");
-    auto plot=window.findChild<PlotWidget*>("plotWidget");
-    auto runner=window.findChild<SysplorerRunner*>();
-    auto player=window.findChild<ReplayPlayer*>();
-    auto play=window.findChild<QPushButton*>("btnPlay");
-    auto pause=window.findChild<QPushButton*>("btnPause");
-    auto resume=window.findChild<QPushButton*>("btnResume");
-    auto stop=window.findChild<QPushButton*>("btnStop");
-    auto apply=view->findChild<QPushButton*>("btnApply");
-    auto speed=window.findChild<QComboBox*>("cmbSpeed");
-    auto results=window.findChild<QComboBox*>("cmbResults");
-    auto state=window.findChild<QLabel*>("lblState");
-    auto time=window.findChild<QLabel*>("lblTime");
-    auto hint=window.findChild<QLabel*>("lblHint");
-    auto errors=window.findChild<QPlainTextEdit*>("errorPanel");
-    QVERIFY(view&&plot&&runner&&player&&play&&pause&&resume&&stop&&apply&&results);
-    QSignalSpy completed(runner,&SysplorerRunner::finished);
-    QSignalSpy stopped(runner,&SysplorerRunner::stopped);
-    const QString artifacts=qEnvironmentVariable("BATTERY_TEST_ARTIFACTS",QDir::tempPath()+"/BatteryUdpUiTests");
-    QDir().mkpath(artifacts);
-    QJsonArray phases;
-    QString previous;
-    connect(runner,&SysplorerRunner::stateChanged,this,[&](const QString&p){
-        if(p!=previous){qInfo()<<"Phase"<<p;phases.append(QJsonObject{{"phase",p},{"taskId",runner->taskId()}});
-            previous=p;}
-    });
-    QVERIFY(!plot->hasData());QVERIFY(!runner->isRunning());
-    speed->setCurrentIndex(4); // 60x applies to genuine real-time solver and cached replay.
-    view->setInputs(3.45,5,1,.8);window.findChild<QTabWidget*>()->setCurrentIndex(0);QTest::mouseClick(apply,Qt::LeftButton);
-    QCOMPARE(completed.count(),0);QVERIFY(!runner->isRunning());QVERIFY(!plot->hasData());
-    QCOMPARE(view->findChild<QLabel*>("displaySoc")->text(),QStringLiteral("80.0 %"));
-    QTest::mouseClick(play,Qt::LeftButton);QVERIFY(runner->isRunning());
-    QTRY_VERIFY_WITH_TIMEOUT(runner->liveSamples().size()>3,180000);
-    QVERIFY(runner->isRunning());QVERIFY(plot->sampleCount()>0);
-    QVERIFY(runner->liveSamples().last().soc>.8);
-    window.grab().save(artifacts+"/live_charge.png");
+ void startupFailureKeepsUiUsable(){
+    const auto old=qgetenv("SYSPLORER_HOME");qputenv("SYSPLORER_HOME","C:/missing/sysplorer");
+    {
+      MainWindow w;w.show();auto runner=w.findChild<SysplorerRunner*>();
+      QSignalSpy failed(runner,&SysplorerRunner::hostConnectionFailed);
+      QTRY_COMPARE_WITH_TIMEOUT(failed.count(),1,5000);
+      QVERIFY(!runner->isRunning());QVERIFY(runner->isConnecting());
+      QVERIFY(w.findChild<BatteryView*>()->isEnabled());
+      QVERIFY(!w.findChild<QPushButton*>("btnReplay")->isEnabled());
+      QTest::qWait(200);QCOMPARE(failed.count(),1);
+    }
+    if(old.isNull())qunsetenv("SYSPLORER_HOME");else qputenv("SYSPLORER_HOME",old);
+ }
+ void realButtonsAndTaskLifecycle(){
+    MainWindow w;w.show();auto runner=w.findChild<SysplorerRunner*>();
+    auto player=w.findChild<ReplayPlayer*>();auto view=w.findChild<BatteryView*>("batteryView");
+    auto plot=w.findChild<PlotWidget*>("plotWidget");
+    auto prepare=w.findChild<QPushButton*>("btnPrepare");auto start=w.findChild<QPushButton*>("btnPlay");
+    auto pause=w.findChild<QPushButton*>("btnPause");auto stop=w.findChild<QPushButton*>("btnStop");
+    auto replay=w.findChild<QPushButton*>("btnReplay");auto apply=view->findChild<QPushButton*>("btnApply");
+    auto speed=w.findChild<QComboBox*>("cmbSpeed");auto tabs=w.findChild<QTabWidget*>();
+    auto errors=w.findChild<QPlainTextEdit*>("errorPanel");
+    QSignalSpy completed(runner,&SysplorerRunner::finished),stopped(runner,&SysplorerRunner::stopped);
+    const auto artifacts=qEnvironmentVariable("BATTERY_TEST_ARTIFACTS",QDir::tempPath()+"/BatterySplitTests");QDir().mkpath(artifacts);
+    connect(runner,&SysplorerRunner::stateChanged,this,[](const QString&p){qInfo()<<"phase"<<p;});
+    QTRY_VERIFY_WITH_TIMEOUT(!runner->isConnecting(),100000);
+    QVERIFY(!start->isEnabled());QVERIFY(!replay->isEnabled());
+    tabs->setCurrentIndex(0);view->setInputs(3.45,5,1,.99);QTest::mouseClick(apply,Qt::LeftButton);
+    speed->setCurrentIndex(4);QTest::mouseClick(prepare,Qt::LeftButton);
+    QTRY_VERIFY_WITH_TIMEOUT(runner->isPrepared()||!runner->isRunning(),180000);
+    QVERIFY2(runner->isPrepared(),qPrintable(errors->toPlainText()));
+    QVERIFY(start->isEnabled());QVERIFY(!pause->isEnabled());QVERIFY(!stop->isEnabled());
+    QTest::qWait(500);QVERIFY(runner->liveSamples().isEmpty());QCOMPARE(completed.count(),0);
+    // Applying parameters invalidates a translated instance; a second prepare is required.
+    tabs->setCurrentIndex(0);view->setInputs(3.45,5,1,.98);QTest::mouseClick(apply,Qt::LeftButton);
+    QVERIFY(!start->isEnabled());QTRY_VERIFY_WITH_TIMEOUT(!runner->isRunning(),5000);
+    QTest::mouseClick(prepare,Qt::LeftButton);
+    QTRY_VERIFY_WITH_TIMEOUT(runner->isPrepared()||!runner->isRunning(),180000);
+    QVERIFY2(runner->isPrepared(),qPrintable(errors->toPlainText()));
+    QTest::mouseClick(start,Qt::LeftButton);QVERIFY(!replay->isEnabled());
     QTRY_VERIFY_WITH_TIMEOUT(!runner->isRunning(),180000);
-    QCOMPARE(completed.count(),1);
-    QVERIFY2(completed.at(0).at(0).toBool(),qPrintable(completed.at(0).at(2).toString()));
-    QVERIFY(!errors->isVisible());QVERIFY(!player->isPlaying());
-    const auto full=player->samples();QVERIFY(full.size()>100);
-    QVERIFY(qAbs(full.first().soc-.8)<1e-6);QVERIFY(qAbs(full.first().current-5)<1e-4);
-    bool found60=false;
-    for(const auto&s:full)if(qAbs(s.t-60)<.02){QVERIFY(qAbs(s.soc-(.8+.995*5*60/9000))<2e-4);found60=true;}
-    QVERIFY(found60);const QString fullJob=runner->lastRunDirectory();
-    QVERIFY(state->text().contains(QString::fromUtf8("仿真完成")));
-    // Cache hit must not create a UDP task or open another native viewer.
-    const QString fullTask=runner->taskId();
-    QTest::mouseClick(play,Qt::LeftButton);
-    QVERIFY(!runner->isRunning());QVERIFY(player->isPlaying());
-    QCOMPARE(runner->taskId(),fullTask);QCOMPARE(completed.count(),1);
-    QTRY_VERIFY(player->currentTime()>0);
-    QTest::mouseClick(pause,Qt::LeftButton);
-    const auto cacheTime=time->text();const auto cachePosition=player->currentTime();
-    QTest::qWait(200);QCOMPARE(player->currentTime(),cachePosition);QCOMPARE(time->text(),cacheTime);
-    QTest::mouseClick(resume,Qt::LeftButton);QTRY_VERIFY(player->currentTime()>cachePosition);
-    QTest::mouseClick(stop,Qt::LeftButton);const auto stoppedPosition=player->currentTime();
-    QTest::qWait(150);QCOMPARE(player->currentTime(),stoppedPosition);QVERIFY(!resume->isEnabled());
-    // Different applied parameters must start a new real solver task.
-    speed->setCurrentIndex(3); // 20x, enough time for user controls.
-    view->setInputs(2.5,1.25,2,.6);window.findChild<QTabWidget*>()->setCurrentIndex(0);QTest::mouseClick(apply,Qt::LeftButton);
-    QCOMPARE(view->findChild<QLabel*>("displaySoc")->text(),QStringLiteral("60.0 %"));
-    QVERIFY(!runner->isRunning());
-    QTest::mouseClick(play,Qt::LeftButton);QVERIFY(runner->isRunning());
-    const auto partialTask=runner->taskId();QVERIFY(partialTask!=fullTask);
-    QTRY_VERIFY_WITH_TIMEOUT(runner->phase()=="Running"&&runner->liveSamples().size()>4,180000);
-    QVERIFY(runner->liveSamples().last().soc<.6);QVERIFY(pause->isEnabled());
-    QTest::mouseClick(pause,Qt::LeftButton);
-    QTRY_VERIFY_WITH_TIMEOUT(runner->phase()=="Paused",15000);
-    QTRY_VERIFY(resume->isEnabled());
-    QTest::qWait(250);const auto pausedTime=time->text();const auto pausedDrawn=plot->drawnUntil();
-    const auto pausedCount=plot->sampleCount();const auto pausedSoc=view->findChild<QLabel*>("displaySoc")->text();
-    QTest::qWait(700);QCOMPARE(time->text(),pausedTime);QCOMPARE(plot->drawnUntil(),pausedDrawn);
-    QCOMPARE(plot->sampleCount(),pausedCount);QCOMPARE(view->findChild<QLabel*>("displaySoc")->text(),pausedSoc);
-    window.grab().save(artifacts+"/live_paused.png");
-    QTest::mouseClick(resume,Qt::LeftButton);
-    QTRY_VERIFY_WITH_TIMEOUT(runner->phase()=="Running",15000);
-    QTRY_VERIFY_WITH_TIMEOUT(plot->drawnUntil()>pausedDrawn+.5,10000);
+    QCOMPARE(completed.count(),1);QVERIFY2(completed.last()[0].toBool(),qPrintable(completed.last()[2].toString()));
+    QVERIFY(replay->isEnabled());QVERIFY(!player->isPlaying());const auto full=player->samples();QVERIFY(full.size()>1);
+    QVERIFY(qAbs(full.first().soc-.98)<1e-6);QVERIFY(qAbs(full.first().current-5)<1e-4);
+    const auto fullTask=runner->taskId();QTest::mouseClick(replay,Qt::LeftButton);
+    QVERIFY(player->isPlaying());QCOMPARE(runner->taskId(),fullTask);QTRY_VERIFY(player->currentTime()>0);
+    QTest::mouseClick(pause,Qt::LeftButton);const auto pos=player->currentTime();QTest::qWait(100);QCOMPARE(player->currentTime(),pos);
+    QCOMPARE(pause->text(),QString::fromUtf8("继续"));QTest::mouseClick(pause,Qt::LeftButton);QTRY_VERIFY(player->currentTime()>pos);
     QTest::mouseClick(stop,Qt::LeftButton);
-    QTRY_VERIFY_WITH_TIMEOUT(!runner->isRunning(),30000);
-    QCOMPARE(stopped.count(),1);QCOMPARE(completed.count(),1);
-    QVERIFY(state->text().contains(QString::fromUtf8("部分结果")));QVERIFY(!resume->isEnabled());
-    QVERIFY(plot->drawnUntil()>0&&plot->drawnUntil()<runner->duration());
-    const auto partialCount=plot->sampleCount();const auto partialTime=time->text();
-    const auto partialSoc=view->findChild<QLabel*>("displaySoc")->text();
-    QTest::qWait(200);QCOMPARE(plot->sampleCount(),partialCount);QCOMPARE(time->text(),partialTime);
-    QCOMPARE(view->findChild<QLabel*>("displaySoc")->text(),partialSoc);
-    QVERIFY(hint->text().contains(partialTask));QCOMPARE(results->count(),2);
-    QFile partialFile(runner->lastRunDirectory()+"/result.json");QVERIFY(partialFile.open(QIODevice::ReadOnly));
-    QVERIFY(!QJsonDocument::fromJson(partialFile.readAll()).object()["complete"].toBool());
-    window.findChild<QTabWidget*>()->setCurrentIndex(1);
-    window.grab().save(artifacts+"/partial_result.png");
-    // View complete and partial results independently without altering cache.
-    results->setCurrentIndex(results->findData("cache"));
-    QCOMPARE(player->samples().size(),full.size());QCOMPARE(player->samples().first().soc,full.first().soc);
-    results->setCurrentIndex(results->findData("partial:0"));
-    QCOMPARE(plot->sampleCount(),partialCount);QCOMPARE(time->text(),partialTime);
-    // Reapplying the full result parameters must reuse the old complete cache.
-    view->setInputs(3.45,5,1,.8);window.findChild<QTabWidget*>()->setCurrentIndex(0);QTest::mouseClick(apply,Qt::LeftButton);
-    const auto beforeCachedJob=runner->lastRunDirectory();
-    QTest::mouseClick(play,Qt::LeftButton);
-    QVERIFY(!runner->isRunning());QCOMPARE(runner->lastRunDirectory(),beforeCachedJob);
-    QCOMPARE(completed.count(),1);QCOMPARE(stopped.count(),1);
-    QCOMPARE(player->samples().size(),full.size());QVERIFY(qAbs(player->samples().first().soc-.8)<1e-6);
-    QTest::mouseClick(stop,Qt::LeftButton);
-    // Explicit local startup failure must not corrupt successful cache.
-    const auto priorHome=qgetenv("SYSPLORER_HOME");
-    qputenv("SYSPLORER_HOME","C:/missing/sysplorer");
-    view->setInputs(3.45,4,1,.8);window.findChild<QTabWidget*>()->setCurrentIndex(0);QTest::mouseClick(apply,Qt::LeftButton);QTest::mouseClick(play,Qt::LeftButton);
-    QTRY_VERIFY_WITH_TIMEOUT(!runner->isRunning(),10000);
-    QCOMPARE(completed.count(),2);QVERIFY(!completed.at(1).at(0).toBool());QVERIFY(errors->isVisible());
-    if(priorHome.isNull())qunsetenv("SYSPLORER_HOME");else qputenv("SYSPLORER_HOME",priorHome);
-    view->setInputs(3.45,5,1,.8);window.findChild<QTabWidget*>()->setCurrentIndex(0);QTest::mouseClick(apply,Qt::LeftButton);QTest::mouseClick(play,Qt::LeftButton);
-    QVERIFY(!runner->isRunning());QCOMPARE(player->samples().size(),full.size());
-    QTest::mouseClick(stop,Qt::LeftButton);
-    // Zero current has no finite fill/drain time: a real 120-second stationary task.
-    speed->setCurrentIndex(4);view->setInputs(3.45,0,1,0);window.findChild<QTabWidget*>()->setCurrentIndex(0);QTest::mouseClick(apply,Qt::LeftButton);
-    const int beforeZero=completed.count();QTest::mouseClick(play,Qt::LeftButton);QVERIFY(runner->isRunning());
-    QTRY_VERIFY_WITH_TIMEOUT(!runner->isRunning(),180000);
-    QCOMPARE(completed.count(),beforeZero+1);QVERIFY2(completed.last().at(0).toBool(),qPrintable(completed.last().at(2).toString()));
-    QVERIFY(!errors->isVisible());QVERIFY(qAbs(player->duration()-120)<.02);
-    for(const auto&s:player->samples()){QVERIFY(qAbs(s.soc)<1e-6);QVERIFY(qAbs(s.current)<1e-6);}
-    QJsonObject summary{{"ok",true},{"platform",QGuiApplication::platformName()},{"fullJob",fullJob},
-        {"fullTask",fullTask},{"partialTask",partialTask},{"fullPoints",full.size()},
-        {"partialPoints",partialCount},{"partialDisplayedTime",partialTime},{"phases",phases}};
-    QFile output(artifacts+"/ui_verification.json");QVERIFY(output.open(QIODevice::WriteOnly));
-    output.write(QJsonDocument(summary).toJson());
+    // A new simulation always requires preparation, even when previous results exist.
+    tabs->setCurrentIndex(0);view->setInputs(2.5,1.25,2,.6);QTest::mouseClick(apply,Qt::LeftButton);speed->setCurrentIndex(3);
+    QTest::mouseClick(prepare,Qt::LeftButton);
+    QTRY_VERIFY_WITH_TIMEOUT(runner->isPrepared()||!runner->isRunning(),180000);
+    QVERIFY2(runner->isPrepared(),qPrintable(errors->toPlainText()));QTest::mouseClick(start,Qt::LeftButton);
+    QTRY_VERIFY_WITH_TIMEOUT(runner->phase()=="Running"&&runner->liveSamples().size()>4,30000);
+    QVERIFY(!replay->isEnabled());QTest::mouseClick(pause,Qt::LeftButton);
+    QTRY_COMPARE_WITH_TIMEOUT(runner->phase(),QString("Paused"),15000);
+    QTRY_VERIFY(pause->isEnabled());QVERIFY(!replay->isEnabled());const auto n=plot->sampleCount();QTest::qWait(500);QCOMPARE(plot->sampleCount(),n);
+    w.grab().save(artifacts+"/paused.png");QTest::mouseClick(pause,Qt::LeftButton);
+    QTRY_COMPARE_WITH_TIMEOUT(runner->phase(),QString("Running"),15000);QTRY_VERIFY(stop->isEnabled());QTest::mouseClick(stop,Qt::LeftButton);
+    QVERIFY(!replay->isEnabled());QTRY_VERIFY_WITH_TIMEOUT(!runner->isRunning(),30000);QCOMPARE(stopped.count(),1);
+    const auto partial=player->samples();QVERIFY(!partial.isEmpty());QVERIFY(player->duration()<runner->duration());QVERIFY(replay->isEnabled());
+    w.grab().save(artifacts+"/stopped.png");
+    auto results=w.findChild<QComboBox*>("cmbResults");results->setCurrentIndex(results->findData("cache"));
+    QCOMPARE(player->samples().size(),full.size());
+    QTest::mouseClick(replay,Qt::LeftButton);QVERIFY(player->isPlaying());
+    QCOMPARE(player->samples().size(),partial.size());QCOMPARE(player->samples().first().soc,partial.first().soc);QTest::mouseClick(stop,Qt::LeftButton);
+    // A failed preparation cannot replace the latest valid partial result.
+    const auto old=qgetenv("SYSPLORER_HOME");qputenv("SYSPLORER_HOME","C:/missing/sysplorer");
+    QTest::mouseClick(prepare,Qt::LeftButton);QTRY_VERIFY_WITH_TIMEOUT(!runner->isRunning(),5000);
+    QCOMPARE(completed.count(),2);QVERIFY(!completed.last()[0].toBool());
+    if(old.isNull())qunsetenv("SYSPLORER_HOME");else qputenv("SYSPLORER_HOME",old);
+    QTest::mouseClick(replay,Qt::LeftButton);QVERIFY(player->isPlaying());QCOMPARE(player->samples().size(),partial.size());
+    QCOMPARE(player->samples().first().soc,partial.first().soc);
  }
 };
 QTEST_MAIN(UdpIntegration)

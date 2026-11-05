@@ -53,6 +53,8 @@ public:
     ~MainWindow() override;
 
 private slots:
+    void onPrepare();
+    void onReplay();
     void onPlay();
     void onPause();
     void onResume();
@@ -78,22 +80,21 @@ private:
     void setStateText(const QString& phase); // 自动带「自定义 ·」前缀
     void refreshButtons();
     void showSavedPreview();
-    // 把一条新曲线装进当前场景（两条重算路径共用）
+    // 保存通过校验的完整结果，同时更新最近有效结果。
     void applyComputedCurve(QVector<ReplaySample> samples,
                             double voltage, double current, int mode, double soc0,
                             const QString& hint);
 
-    // 当前界面参数与已有曲线是否不一致（不一致才需要重新仿真）
-    bool needsRecompute(int index, double voltage, double current,
-                        int mode, double soc0) const;
-    // A cache miss always launches the real local Sysplorer SDK calculation.
-    void startRecompute(int index, double voltage, double current, int mode, double soc0);
     void startSysplorerRun(double voltage, double current, int mode, double soc0);
     QString restoreStateText(const ScenarioState& st) const;
 
+    QVector<ReplaySample> m_latestSamples;
+    bool m_latestPartial=false;
+    QPushButton* m_btnPrepare=nullptr;
+    QPushButton* m_btnReplay=nullptr;
     QPushButton* m_btnPlay = nullptr;
     QPushButton* m_btnPause = nullptr;
-    QPushButton* m_btnResume = nullptr;
+
     QPushButton* m_btnStop = nullptr;
     QComboBox*   m_cmbSpeed = nullptr;
     QComboBox*   m_resultSelector = nullptr;
@@ -108,7 +109,7 @@ private:
     PlotWidget*   m_plotWidget = nullptr;
 
     ReplayPlayer* m_player = nullptr;
-    SysplorerRunner* m_runner = nullptr;   // 「仿真」缓存未命中时启动 SDK
+    SysplorerRunner* m_runner = nullptr;   // 宿主连接、准备及求解控制
     int m_requestIndex = -1;
     QString m_viewerJob, m_viewerMessage;
     bool m_viewerOk = false;
