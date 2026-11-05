@@ -15,6 +15,7 @@ build/
 dist/
 app/ui/runtime_udp/
 app/ui/runtime_tuning/
+app/ui/runtime_buttons/
 
 # 忽略日志和测试证据
 logs/

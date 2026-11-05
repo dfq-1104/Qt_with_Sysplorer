@@ -1,0 +1,24 @@
+********* Start testing of UdpIntegration *********
+Config: Using QtTest library 5.14.2, Qt 5.14.2 (x86_64-little_endian-llp64 shared (dynamic) release build; by MSVC 2017)
+INFO   : UdpIntegration::initTestCase() entering
+PASS   : UdpIntegration::initTestCase()
+INFO   : UdpIntegration::layoutAndDisclosure() entering
+PASS   : UdpIntegration::layoutAndDisclosure()
+INFO   : UdpIntegration::startupFailureKeepsUiUsable() entering
+PASS   : UdpIntegration::startupFailureKeepsUiUsable()
+INFO   : UdpIntegration::modelLoadAndReuse() entering
+PASS   : UdpIntegration::modelLoadAndReuse()
+INFO   : UdpIntegration::startIncludesPreparation() entering
+PASS   : UdpIntegration::startIncludesPreparation()
+INFO   : UdpIntegration::automaticStartFailureKeepsStage() entering
+PASS   : UdpIntegration::automaticStartFailureKeepsStage()
+INFO   : UdpIntegration::realButtonsAndTaskLifecycle() entering
+PASS   : UdpIntegration::realButtonsAndTaskLifecycle()
+INFO   : UdpIntegration::runtimeTuningButtons() entering
+PASS   : UdpIntegration::runtimeTuningButtons()
+INFO   : UdpIntegration::busyHostIsSkipped() entering
+PASS   : UdpIntegration::busyHostIsSkipped()
+INFO   : UdpIntegration::cleanupTestCase() entering
+PASS   : UdpIntegration::cleanupTestCase()
+Totals: 10 passed, 0 failed, 0 skipped, 0 blacklisted, 249321ms
+********* Finished testing of UdpIntegration *********

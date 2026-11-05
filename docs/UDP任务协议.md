@@ -27,9 +27,11 @@
 
 | 命令 | 参数 | 作用 |
 |---|---|---|
-| hello | 无 | 查询宿主就绪、控制器状态、模型哈希及 splitLifecycle=true 能力 |
-| begin | modelHash、mode、voltage、current、soc0、duration、speed | 接受新准备任务，异步加载、设参、翻译，完成后停在 Prepared |
-| start | 无 | 从 Prepared 启动本任务求解 |
+| hello | 无 | 查询宿主就绪、控制器状态、模型哈希及 splitLifecycle=true、modelLifecycle=true 能力及 modelLoaded 状态 |
+| load | modelHash（其余仿真参数可省略） | 只加载并确认固定模型，完成后停在 Loaded；不写参、不翻译、不求解 |
+| translate | modelHash、mode、voltage、current、soc0、duration、speed | 自动加载或复用本宿主有效模型，写参回读并翻译，完成后停在 Prepared |
+| begin | 同 translate | 保留旧客户端的完整准备命令；新客户端使用 translate |
+| start | speed（可选） | 从 Prepared 启动本任务求解，使用启动时选择的倍速 |
 | discard | 无 | 放弃本客户端的 Prepared 状态，重新应用参数时使用 |
 | poll | cursor | 获取任务状态及一批实时数据 |
 | pause | 无 | 请求暂停本任务求解 |
@@ -69,11 +71,19 @@ poll 返回 rows，每行固定为 [time, SOC, I_act, V_term]。cursor 为本批
 
 ## 状态
 
-Ready → Preparing → Translating → Prepared →（start）Starting → Running。Prepared 可通过 discard 返回 Ready。
+Ready →（load）Loading → Loaded；Loaded 不持有求解器或准备实例。
+
+Ready / Loaded / Completed / Stopped →（translate）Preparing → Translating → Prepared →（start）Starting → Running。Prepared 可通过 discard 返回 Ready。每个 load/translate 操作使用新的任务 UUID；同一请求 ID 重发返回缓存，不重复执行。
+
+界面入口采用包含关系：加载模型只发送 load；翻译模型发送 translate，内部自动加载或复用；开始仿真在准备无效或参数变化时先 discard（如需要）、translate，确认 Prepared 后才发送 start。准备有效时开始入口直接 start。点击“翻译模型”不会自动求解，点击“加载模型”不会写参或翻译。原流程文档中“参数修改后禁用开始，必须手动翻译”的规则已由 2026-11-05 用户追加要求替代为“开始自动重新准备”。
 
 运行期间可能进入 Pausing → Paused → Resuming → Running；停止经过 Stopping → Finalizing → Stopped。自然结束经过 Finalizing → Completed。错误进入 Failed。
 
 按钮以宿主确认状态驱动；命令 ok 只表示该操作被接受，不能代替完成状态。
+
+新客户端同时检查 modelLifecycle 能力和模型哈希，缺少能力的旧插件明确报错，不将 load 降级为 begin。宿主缓存只在本进程中有效，翻译前检查 BatterySim.SingleRun 仍存在；缺失时重新加载。
+
+状态新增 modelLoaded、stage。stage 区分加载模型、写入参数、回读参数、检查输出目录、翻译模型、启动仿真、运行仿真及结果处理。写入或回读失败返回 PARAM_WRITE_FAILED / PARAM_READBACK_FAILED，并带字段、期望值、实际值；失败状态与 plugin.log 保留原始阶段。LOAD_FAILED、TRANSLATE_FAILED、TRANSLATE_REJECTED、START_FAILED、RESULT_FAILED 分别归属各自步骤。客户端日志记录任务号、时间、phase、操作及原始错误，不把自动准备失败记为求解成功。
 
 模型和控制器对象必须仍属于本任务。任务编号、客户端归属或宿主绑定对象不一致时拒绝控制。超过 15 秒未收到拥有者查询且任务在运行时，请求暂停以避免客户端失联后继续无人查看的计算。
 

@@ -15,6 +15,8 @@ public:
     explicit SysplorerRunner(QObject* parent=nullptr);
     ~SysplorerRunner() override;
     void connectHost();
+    void loadModel();
+    bool isModelLoaded() const {return m_modelLoaded;}
     void beginSimulation();
     void invalidatePreparation();
     bool isPrepared() const {return m_busy && m_phase=="Prepared";}
@@ -73,8 +75,10 @@ private:
     qint64 m_hostPid=0,m_launchedPid=0;
     QSet<qint64> m_busyHosts;
     int m_attempts=0,m_cursor=0,m_mode=1;
+    int m_hostTimeoutMs=90000;
     bool m_connectOnly=false,m_autoAttempted=false,m_connectionWarned=false;
     bool m_busy=false,m_launched=false,m_begun=false;
+    bool m_loadOnly=false,m_modelLoaded=false;
     double m_voltage=3.45,m_current=2.5,m_soc0=.5,m_duration=120,m_speed=20;
     QVector<ReplaySample> m_samples;
 };

@@ -93,7 +93,7 @@ MwPlugin::ShutdownFlag BatteryUdpControl::aboutToShutdown() {
     return SynchronousShutdown;
 }
 bool BatteryUdpControl::active() const {
-    return phase=="Prepared"||phase=="Preparing"||phase=="Translating"||phase=="Starting"||phase=="Running"
+    return phase=="Loading"||phase=="Prepared"||phase=="Preparing"||phase=="Translating"||phase=="Starting"||phase=="Running"
         ||phase=="Pausing"||phase=="Paused"||phase=="Resuming"||phase=="Stopping"||phase=="Finalizing";
 }
 bool BatteryUdpControl::bindHost(QString &error) {
@@ -153,37 +153,38 @@ void BatteryUdpControl::log(const QString &event,const QJsonObject &values) {
 QJsonObject BatteryUdpControl::snapshot(int cursor) const {
     QJsonArray rows;cursor=qBound(0,cursor,live.size());int end=qMin(cursor+8,live.size());
     for(int n=cursor;n<end;++n){const auto&r=live[n];rows.append(QJsonArray{r.t,r.soc,r.current,r.voltage});}
-    return {{"phase",phase},{"taskId",taskId},{"owner",owner},{"params",verifiedParams},
+    return {{"phase",phase},{"modelLoaded",modelLoaded},{"taskId",taskId},{"owner",owner},{"params",verifiedParams},
         {"runtimeParams",runtimeParams},{"tuneHistory",tuneHistory},{"tunePending",!pendingTune.isEmpty()},
         {"modelHash",modelHash},{"controller",pointer(control)},{"data",pointer(data)},
         {"pid",double(QCoreApplication::applicationPid())},{"duration",duration},
         {"time",live.isEmpty()?0:live.last().t},{"cursor",cursor},{"next",end},{"total",live.size()},{"rows",rows},
-        {"code",errorCode},{"message",errorMessage},{"jobDir",jobDir},{"csvHash",csvHash},
+        {"stage",stage},{"code",errorCode},{"message",errorMessage},{"jobDir",jobDir},{"csvHash",csvHash},
         {"nativeResult",nativeResult},{"viewerMessage",viewMessage}};
 }
-void BatteryUdpControl::beginTask(const QJsonObject &a,const QString &client,const QString &id) {
+void BatteryUdpControl::beginTask(const QJsonObject &a,const QString &client,const QString &id,bool loadOnly) {
     require(!active()&&controllerState()=="Idle","HOST_BUSY");
     auto app=MwAppPtr;require(app&&app->GetTaskManager()&&!app->GetTaskManager()->IsRunning(),"HOST_STARTING");
     require(!QUuid(id).isNull(),"Invalid task identifier");
     require(a.value("modelHash").toString()==modelHash,"MODEL_MISMATCH");
-    auto v=a["voltage"].toDouble(-1),i=a["current"].toDouble(-1),s=a["soc0"].toDouble(-1);
-    auto d=a["duration"].toDouble(-1),sp=a["speed"].toDouble(20);int md=a["mode"].toInt();
+    auto v=a["voltage"].toDouble(loadOnly?3.45:-1),i=a["current"].toDouble(loadOnly?2.5:-1),s=a["soc0"].toDouble(loadOnly?.5:-1);
+    auto d=a["duration"].toDouble(loadOnly?120:-1),sp=a["speed"].toDouble(20);int md=a["mode"].toInt(loadOnly?1:0);
     require(finite(v)&&v>=2.5&&v<=3.45&&finite(i)&&i>=0&&i<=5&&finite(s)&&s>=0&&s<=1&&(md==1||md==2),"INVALID_PARAMS");
     require(finite(d)&&d>=.1&&d<=20000&&finite(sp)&&sp>=.5&&sp<=60,"INVALID_DURATION_OR_SPEED");
     taskId=id;owner=client;voltage=v;current=i;mode=md;soc0=s;duration=d;speed=sp;
     errorCode.clear();errorMessage.clear();viewMessage.clear();csvHash.clear();nativeResult.clear();
-    live.clear();verifiedParams={};data.clear();stopAt=-1;stopRequested=false;preparing=false;phase="Preparing";
+    live.clear();verifiedParams={};data.clear();stopAt=-1;stopRequested=false;preparing=false;phase=loadOnly?"Loading":"Preparing";
     pendingTune={};tuneHistory={};resumeAfterTune=false;tuneAwaitingSample=false;tuneBoundary={};
     runtimeParams={{"current",current},{"voltage",voltage},{"mode",mode},
         {"vMin",mode==2?voltage:2.5},{"vMax",mode==1?voltage:3.45},{"iMax",5.0}};
     QString base=qEnvironmentVariable("BATTERY_SIM_WORKSPACE",QDir::tempPath()+"/BatteryConsoleUDP");
     for(QChar c:base)require(c.unicode()<128,"ASCII_WORKSPACE_REQUIRED");
     jobDir=QDir(base).absoluteFilePath(taskId);require(QDir().mkpath(jobDir),"Cannot create task directory");
-    taskClock.start();lastClientMs=heartbeat.elapsed();persist();log("accepted",a);
+    stage=QString::fromUtf8("加载模型");taskClock.start();lastClientMs=heartbeat.elapsed();persist();log("accepted",a);
     QTimer::singleShot(0,this,&BatteryUdpControl::prepare);
 }
 void BatteryUdpControl::prepare() {
-    if(phase!="Preparing"||shutdown)return;
+    if((phase!="Preparing"&&phase!="Loading")||shutdown)return;
+    const bool loadOnly=phase=="Loading";
     try {
         QString error;require(bindHost(error),qPrintable(error));
         auto app=MwAppPtr;
@@ -191,22 +192,38 @@ void BatteryUdpControl::prepare() {
             if(taskClock.elapsed()>60000)throw std::runtime_error("Host initialization timeout");
             QTimer::singleShot(300,this,&BatteryUdpControl::prepare);return;
         }
+        stage=QString::fromUtf8("加载模型");
         auto h=manager->GetMoHandler();
-        if(!modelLoaded){require(h->NewModel(modelText.toUtf8().toStdString(),MoKey(0))!=0,"Battery model load failed");modelLoaded=true;}
+        // Revalidate the cached class in this host session before reusing it.
+        if(modelLoaded&&h->DirectLookupType("BatterySim.SingleRun")==0)modelLoaded=false;
+        if(!modelLoaded){
+            require(h->NewModel(modelText.toUtf8().toStdString(),MoKey(0))!=0,"Battery model load failed");
+            modelLoaded=true;log("model_loaded",{{"modelHash",modelHash}});
+        }else log("model_reused",{{"modelHash",modelHash}});
         auto key=h->DirectLookupType("BatterySim.SingleRun");require(key!=0,"Battery model missing");
+        if(loadOnly){phase="Loaded";persist();log("load_confirmed");return;}
         const std::pair<const char*,QString> args[]={{"runMode",QString::number(mode)},{"runCurrent",QString::number(current,'g',15)},
             {"runVoltage",QString::number(voltage,'g',15)},{"socStart",QString::number(soc0,'g',15)}};
         for(auto &p:args){
-            require(h->SetParamValue(key,MwStrVector{p.first},p.second.toStdString()),"Parameter assignment failed");
+            stage=QString::fromUtf8("写入参数");
+            if(!h->SetParamValue(key,MwStrVector{p.first},p.second.toStdString())){
+                fail("PARAM_WRITE_FAILED",QString::fromUtf8("写参失败：%1，期望 %2").arg(QString::fromLatin1(p.first),p.second));return;
+            }
+            stage=QString::fromUtf8("回读参数");
             bool ok=false;auto back=QString::fromStdString(h->GetParamValue(key,MwStrVector{p.first})).toDouble(&ok);
-            require(ok&&std::abs(back-p.second.toDouble())<1e-8,"Parameter readback mismatch");
+            if(!ok||std::abs(back-p.second.toDouble())>=1e-8){
+                fail("PARAM_READBACK_FAILED",QString::fromUtf8("参数回读失败：%1，期望 %2，实际 %3")
+                    .arg(QString::fromLatin1(p.first),p.second,ok?QString::number(back,'g',15):QString::fromUtf8("非数值")));return;
+            }
+            log("parameter_verified",{{"field",p.first},{"expected",p.second},{"actual",back}});
         }
         verifiedParams={{"mode",mode},{"voltage",voltage},{"current",current},{"soc0",soc0}};
         auto p=static_cast<MwSimInstPanel*>(panel.data());
+        stage=QString::fromUtf8("检查输出目录");require(QDir().mkpath(jobDir+"/solver"),"OUTPUT_DIRECTORY_FAILED");
         p->SetSolverPath(jobDir+"/solver");p->SetResultPath(jobDir+"/Result.msr");
-        phase="Translating";persist();preparing=true;
+        stage=QString::fromUtf8("翻译模型");phase="Translating";persist();preparing=true;
         if(!p->TranslateModel("BatterySim.SingleRun",false))fail("TRANSLATE_REJECTED","宿主未接受翻译请求");
-    } catch(const std::exception&e){fail("PREPARE_FAILED",QString::fromUtf8(e.what()));}
+    } catch(const std::exception&e){fail(stage==QString::fromUtf8("加载模型")?"LOAD_FAILED":"PREPARE_FAILED",QString::fromUtf8(e.what()));}
 }
 void BatteryUdpControl::applyTune() {
     // Never touch initial values or restart/translate the model here.
@@ -259,6 +276,7 @@ void BatteryUdpControl::registerVariables(MwAniService *s,MwAniListener *l) {
     s->SetAnimationRefVars(l,d,reals,empty,empty);
 }
 void BatteryUdpControl::startSolver() {
+    stage=QString::fromUtf8("启动仿真");
     if(phase!="Prepared"||!data)return;
     try {
         auto c=static_cast<MwSimControl*>(control.data());auto d=static_cast<MwSimData*>(data.data());
@@ -272,9 +290,9 @@ void BatteryUdpControl::startSolver() {
         sym<void(*)(void*,int)>(L"modelica_post_processor.dll","?SetCommuStepSizeDenominator@MwModelSimConfig@@QEAAXH@Z")(cfg,1);
         d->SetSlowdownFactor(1.0/speed);
         if(!listenerAttached){c->GetAniService()->AddListener(&listener);listenerAttached=true;}
-        phase="Starting";c->AnimationStart();
+        phase="Starting";startClock.start();c->AnimationStart();
         require(c->StartSimulate(MwSimControl::Sim_RealtimeMode),"Host solver rejected start");
-        phase="Running";collectTimer.start();persist();log("started",snapshot());
+        collectTimer.start();persist();log("start_accepted",snapshot());
         QTimer::singleShot(150,this,[this]{if(!active()||!ownsController()||phase!="Running")return;
             auto c=static_cast<MwSimControl*>(control.data());
             log("runtime_speed",{{"speed",speed},{"accepted",c->ResetSimConfig(MwSimControl::SIM_SLOWDOWN_FACTOR,1.0/speed)}});});
@@ -304,7 +322,12 @@ void BatteryUdpControl::collect() {
     if(!active()||!ownsController())return;
     try {
         auto c=static_cast<MwSimControl*>(control.data());
-        if(phase=="Running"||phase=="Pausing"||phase=="Paused"||phase=="Resuming"||phase=="Stopping") c->AnimationStep();
+        if(phase=="Starting"){
+            const auto actual=controllerState();
+            if(actual=="Running"){stage=QString::fromUtf8("运行仿真");phase="Running";persist();log("started",snapshot());}
+            else if(startClock.elapsed()>15000&&actual=="Idle"){fail("START_UNCONFIRMED",QString::fromUtf8("启动请求已接受，但宿主未确认运行；未重复启动。"));return;}
+        }
+        if(phase=="Starting"||phase=="Running"||phase=="Pausing"||phase=="Paused"||phase=="Resuming"||phase=="Stopping") c->AnimationStep();
         if(lastClientMs>0&&heartbeat.elapsed()-lastClientMs>15000&&phase=="Running"){
             phase="Pausing";c->PauseSimulate();log("client_timeout_pausing");
         }
@@ -313,7 +336,7 @@ void BatteryUdpControl::collect() {
 void BatteryUdpControl::simulationStopped(int code) {
     if(!active()||!ownsController()||phase=="Finalizing")return;
     if(!stopRequested&&code==-1){stopRequested=true;stopAt=live.isEmpty()?0:live.last().t;}
-    phase="Finalizing";collectTimer.stop();persist();
+    stage=QString::fromUtf8("结果处理");phase="Finalizing";collectTimer.stop();persist();
     QTimer::singleShot(300,this,[this,code]{finish(code);});
 }
 bool BatteryUdpControl::saveResult(const QVector<LiveRow>&rows,bool complete) {
@@ -373,7 +396,7 @@ void BatteryUdpControl::showNativePlots() {
     }catch(const std::exception&e){viewMessage=QString("计算结果已保留；原生查看：%1").arg(QString::fromUtf8(e.what()));}
 }
 void BatteryUdpControl::fail(const QString &code,const QString &message){
-    collectTimer.stop();phase="Failed";errorCode=code;errorMessage=message;persist();log("failed",{{"code",code},{"message",message}});
+    collectTimer.stop();phase="Failed";errorCode=code;errorMessage=message;persist();log("failed",{{"stage",stage},{"code",code},{"message",message}});
 }
 void BatteryUdpControl::persist() {
     if(jobDir.isEmpty())return;
@@ -383,16 +406,18 @@ QJsonObject BatteryUdpControl::execute(const QJsonObject&r) {
     QString e;require(bindHost(e),qPrintable(e));
     const QString cmd=r["command"].toString(),client=r["client"].toString(),id=r["taskId"].toString();
     require(!client.isEmpty(),"Missing client identifier");
-    if(cmd=="hello")return {{"splitLifecycle",true},{"ok",true},{"status",snapshot()},{"modelHash",modelHash},{"ready",!MwAppPtr->GetTaskManager()->IsRunning()},{"controllerState",controllerState()}};
-    if(cmd=="begin"){
+    if(cmd=="hello")return {{"modelLifecycle",true},{"modelLoaded",modelLoaded},{"splitLifecycle",true},{"ok",true},{"status",snapshot()},{"modelHash",modelHash},{"ready",!MwAppPtr->GetTaskManager()->IsRunning()},{"controllerState",controllerState()}};
+    if(cmd=="begin"||cmd=="translate"||cmd=="load"){
         if(id==taskId&&client==owner)return {{"ok",true},{"status",snapshot()}};
-        beginTask(r["args"].toObject(),client,id);return {{"ok",true},{"status",snapshot()}};
+        beginTask(r["args"].toObject(),client,id,cmd=="load");return {{"ok",true},{"status",snapshot()}};
     }
     require(id==taskId&&client==owner,"TASK_OWNERSHIP_MISMATCH");lastClientMs=heartbeat.elapsed();
     if(cmd=="poll")return {{"ok",true},{"status",snapshot(r["args"].toObject()["cursor"].toInt())}};
     if(cmd=="start"){
         require(phase=="Prepared"&&controllerState()=="Idle","INVALID_STATE");
         require(data&&panel&&control,"PREPARED_MODEL_REMOVED");
+        const auto requestedSpeed=r["args"].toObject()["speed"].toDouble(speed);
+        require(finite(requestedSpeed)&&requestedSpeed>=.5&&requestedSpeed<=60,"INVALID_SPEED");speed=requestedSpeed;
         startSolver();return {{"ok",true},{"status",snapshot()}};
     }
     if(cmd=="discard"){

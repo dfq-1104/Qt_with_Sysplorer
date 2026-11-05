@@ -46,7 +46,7 @@ private:
     void receive();
     QJsonObject execute(const QJsonObject&);
     QJsonObject snapshot(int cursor=0) const;
-    void beginTask(const QJsonObject&,const QString&,const QString&);
+    void beginTask(const QJsonObject&,const QString&,const QString&,bool loadOnly=false);
     void prepare();
     void startSolver();
     void applyTune();
@@ -60,13 +60,14 @@ private:
     void persist();
     QUdpSocket *socket=nullptr;
     QTimer advertiseTimer,collectTimer;
-    QElapsedTimer taskClock;
+    QElapsedTimer taskClock,startClock;
     QPointer<QObject> control,panel,data;
     MwClassManager *manager=nullptr;
     MwWorkbenchCore *core=nullptr;
     BatteryListener listener{this};
     QString session,token,endpoint,modelHash,modelText,taskId,owner,phase="Ready",jobDir,errorCode,errorMessage;
     QString csvHash,nativeResult,viewMessage;
+    QString stage;
     double voltage=3.45,current=2.5,soc0=.5,duration=120,speed=20,stopAt=-1;
     int mode=1;
     bool modelLoaded=false,stopRequested=false,listenerAttached=false,shutdown=false,preparing=false;

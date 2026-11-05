@@ -1,3 +1,3 @@
 @echo off
-rem Keep both worktree launchers on the same verified isolated package.
-call "%~dp0run_runtime_tuning.bat"
+rem Launch this worktree's button-details package and its paired isolated host.
+call "%~dp0run_button_details.bat"

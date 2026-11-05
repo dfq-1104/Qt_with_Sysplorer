@@ -12,6 +12,7 @@ class QComboBox;
 class QTabWidget;
 class QPlainTextEdit;
 class QDoubleSpinBox;
+class QToolButton;
 
 class BatteryView;
 class PlotWidget;
@@ -73,6 +74,9 @@ private slots:
 private:
     void buildUi();
     void refreshResultSelector();
+    bool inputsMatchPreparation() const;
+    void appendStageLog(const QString& category, const QString& message);
+    void refreshLog();
 
     void applyScenario(int index);           // 把某个场景的快照装到界面上
     bool loadScenarioData(int index);        // 首次进入时读 CSV 并缓存
@@ -92,7 +96,19 @@ private:
     QVector<ReplaySample> m_latestSamples;
     bool m_latestPartial=false;
     QPushButton* m_btnPrepare=nullptr;
+    QPushButton* m_btnLoad=nullptr;
     QPushButton* m_btnReplay=nullptr;
+    QPushButton* m_btnReplayPause=nullptr;
+    QPushButton* m_btnReplayStop=nullptr;
+    QPushButton* m_btnOpenJob=nullptr;
+    QComboBox* m_replaySpeed=nullptr;
+    QLabel* m_replayTime=nullptr;
+    QLabel* m_replayState=nullptr;
+    QLabel* m_taskInfo=nullptr;
+    QPlainTextEdit* m_stageLog=nullptr;
+    QComboBox* m_logFilter=nullptr;
+    QVector<QPair<QString, QString>> m_logEntries;
+    QString m_lastLoggedPhase;
     QPushButton* m_btnPlay = nullptr;
     QPushButton* m_btnPause = nullptr;
 
@@ -118,7 +134,10 @@ private:
     int m_requestIndex = -1;
     QString m_viewerJob, m_viewerMessage;
     bool m_viewerOk = false;
-    bool m_stopped = false;
+    bool m_stopped = true;
+    bool m_translateAfterDiscard = false;
+    bool m_startAfterPreparation = false;
+    QString m_resultBeforeTask;
 
     // 正在跑的 Sysplorer 请求参数（成功时写回场景快照）
     double m_reqVoltage = 3.45;

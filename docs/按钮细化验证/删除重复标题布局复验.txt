@@ -1,0 +1,10 @@
+********* Start testing of UdpIntegration *********
+Config: Using QtTest library 5.14.2, Qt 5.14.2 (x86_64-little_endian-llp64 shared (dynamic) release build; by MSVC 2017)
+INFO   : UdpIntegration::initTestCase() entering
+PASS   : UdpIntegration::initTestCase()
+INFO   : UdpIntegration::layoutAndDisclosure() entering
+PASS   : UdpIntegration::layoutAndDisclosure()
+INFO   : UdpIntegration::cleanupTestCase() entering
+PASS   : UdpIntegration::cleanupTestCase()
+Totals: 3 passed, 0 failed, 0 skipped, 0 blacklisted, 4111ms
+********* Finished testing of UdpIntegration *********

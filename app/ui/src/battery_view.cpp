@@ -33,6 +33,7 @@ BatteryView::BatteryView(QWidget* parent)
 
     // 场景简介（跨两列）
     m_lblScenario = new QLabel(m_controls);
+    m_lblScenario->setObjectName("scenarioInfo");
     m_lblScenario->setWordWrap(true);
     m_lblScenario->setStyleSheet(
         "color:#3d4a5a; background:#eaf2fb; border:1px solid #d6e4f5;"
@@ -76,7 +77,7 @@ BatteryView::BatteryView(QWidget* parent)
     m_spinSoc0->setSuffix(QString::fromUtf8(" %"));
     m_spinSoc0->setValue(50.0);
     m_spinSoc0->setToolTip(QString::fromUtf8(
-        "本次仿真从多少电量开始。应用参数只保存，点击仿真后才计算。"));
+        "本次仿真从多少电量开始。保存参数只保存设置；翻译或开始时读取当前输入。"));
 
     // 充放电方向（仅自定义场景可用）
     auto* dirRow = new QWidget(m_controls);
@@ -94,7 +95,7 @@ BatteryView::BatteryView(QWidget* parent)
     dirLayout->addWidget(m_radioDischarge);
     dirLayout->addStretch(1);
 
-    m_btnApply = new QPushButton(QString::fromUtf8("应用参数"), m_controls);
+    m_btnApply = new QPushButton(QString::fromUtf8("保存参数"), m_controls);
     m_btnApply->setObjectName(QStringLiteral("btnApply"));
     m_btnApply->setToolTip(QString::fromUtf8(
         "校验并保存设置；不会启动计算或回放。"));
@@ -256,11 +257,12 @@ void BatteryView::setScenarioInfo(const QString& title,
 {
     QString text = QString::fromUtf8("%1\n%2").arg(title, description);
     if (customizable) {
-        text += QString::fromUtf8("\n可改电压/电流/方向/起始电量，改完点「应用参数」。");
+        text += QString::fromUtf8("\n可改电压/电流/方向/起始电量，改完可点「保存参数」。");
     } else {
         text += QString::fromUtf8("\n本场景电流固定，起始电量可改；应用参数后点击仿真计算。");
     }
-    m_lblScenario->setText(text);
+    m_lblScenario->setText(title);
+    m_lblScenario->setToolTip(text);
     setCustomEnabled(customizable);
 }
 
