@@ -1,10 +1,5 @@
 @echo off
 setlocal
 cd /d "%~dp0"
-set "BATTERY_PROJECT_DIR=%~dp0..\.."
-if not exist "runtime\battery_console_ui.exe" (
-  echo Please build and deploy the application first.
-  pause
-  exit /b 1
-)
-start "" "runtime\battery_console_ui.exe"
+"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -ExecutionPolicy Bypass -File "%~dp0start_ui.ps1"
+exit /b %errorlevel%

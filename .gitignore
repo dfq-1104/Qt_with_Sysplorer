@@ -1,57 +1,74 @@
-# Local Codex environment
-/.codex/
-
-# IDE and editor caches
+# 忽略 Visual Studio / IDE 配置
 .vs/
 .vscode/
+*.sln
+*.vcxproj*
+*.ipch
+*.db
+
+# 忽略编译产物
+*.exe
+*.dll
+*.obj
+*.pdb
+build/
+dist/
+app/ui/runtime_udp/
+app/ui/runtime_tuning/
+app/ui/runtime_buttons/
+
+# 忽略日志和测试证据
+logs/
+*.log
+tools/*/evidence*/
+tools/*/artifacts/
+tools/sysplorer_udp_plugin/runtime_host/
+tools/sysplorer_udp_plugin/__pycache__/
+
+# 忽略压缩包
+*.zip
+*.tar.gz
+*.7z
+
+# 忽略系统文件
+.DS_Store
+Thumbs.db
+
+# 补充忽略 Modelica/Sysplorer 编译产物
+runs/
+
+# 补充忽略 Qt 的 Makefile
+Makefile
+Makefile.*
+.qmake.stash
+
+# 补充忽略其他 runtime 目录
+app/ui/probe_runtime/
+app/ui/runtime/
+
+# Publish excludes: retain remote rules for local settings and generated files
+/.codex/
 *.user
 *.suo
 *.VC.db
 *.VC.opendb
-*.ipch
-
-# Qt / C++ build products
-build/
 debug/
 release/
-.qmake.stash
-Makefile*
-*.obj
 *.o
-*.pdb
 *.ilk
 *.pch
 *.idb
 *.tlog
-*.dll
-*.exe
 *.lib
 *.exp
-
-# Generated runtime deployments and simulation runs
-/app/ui/runtime/
-/app/ui/runtime_udp/
-/app/ui/probe_runtime/
-/runs/
-
-# Python caches and local environments
+*.tmp
+*.bak
 __pycache__/
 *.py[cod]
 .venv/
 venv/
-
-# Logs, temporary files and generated document archives
-*.log
-*.tmp
-*.bak
-*.zip
-/logs/*.txt
-/logs/probe_open_result.py
-/logs/truncated_utf8.mo
-/tools/udp_host_probe/deploy*_status.json
-
-# Credentials and machine-specific settings
 .env
 .env.*
 !.env.example
 *.private.json
+/tools/udp_host_probe/deploy*_status.json

@@ -1,0 +1,2 @@
+Warning: Failed to resolve include "C:/Users/TR/Documents/ChatGPT/qt????/app/ui/build/release/moc_predefs.h" for moc file ..\src\main_window.h
+Warning: Failed to resolve include "C:/Users/TR/Documents/ChatGPT/qt????/app/ui/build/release/moc_predefs.h" for moc file ..\src\sysplorer_runner.h

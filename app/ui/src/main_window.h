@@ -11,6 +11,8 @@ class QPushButton;
 class QComboBox;
 class QTabWidget;
 class QPlainTextEdit;
+class QDoubleSpinBox;
+class QToolButton;
 
 class BatteryView;
 class PlotWidget;
@@ -53,6 +55,8 @@ public:
     ~MainWindow() override;
 
 private slots:
+    void onPrepare();
+    void onReplay();
     void onPlay();
     void onPause();
     void onResume();
@@ -70,6 +74,9 @@ private slots:
 private:
     void buildUi();
     void refreshResultSelector();
+    bool inputsMatchPreparation() const;
+    void appendStageLog(const QString& category, const QString& message);
+    void refreshLog();
 
     void applyScenario(int index);           // 把某个场景的快照装到界面上
     bool loadScenarioData(int index);        // 首次进入时读 CSV 并缓存
@@ -78,22 +85,33 @@ private:
     void setStateText(const QString& phase); // 自动带「自定义 ·」前缀
     void refreshButtons();
     void showSavedPreview();
-    // 把一条新曲线装进当前场景（两条重算路径共用）
+    // 保存通过校验的完整结果，同时更新最近有效结果。
     void applyComputedCurve(QVector<ReplaySample> samples,
                             double voltage, double current, int mode, double soc0,
                             const QString& hint);
 
-    // 当前界面参数与已有曲线是否不一致（不一致才需要重新仿真）
-    bool needsRecompute(int index, double voltage, double current,
-                        int mode, double soc0) const;
-    // A cache miss always launches the real local Sysplorer SDK calculation.
-    void startRecompute(int index, double voltage, double current, int mode, double soc0);
     void startSysplorerRun(double voltage, double current, int mode, double soc0);
     QString restoreStateText(const ScenarioState& st) const;
 
+    QVector<ReplaySample> m_latestSamples;
+    bool m_latestPartial=false;
+    QPushButton* m_btnPrepare=nullptr;
+    QPushButton* m_btnLoad=nullptr;
+    QPushButton* m_btnReplay=nullptr;
+    QPushButton* m_btnReplayPause=nullptr;
+    QPushButton* m_btnReplayStop=nullptr;
+    QPushButton* m_btnOpenJob=nullptr;
+    QComboBox* m_replaySpeed=nullptr;
+    QLabel* m_replayTime=nullptr;
+    QLabel* m_replayState=nullptr;
+    QLabel* m_taskInfo=nullptr;
+    QPlainTextEdit* m_stageLog=nullptr;
+    QComboBox* m_logFilter=nullptr;
+    QVector<QPair<QString, QString>> m_logEntries;
+    QString m_lastLoggedPhase;
     QPushButton* m_btnPlay = nullptr;
     QPushButton* m_btnPause = nullptr;
-    QPushButton* m_btnResume = nullptr;
+
     QPushButton* m_btnStop = nullptr;
     QComboBox*   m_cmbSpeed = nullptr;
     QComboBox*   m_resultSelector = nullptr;
@@ -101,6 +119,10 @@ private:
     QLabel*      m_lblState = nullptr;
     QLabel*      m_lblHint = nullptr;
     QPlainTextEdit* m_errorPanel = nullptr;
+    QWidget* m_tuneControls = nullptr;
+    QComboBox* m_tuneMode = nullptr;
+    QDoubleSpinBox *m_tuneCurrent=nullptr,*m_tuneVoltage=nullptr,*m_tuneMin=nullptr,*m_tuneMax=nullptr,*m_tuneLimit=nullptr;
+    QLabel* m_tuneStatus=nullptr;
 
     QTabWidget*   m_tabs = nullptr;
     BatteryView*  m_batteryView = nullptr;
@@ -108,11 +130,15 @@ private:
     PlotWidget*   m_plotWidget = nullptr;
 
     ReplayPlayer* m_player = nullptr;
-    SysplorerRunner* m_runner = nullptr;   // 「仿真」缓存未命中时启动 SDK
+    SysplorerRunner* m_runner = nullptr;   // 宿主连接、准备及求解控制
     int m_requestIndex = -1;
     QString m_viewerJob, m_viewerMessage;
     bool m_viewerOk = false;
-    bool m_stopped = false;
+    bool m_stopped = true;
+    bool m_hostConnectionFailed = false;
+    bool m_translateAfterDiscard = false;
+    bool m_startAfterPreparation = false;
+    QString m_resultBeforeTask;
 
     // 正在跑的 Sysplorer 请求参数（成功时写回场景快照）
     double m_reqVoltage = 3.45;

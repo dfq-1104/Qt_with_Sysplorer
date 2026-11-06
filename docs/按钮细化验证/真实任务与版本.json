@@ -1,0 +1,152 @@
+{
+  "fullRegressionRun": "20261105_194352",
+  "binariesAtFullRegression": {
+    "client": {
+      "path": "C:\\Users\\TR\\.codex\\worktrees\\0cf2\\qt界面开发\\app\\ui\\build\\release\\battery_console_ui.exe",
+      "sha256": "BBA6F55C5D2ADA441442B39954D75F516DCC53C642CBBA07B12DDBA4F3862201"
+    },
+    "plugin": {
+      "path": "C:\\Users\\TR\\.codex\\worktrees\\0cf2\\qt界面开发\\tools\\sysplorer_udp_plugin\\release\\battery_udp_control.dll",
+      "sha256": "b4040093827de635b0e09d7059625241f1ce45f3e2ca9e53b7a5c33c6ca32f63"
+    }
+  },
+  "results": [
+    {
+      "taskId": "257c631a-05a5-4355-a5a8-c58d0213ed64",
+      "modelHash": "e03bd3634004ca82bb190521c214ec5fae25713120db83caf016aeac8b7472cd",
+      "complete": true,
+      "points": 124,
+      "csvHash": "23d94c39cbbec34ed8ed4657c1ba8a470835342325f3b7c2711ef8d8ee9ccd88",
+      "params": {
+        "current": 5,
+        "mode": 1,
+        "soc0": 0.99,
+        "voltage": 3.45
+      },
+      "csvHashVerified": true,
+      "taskDirectory": "C:\\Users\\TR\\AppData\\Local\\Temp\\B0cf2Jobs\\257c631a-05a5-4355-a5a8-c58d0213ed64",
+      "firstSample": "0,0.990000009536743,5,3.44000005722046",
+      "lastSample": "120,1,0,3.40000009536743",
+      "runtimeChanges": 0
+    },
+    {
+      "taskId": "3b27b96a-d6f2-41d5-a513-386320541cd6",
+      "modelHash": "e03bd3634004ca82bb190521c214ec5fae25713120db83caf016aeac8b7472cd",
+      "complete": true,
+      "points": 124,
+      "csvHash": "ee82893d539da3c530a7805b2fdffd34ccd98e16af94870d402577770eda518e",
+      "params": {
+        "current": 5,
+        "mode": 1,
+        "soc0": 0.98,
+        "voltage": 3.45
+      },
+      "csvHashVerified": true,
+      "taskDirectory": "C:\\Users\\TR\\AppData\\Local\\Temp\\B0cf2Jobs\\3b27b96a-d6f2-41d5-a513-386320541cd6",
+      "firstSample": "0,0.980000019073486,5,3.4300000667572",
+      "lastSample": "120,1,0,3.40000009536743",
+      "runtimeChanges": 0
+    },
+    {
+      "taskId": "b853acd9-4490-4123-9a66-63d092e22553",
+      "modelHash": "e03bd3634004ca82bb190521c214ec5fae25713120db83caf016aeac8b7472cd",
+      "complete": false,
+      "points": 12,
+      "csvHash": "3c16cb2d00b2648b7348d9075f2ec56ca85ef4f9142bbdebef5cf9d827164c75",
+      "params": {
+        "current": 1.25,
+        "mode": 2,
+        "soc0": 0.6,
+        "voltage": 2.5
+      },
+      "csvHashVerified": true,
+      "taskDirectory": "C:\\Users\\TR\\AppData\\Local\\Temp\\B0cf2Jobs\\b853acd9-4490-4123-9a66-63d092e22553",
+      "firstSample": "0,0.600000023841858,-1.25,3.2574999332428",
+      "lastSample": "11,0.598472237586975,-1.25,3.25734710693359",
+      "runtimeChanges": 0
+    },
+    {
+      "taskId": "d6088e39-080d-4b83-9130-0279545bd9ea",
+      "modelHash": "e03bd3634004ca82bb190521c214ec5fae25713120db83caf016aeac8b7472cd",
+      "complete": true,
+      "points": 8,
+      "csvHash": "78afc349520d42a63da8bba492f17caa29914fc253c3030d34a780c9482cdd34",
+      "params": {
+        "current": 1,
+        "mode": 1,
+        "soc0": 0.5,
+        "voltage": 3.45
+      },
+      "csvHashVerified": true,
+      "taskDirectory": "C:\\Users\\TR\\AppData\\Local\\Temp\\B0cf2Jobs\\d6088e39-080d-4b83-9130-0279545bd9ea",
+      "firstSample": "0,0.5,1,3.26999998092651",
+      "lastSample": "6,0.500663340091705,1,3.2700662612915",
+      "runtimeChanges": 0
+    },
+    {
+      "taskId": "de0778ae-ad51-41f7-a984-876ffaa89323",
+      "modelHash": "e03bd3634004ca82bb190521c214ec5fae25713120db83caf016aeac8b7472cd",
+      "complete": false,
+      "points": 5,
+      "csvHash": "bcd26b3acf543e415cffbe1cc45df91215347c2f09ab0e401deac1ad50c45081",
+      "params": {
+        "current": 1,
+        "mode": 1,
+        "soc0": 0.5,
+        "voltage": 3.45
+      },
+      "csvHashVerified": true,
+      "taskDirectory": "C:\\Users\\TR\\AppData\\Local\\Temp\\B0cf2Jobs\\de0778ae-ad51-41f7-a984-876ffaa89323",
+      "firstSample": "0,0.5,1,3.26999998092651",
+      "lastSample": "4,0.5002760887146,-0.5,3.25502753257751",
+      "runtimeChanges": 1
+    },
+    {
+      "taskId": "e1d5a923-96a7-47e7-bc80-c4b95e4ed286",
+      "modelHash": "e03bd3634004ca82bb190521c214ec5fae25713120db83caf016aeac8b7472cd",
+      "complete": false,
+      "points": 4,
+      "csvHash": "f4462abd0accad72df12c69d2cf1efdf41930f41d29b2e18b24068a0f77e51cd",
+      "params": {
+        "current": 1,
+        "mode": 1,
+        "soc0": 0.5,
+        "voltage": 3.45
+      },
+      "csvHashVerified": true,
+      "taskDirectory": "C:\\Users\\TR\\AppData\\Local\\Temp\\B0cf2Jobs\\e1d5a923-96a7-47e7-bc80-c4b95e4ed286",
+      "firstSample": "0,0.5,1,3.26999998092651",
+      "lastSample": "2,0.500221133232117,1,3.27002215385437",
+      "runtimeChanges": 0
+    }
+  ],
+  "finalLayoutRun": "20261105_195212",
+  "packagedUiSmokeExitCode": 0,
+  "finalBinaries": {
+    "client": {
+      "path": "C:\\Users\\TR\\.codex\\worktrees\\0cf2\\qt界面开发\\app\\ui\\build\\release\\battery_console_ui.exe",
+      "sha256": "14163f257ae95fbc54618d5edf7801a0980a840169894a9c517ba85a1c9db5cf"
+    },
+    "plugin": {
+      "path": "C:\\Users\\TR\\.codex\\worktrees\\0cf2\\qt界面开发\\tools\\sysplorer_udp_plugin\\release\\battery_udp_control.dll",
+      "sha256": "b4040093827de635b0e09d7059625241f1ce45f3e2ca9e53b7a5c33c6ca32f63"
+    }
+  },
+  "packagedClientMatchesBuild": true,
+  "beforeHeaderRemovalBinaries": {
+    "client": {
+      "path": "C:\\Users\\TR\\.codex\\worktrees\\0cf2\\qt界面开发\\app\\ui\\build\\release\\battery_console_ui.exe",
+      "sha256": "6d08dbfd74ac7cff4f025c862365ecb322bfabf15e478a861a2e0d28f445ab59"
+    },
+    "plugin": {
+      "path": "C:\\Users\\TR\\.codex\\worktrees\\0cf2\\qt界面开发\\tools\\sysplorer_udp_plugin\\release\\battery_udp_control.dll",
+      "sha256": "b4040093827de635b0e09d7059625241f1ce45f3e2ca9e53b7a5c33c6ca32f63"
+    }
+  },
+  "headerRemovalLayoutRun": "20261105_201348",
+  "headerRemovalSmoke": {
+    "platform": "windows",
+    "exitCode": 0,
+    "realHostLaunched": false
+  }
+}

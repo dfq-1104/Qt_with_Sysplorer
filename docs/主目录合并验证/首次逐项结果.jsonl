@@ -1,0 +1,8 @@
+{"passed":true,"test":"layoutAndDisclosure"}
+{"passed":true,"test":"startupFailureKeepsUiUsable"}
+{"passed":false,"test":"modelLoadAndReuse"}
+{"passed":true,"test":"startIncludesPreparation"}
+{"passed":true,"test":"automaticStartFailureKeepsStage"}
+{"passed":true,"test":"realButtonsAndTaskLifecycle"}
+{"passed":true,"test":"runtimeTuningButtons"}
+{"passed":true,"test":"busyHostIsSkipped"}

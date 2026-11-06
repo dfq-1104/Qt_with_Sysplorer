@@ -1,0 +1,30 @@
+{
+  "root": "C:\\Users\\TR\\Documents\\ChatGPT\\qt界面开发",
+  "branch": "main",
+  "head": "2af1cb3f19953a39455b59f68cf9c741195d5f0e",
+  "sourceHashes": {
+    "app/ui/src/main.cpp": "f0ddf5d01ba12bec567923b5f64c001da7e6570291be5a13c4c08cb25da3bb86",
+    "app/ui/src/main_window.cpp": "171edc1d37ef9a02fe7c471d9f40ef8ecd4135d487f6005e4cf4d60a2107bca7",
+    "app/ui/src/main_window.h": "f33078cdfa49b82e0133d92ef8fb0066f7f9401b1707013ea2d659162f3d5620",
+    "app/ui/src/battery_view.cpp": "6a91ab6268e6b2a65d10dfee35d362c1e643dcbc6914fe344cc207bee0184cd1",
+    "app/ui/src/battery_view.h": "6af00ccd19682bc79e83629173aecaee86953bf633171cf5e4e75c25ce8eb4e6",
+    "app/ui/src/plot_widget.cpp": "efaff085725f2540c5aa5cd1b482a8aaed6ccb341b473d3ba9f21567e3de87d5",
+    "app/ui/src/replay_data.cpp": "bb575c7257633898f28e3256aa78bc18e9c15c33efc88a2c5fc4b4c5726990ad",
+    "app/ui/src/replay_player.cpp": "61825923571b571bfd639a8226a3e511ec849069194f48dbf1e7f45dedb796bc",
+    "app/ui/src/sysplorer_runner.cpp": "69f06d88cf57d9a1431e1ba1d22482194780c4c55e26c28416ddedbeb6e4ba7a",
+    "app/ui/src/sysplorer_runner.h": "fea3a0e462106712fa91c529ebd353cbd406579d1a205af5b92957a0acc507d0",
+    "app/ui/tests/udp_integration_test.cpp": "765a9bffd4f5a8ead7c5d0acb102f539973ef6093fb7a7aaf8afad39e7fc0e2c",
+    "tools/sysplorer_udp_plugin/control_plugin.cpp": "eff6170ff55c80a6d234d3162b8c800250971b98ac7d9fb2d8523c9f36ad4e43",
+    "tools/sysplorer_udp_plugin/control_plugin.h": "ec33366707328d9406a462f9ec4f08dc4a059870bcd947d9881869cf759100f3",
+    "model/BatterySim.mo": "e03bd3634004ca82bb190521c214ec5fae25713120db83caf016aeac8b7472cd",
+    "app/ui/ui.pro": "63ac58282b220227f68247c377ec5eba3e89c2fb9dfb6134228204ddf61a34a0",
+    "app/ui/tests/tests.pro": "97cff5fe2316ea3b1c3b402a97f09ea71d3c949aa58f32486451aa753288fc90",
+    "tools/sysplorer_udp_plugin/plugin.pro": "9eb8632bd441ec4b7b17a78114dd776e28977d37b973e476cb0588243ef32dc1",
+    "app/ui/start_ui.ps1": "4cbe57d52d946e9dada86d2da7bbb8966449152f181bde54dbee81421947f546"
+  },
+  "binaries": {
+    "app/ui/build/release/battery_console_ui.exe": "308c160b2e26179e0a81b01bb9c36ee0f649cd0f7e4c50d6909ade1926afb95b",
+    "app/ui/tests/build/release/ui_integration_test.exe": "91529318346148d38a32728d6ee4f9bb49fa64a4d203814d5ff32c8b325f48a8",
+    "tools/sysplorer_udp_plugin/release/battery_udp_control.dll": "617556f2843f289dc449b6d540a75f0911e6e2ff4c91727cb52e64555976895e"
+  }
+}

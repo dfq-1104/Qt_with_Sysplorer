@@ -3,6 +3,8 @@
 日期：2026-11-04。状态：本机固定电池模型的分阶段开发、部署和验收完成。
 读者：项目负责人、后续开发及联调人员。范围为本轮 UDP 改造；历史 helper 问题见原交付文档。
 
+架构职责、开发经验及与上一版 helper 方案的系统比较，参见[UDP架构设计与开发经验及helper方案对比](UDP架构设计与开发经验及helper方案对比.md)（2026-11-05 整理，不改变本记录的验收日期）。
+
 ## 当前架构
 
 ~~~mermaid
@@ -121,3 +123,65 @@ sequenceDiagram
 nativeResult 当前记录宿主配置的结果根目录，不是具体 .msr 文件；原生展示通过结果对象完成。未来如需精确原生文件导出，应另行实现和验证，不应直接把此字段当文件打开。
 
 旧六篇交付文档及 ZIP 是 helper 阶段历史快照，当前行为以本文、UDP 协议及运行说明为准。
+
+## 2026-11-05 运行中调参验证
+
+新增模型顶层 liveCurrent/liveVoltage/liveMode/liveVMin/liveVMax/liveIMax 输入，通过现有 UDP 任务的 tune 命令修改。
+电池状态和求解器保持同一个实例，不重新翻译、不重启、不覆盖初始 SOC。运行中请求暂停后批量暂存，自动继续；已暂停时保持暂停，用户继续后确认。
+
+本机 SDK 的 SetInputReals 会将修改用于后续求解步，紧接着 GetReals 仍读到旧步值。
+因此确认依据改为实际模型流中的六项输入采样；全部匹配才生成 tuneHistory 记录。
+记录 time 为暂停边界，confirmedAt 为首次模型确认采样时刻，另含 socBefore/socAfter 与实际输入。
+任务完整结果包含全部修改历史；动态轨迹不能作为静态起始参数的成功缓存复用。
+
+真实验证证据：tools/sysplorer_udp_plugin/artifacts/20261105_135052/runtime_tuning.json，ok=true。
+同一任务完成 0–90 s 原生计算，92 个原生结果点，九项行为全部通过，写入前后 SOC 最大差值 0。
+逐对检查原生 SOC 差值不超过 5 A 电流所允许的积分变化量（另含 2e-6 数值容差），时间不倒退；实时输出与原生结果采样交叉一致。
+
+| 验证 | 真实结果 |
+|---|---|
+| 电流指令 | 1 A 改为 2 A，实际电流 2 A |
+| 电流上限 | 改为 0.4 A，实际电流 0.4 A |
+| 恒流放电 | 实际电流 -2 A |
+| 暂停时提交静置 | 暂停时间保持不变，继续后实际电流 0 A |
+| 恒压模式 | 端电压 3.275 V |
+| 修改恒压目标 | 端电压 3.280 V |
+| 充电上截止 | 实际电流归零 |
+| 放电下截止 | 实际电流归零 |
+| 解除截止条件 | 实际电流恢复 -2 A |
+
+Qt 真实按钮回归进程退出码 0，覆盖运行中提交（同一任务、-0.5 A 实际输出）、暂停/继续/停止、静态成功缓存、部分结果隔离、失败保留旧结果、零电流任务。
+原有流程汇总 tools/sysplorer_udp_plugin/artifacts/ui_runtime_tuning/ui_verification.json 为 ok=true；截图同目录。
+
+首次安装目录部署因 Windows 管理员授权取消而未完成，真实行为验证先使用英文临时目录 `%TEMP%/BatteryConsoleRuntime` 的隔离宿主。
+插件副本与编译产物 SHA256 一致。中文宿主路径会被原生编译脚本错误解码，故隔离根目录必须使用英文。
+隔离入口 app/ui/run_runtime_tuning.bat，客户端部署目录 app/ui/runtime_tuning。
+模型 SHA256：e03bd3634004ca82bb190521c214ec5fae25713120db83caf016aeac8b7472cd。
+
+最终显示修正后再次执行 runtimeTuningButtons，退出码 0；截图位于 artifacts/ui_runtime_tuning_final/runtime_tuning.png。
+截图确认在 4.000 s 由模型采样回读，底部显示实际电流 -0.500 A、端电压 3.255 V 和当前 SOC 50.03%。
+app/ui/runtime_tuning/battery_console_ui.exe 与最终 build/release 产物哈希一致。
+
+用户随后确认管理员授权，正式部署已完成：deployment.json 为 ok=true、administrator=true，安装目录插件 SHA256 与已验证产物一致，为 F44EC16CD115A717B2D6B42BDA659054CBA364912FB3D2FDCE917F37E54A3112。
+正式 app/ui/runtime 客户端也已按最终产物更新并校验，入口 app/ui/run_ui.bat。九项行为验证在上述隔离宿主完成；正式部署核验为二进制哈希一致，未额外重跑整套求解。
+
+### 当前工作树连接修复与最终回归
+
+上述部署为此前操作记录。按用户后续要求，本轮只修改当前工作树，不再更新主目录或安装目录，尚未提交或合并。当前验证入口为 app/ui/run_runtime_tuning.bat。
+
+客户端发现宿主有其他运行或暂停任务时跳过该宿主，必要时创建独立实例；每个新实例使用独立工作目录，避免并发编译互相覆盖。
+busyHostIsSkipped 真实回归：原任务 8eba1641-6c15-4a35-b19d-75356b2cea1e 保持暂停；第二任务 01d11571-10b9-4712-8400-4a8f12ac11d4 在独立宿主完成 0–6 秒计算，8 个结果点，随后测试正常停止自己创建的原任务。证据位于 Temp/BatteryConsoleUDP 对应任务目录的 client.log。
+
+当前版本再次执行 runtimeTuningButtons，退出码 0。任务 ea46ebdd-44c9-4c3b-9e1a-ebe8052ecf0b 在 3 秒处提交电流 2 A、放电模式、限流 0.5 A，4 秒处实际模型采样确认；写入前后 SOC 均为 0.5003316666666667。同一任务结果保留 tuneHistory，实际输出为 -0.5 A。
+截图：tools/sysplorer_udp_plugin/artifacts/ui_runtime_tuning_connection_fix/runtime_tuning.png。
+当前工作树 runtime_tuning/battery_console_ui.exe 与 build/release 产物 SHA256 一致：0C1E87EFEFD0A71D4FDB9E9963412224399ED74324B3A74D0765D76BCFCF8535；隔离插件与工作树编译产物哈希仍一致。
+
+### 截图任务模型版本不一致修复
+
+失败任务 98916482-16dd-43d3-985a-6b652dd99a70 在 hello 阶段连接 PID 16568，模型哈希不一致，尚未执行 begin。用户仍打开工作树 app/ui/runtime/battery_console_ui.exe；该旧入口默认连接安装目录宿主，而隔离入口通过环境变量指定宿主。
+
+新增随包 sysplorer.ini 的 Host/Home 配置，直接启动新版 exe 也能选择正确宿主；显式 SYSPLORER_HOME 仍优先。部署通过插件哈希校验后保存宿主配置。工作树 run_ui.bat 统一转到 run_runtime_tuning.bat，使用已更新的 runtime_tuning 包。用户打开的旧 runtime exe 被占用，未关闭用户窗口或强行替换该文件。
+发现的现有实例若模型不匹配则跳过；新启动实例仍不匹配则保留失败保护，报告宿主路径及两端哈希；日志新增 hostExecutable、host_model_mismatch，便于定位。
+
+移除测试进程 SYSPLORER_HOME，仅依赖 exe 旁配置，再执行 runtimeTuningButtons，退出码 0。任务 830a9030-655b-4e4e-97aa-5faca2ffab5d 通过模型校验并完成运行中调参，4 秒回读确认，实际电流 -0.5 A，写入前后 SOC 连续。证据及截图：tools/sysplorer_udp_plugin/artifacts/ui_host_config_fix/verification.json、result.json、result.csv、client.log、runtime_tuning.png。
+最新 runtime_tuning 客户端 SHA256 与 build/release 一致：15E062E2B6F92A7C436F7578FC5969778289A8017E85C94FAB2526AB31359117。本次未修改主目录或安装目录，未提交或合并。

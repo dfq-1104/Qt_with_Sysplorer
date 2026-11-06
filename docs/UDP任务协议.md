@@ -6,7 +6,7 @@
 
 插件绑定 127.0.0.1 的动态 UDP 端口。发现记录位于 Windows 当前用户 LocalAppData/BatteryConsole/udp/<PID>.json，每 2 秒原子更新。记录包含 PID、可执行文件路径、协议、端口、会话编号、令牌、模型哈希及更新时间。
 
-客户端确认 PID 存活且可执行文件为配置的目标 Sysplorer，连接后核对模型哈希。没有可用宿主时启动本机 mworks.exe；连接已有繁忙任务时明确报错，不接管其他任务。
+客户端确认 PID 存活且可执行文件为配置的目标 Sysplorer，连接后核对模型哈希。发现已有繁忙或暂停任务时跳过该实例，不接管其他任务；没有空闲宿主时启动一个本任务专用的 mworks.exe。新启动实例也被占用时才报错，避免无限启动。
 
 令牌不进入普通客户端日志，也不对外分发发现记录。
 
@@ -27,17 +27,39 @@
 
 | 命令 | 参数 | 作用 |
 |---|---|---|
-| hello | 无 | 查询宿主就绪、控制器状态、模型哈希 |
-| begin | modelHash、mode、voltage、current、soc0、duration、speed | 接受新任务，异步加载、设参、翻译和运行 |
+| hello | 无 | 查询宿主就绪、控制器状态、模型哈希及 splitLifecycle=true、modelLifecycle=true 能力及 modelLoaded 状态 |
+| load | modelHash（其余仿真参数可省略） | 只加载并确认固定模型，完成后停在 Loaded；不写参、不翻译、不求解 |
+| translate | modelHash、mode、voltage、current、soc0、duration、speed | 自动加载或复用本宿主有效模型，写参回读并翻译，完成后停在 Prepared |
+| begin | 同 translate | 保留旧客户端的完整准备命令；新客户端使用 translate |
+| start | speed（可选） | 从 Prepared 启动本任务求解，使用启动时选择的倍速 |
+| discard | 无 | 放弃本客户端的 Prepared 状态，重新应用参数时使用 |
 | poll | cursor | 获取任务状态及一批实时数据 |
 | pause | 无 | 请求暂停本任务求解 |
 | resume | 无 | 请求继续本任务求解 |
 | stop | 无 | 请求停止本任务，导出部分结果 |
 | speed | speed | 调整运行期速度 |
+| tune | current、voltage、mode、vMin、vMax、iMax | 同一任务在线修改运行期输入；自动暂停、批量写入、回读、恢复 |
+
+### 运行期输入
+
+`tune` 必须一次提交上述六个数值字段，不接受 SOC、时间或任意变量名。
+mode 为 0 静置、1 恒流充电、2 恒流放电、3 恒压/限流充电；current 为 0–5 A；
+2.5 ≤ vMin < vMax ≤ 3.45 V；2.5 ≤ voltage ≤ vMax；iMax 为 0–5 A。
+voltage 是恒压目标，vMin/vMax 是独立的上下截止电压。恒压模式的实际电流由模型计算并受 iMax 限制。
+
+仅在 Running/Paused 接受。Running 请求先暂停求解器，再通过 MwSimData::SetInputReals 写入顶层 live 输入；
+Paused 请求暂存输入并保持暂停，点击继续后在下一求解步确认。写入前后检查求解器时间与 SOC，不重新编译、不重启任务、不修改初值。
+本机 SDK 的即时 GetReals 仍返回旧步值，不能用它判断修改失败。插件额外订阅六个模型输入，在后续实际模型采样与请求完全一致后才写入确认记录。
+`ok` 仅表示命令已接受；以状态 tuneHistory 中出现新的 sequence 为模型采样回读完成依据；time 是暂停写入边界，confirmedAt 是首次确认采样时刻。
+状态同时提供 tunePending、runtimeParams。tuneHistory 保存生效时间、写入前后 SOC 和输入回读值，最终也写入 result.json。
+同一请求 ID 的重发不重复执行；任务归属检查与其他控制命令一致。
+
+UI 使用独立“运行中调参”页；动态修改结果不能作为静态起始参数的缓存复用。
+验证脚本为 tools/sysplorer_udp_plugin/verify_runtime_tuning.py，另有 Qt 真实按钮测试 runtimeTuningButtons。
 
 mode 只允许 1 充电或 2 放电；voltage 2.5–3.45 V；current 0–5 A；soc0 0–1；duration 0.1–20000 秒；speed 0.5–60。界面时长按容量规则估算并限制为 120–20000 秒；零电流固定执行真实 120 秒静置任务。UI 倍速与 SDK 减速因子的映射为 slowdownFactor=1/speed，例如 60x 对应 1/60；倍速不是实时性能保证。
 
-begin 是组合业务命令，其状态明确区分加载/设参、翻译和求解，不代表收到后就已完成计算。现阶段不提供独立的任意模型加载、任意代码执行或用户自行控制翻译命令。
+begin 只负责准备，不启动求解；客户端必须在 Prepared 后单独发送 start。客户端拒绝缺少 splitLifecycle 能力的旧插件，防止准备动作意外启动仿真。discard 保留已有结果，仅释放准备状态。当前不提供任意模型加载或任意代码执行命令。
 
 ## 响应与实时数据
 
@@ -49,11 +71,19 @@ poll 返回 rows，每行固定为 [time, SOC, I_act, V_term]。cursor 为本批
 
 ## 状态
 
-Ready → Preparing → Translating → Starting → Running。
+Ready →（load）Loading → Loaded；Loaded 不持有求解器或准备实例。
+
+Ready / Loaded / Completed / Stopped →（translate）Preparing → Translating → Prepared →（start）Starting → Running。Prepared 可通过 discard 返回 Ready。每个 load/translate 操作使用新的任务 UUID；同一请求 ID 重发返回缓存，不重复执行。
+
+界面入口采用包含关系：加载模型只发送 load；翻译模型发送 translate，内部自动加载或复用；开始仿真在准备无效或参数变化时先 discard（如需要）、translate，确认 Prepared 后才发送 start。准备有效时开始入口直接 start。点击“翻译模型”不会自动求解，点击“加载模型”不会写参或翻译。原流程文档中“参数修改后禁用开始，必须手动翻译”的规则已由 2026-11-05 用户追加要求替代为“开始自动重新准备”。
 
 运行期间可能进入 Pausing → Paused → Resuming → Running；停止经过 Stopping → Finalizing → Stopped。自然结束经过 Finalizing → Completed。错误进入 Failed。
 
 按钮以宿主确认状态驱动；命令 ok 只表示该操作被接受，不能代替完成状态。
+
+新客户端同时检查 modelLifecycle 能力和模型哈希，缺少能力的旧插件明确报错，不将 load 降级为 begin。宿主缓存只在本进程中有效，翻译前检查 BatterySim.SingleRun 仍存在；缺失时重新加载。
+
+状态新增 modelLoaded、stage。stage 区分加载模型、写入参数、回读参数、检查输出目录、翻译模型、启动仿真、运行仿真及结果处理。写入或回读失败返回 PARAM_WRITE_FAILED / PARAM_READBACK_FAILED，并带字段、期望值、实际值；失败状态与 plugin.log 保留原始阶段。LOAD_FAILED、TRANSLATE_FAILED、TRANSLATE_REJECTED、START_FAILED、RESULT_FAILED 分别归属各自步骤。客户端日志记录任务号、时间、phase、操作及原始错误，不把自动准备失败记为求解成功。
 
 模型和控制器对象必须仍属于本任务。任务编号、客户端归属或宿主绑定对象不一致时拒绝控制。超过 15 秒未收到拥有者查询且任务在运行时，请求暂停以避免客户端失联后继续无人查看的计算。
 
@@ -63,7 +93,7 @@ Ready → Preparing → Translating → Starting → Running。
 
 完整结果必须满足退出成功、实际结果末时间达到请求终点、初始 SOC 与参数一致、变量有限且满足电流方向/范围等要求，才产生 complete=true 清单。客户端再次核对任务、模型、参数、CSV 哈希、点数与数据范围。
 
-主动停止生成 complete=false，限制有效范围至停止时刻，保留真实已产生的样本；不使用停止后控制器回填的配置终止时间冒充有效数据时间。部分结果不写入完整成功缓存。
+主动停止生成 complete=false，限制有效范围至停止时刻，保留真实已产生的样本；不使用停止后控制器回填的配置终止时间冒充有效数据时间。部分结果不写入完整成功缓存，但通过客户端校验后成为最近有效结果，作为默认回放对象。失败任务不替换最近有效结果。
 
 原生查看通过宿主绘图对象进行，不启动额外常驻 Python 服务；缓存回放不重新触发原生查看。
 

@@ -30,12 +30,20 @@ int main(int argc,char** argv) {
             if(report.open(QIODevice::WriteOnly)) {report.write(QJsonDocument(result).toJson());report.commit();}
             QTimer::singleShot(300,&app,[&app,ok]{app.exit(ok?0:1);});
         });
-        QTimer::singleShot(200,&window,[&window]{
+        QObject::connect(runner,&SysplorerRunner::stateChanged,&window,[&window](const QString& phase){
+            if(phase=="Prepared")window.findChild<QPushButton*>("btnPlay")->click();
+        });
+        auto* prepareTimer=new QTimer(&window);
+        QObject::connect(prepareTimer,&QTimer::timeout,&window,[&window,prepareTimer]{
+            auto prepare=window.findChild<QPushButton*>("btnPrepare");
+            if(!prepare||!prepare->isEnabled())return;
+            prepareTimer->stop();
             auto view=window.findChild<BatteryView*>("batteryView");
             view->setInputs(3.43,2.3,1,.65);
             view->findChild<QPushButton*>("btnApply")->click();
-            window.findChild<QPushButton*>("btnPlay")->click();
+            prepare->click();
         });
+        prepareTimer->start(200);
         QTimer::singleShot(330000,&app,[&app]{app.exit(2);});
     }
     if(app.arguments().contains("--smoke-test")) QTimer::singleShot(500,&app,[&]{
