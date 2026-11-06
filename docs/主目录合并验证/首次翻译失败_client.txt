@@ -1,0 +1,10 @@
+{"current":1,"duration":6,"event":"request","hostExecutable":"C:/Users/TR/AppData/Local/Temp/BMmain/Bin64/mworks.exe","mode":1,"modelHash":"e03bd3634004ca82bb190521c214ec5fae25713120db83caf016aeac8b7472cd","phase":"","soc0":0.5,"taskId":"3b317833-f054-43b6-b2dc-11a0e5bbf7c1","utc":"2026-11-05T12:56:11.862Z","voltage":3.45}
+{"event":"discovery_environment","executable":"C:/Users/TR/Documents/ChatGPT/qt界面开发/app/ui/tests/build/release/ui_integration_test.exe","folder":"C:/Users/TR/AppData/Local/BatteryConsole/udp","localAppData":"C:\\Users\\TR\\AppData\\Local","phase":"","target":"C:/Users/TR/AppData/Local/Temp/BMmain/Bin64/mworks.exe","taskId":"3b317833-f054-43b6-b2dc-11a0e5bbf7c1","utc":"2026-11-05T12:56:11.863Z"}
+{"event":"phase","phase":"Connecting","taskId":"3b317833-f054-43b6-b2dc-11a0e5bbf7c1","utc":"2026-11-05T12:56:11.863Z"}
+{"event":"connected","phase":"Connecting","pid":22312,"port":60514,"session":"3408e833-40fe-4aa0-b5c6-18eebc4b77dc","taskId":"3b317833-f054-43b6-b2dc-11a0e5bbf7c1","utc":"2026-11-05T12:56:11.865Z"}
+{"command":"hello","event":"send","id":"47ff3f91-0ea6-4587-90dc-3bb21ac546f5","phase":"Connecting","taskId":"3b317833-f054-43b6-b2dc-11a0e5bbf7c1","utc":"2026-11-05T12:56:11.865Z"}
+{"command":"translate","event":"send","id":"c9e42271-05dd-47f5-abb7-36adb305f4bd","phase":"Connecting","taskId":"3b317833-f054-43b6-b2dc-11a0e5bbf7c1","utc":"2026-11-05T12:56:11.879Z"}
+{"event":"phase","phase":"Preparing","taskId":"3b317833-f054-43b6-b2dc-11a0e5bbf7c1","utc":"2026-11-05T12:56:11.895Z"}
+{"event":"phase","phase":"Translating","taskId":"3b317833-f054-43b6-b2dc-11a0e5bbf7c1","utc":"2026-11-05T12:56:11.974Z"}
+{"event":"phase","phase":"Failed","taskId":"3b317833-f054-43b6-b2dc-11a0e5bbf7c1","utc":"2026-11-05T12:56:12.998Z"}
+{"event":"failed","message":"翻译模型 · TRANSLATE_FAILED: 宿主模型翻译失败，请查看 Sysplorer 输出","phase":"Failed","taskId":"3b317833-f054-43b6-b2dc-11a0e5bbf7c1","utc":"2026-11-05T12:56:12.998Z"}

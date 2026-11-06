@@ -1,3 +1,5 @@
 @echo off
-rem Launch this worktree's button-details package and its paired isolated host.
-call "%~dp0run_button_details.bat"
+setlocal
+cd /d "%~dp0"
+"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -ExecutionPolicy Bypass -File "%~dp0start_ui.ps1"
+exit /b %errorlevel%

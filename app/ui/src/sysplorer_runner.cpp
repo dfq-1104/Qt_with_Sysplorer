@@ -99,28 +99,57 @@ void SysplorerRunner::prepareSimulation(double voltage,double current,int mode,d
     if(!QDir().mkpath(m_jobDir)){QTimer::singleShot(0,this,[this]{fail(QString::fromUtf8("检查输出目录 · OUTPUT_DIRECTORY_FAILED：无法创建任务目录。"));});return;}
     m_log.setFileName(m_jobDir+"/client.log");m_log.open(QIODevice::WriteOnly|QIODevice::Append);
     trace("request",{{"mode",mode},{"voltage",voltage},{"current",current},{"soc0",soc0},{"duration",duration},{"modelHash",m_modelHash},{"hostExecutable",guiExecutable()}});
+    trace("discovery_environment",{{"executable",QCoreApplication::applicationFilePath()},
+        {"folder",QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)+"/BatteryConsole/udp"},
+        {"localAppData",qEnvironmentVariable("LOCALAPPDATA")},{"target",guiExecutable()}});
     setPhase("Connecting");m_timer.start();QTimer::singleShot(0,this,&SysplorerRunner::pump);
 }
 bool SysplorerRunner::discover(){
     const auto folder=QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)+"/BatteryConsole/udp";
-    const auto files=QDir(folder).entryInfoList({"*.json"},QDir::Files,QDir::Time);
+    static QString lastDiagnostic;
+    static QString lastDiagnosticTask;
+    QString diagnostic=QString("folder=%1; target=%2; ").arg(folder,guiExecutable());
+    auto files=QDir(folder).entryInfoList({"*.json"},QDir::Files,QDir::Time);
+#ifdef Q_OS_WIN
+    if(files.isEmpty()){
+        WIN32_FIND_DATAW entry={};
+        const auto pattern=QDir::toNativeSeparators(folder+"/*");
+        HANDLE search=FindFirstFileW(reinterpret_cast<LPCWSTR>(pattern.utf16()),&entry);
+        if(search!=INVALID_HANDLE_VALUE){
+            do {
+                const auto name=QString::fromWCharArray(entry.cFileName);
+                if(!(entry.dwFileAttributes&FILE_ATTRIBUTE_DIRECTORY)&&name.endsWith(".json",Qt::CaseInsensitive))
+                    files.append(QFileInfo(folder+"/"+name));
+            }while(FindNextFileW(search,&entry));
+            FindClose(search);
+        }else diagnostic+=QString("nativeError=%1; ").arg(GetLastError());
+        diagnostic+=QString("nativeEntries=%1; ").arg(files.size());
+    }
+#endif
+    diagnostic+=QString("entries=%1; exists=%2; readable=%3; ").arg(files.size()).arg(QDir(folder).exists()).arg(QFileInfo(folder).isReadable());
+    bool startingHostFound=false;
     for(const auto&f:files){
-        QFile file(f.absoluteFilePath());if(!file.open(QIODevice::ReadOnly))continue;
+        QFile file(f.absoluteFilePath());if(!file.open(QIODevice::ReadOnly)){
+            diagnostic+=QString("file=%1 openError=%2; ").arg(f.fileName(),file.errorString());continue;
+        }
         auto o=QJsonDocument::fromJson(file.readAll()).object();
         const auto updated=QDateTime::fromString(o["updated"].toString(),Qt::ISODateWithMs);
         const qint64 pid=qint64(o["pid"].toDouble());
+        diagnostic+=QString("pid=%1 age=%2 match=%3 bound=%4; ").arg(pid)
+            .arg(updated.secsTo(QDateTime::currentDateTimeUtc())).arg(processMatches(pid,guiExecutable())).arg(o["bound"].toBool());
         if(o["schema"].toInt()!=1||o["protocol"].toString()!="battery-udp/1"||!updated.isValid()
             ||updated.secsTo(QDateTime::currentDateTimeUtc())>20||!processMatches(pid,guiExecutable()))continue;
         if(m_launchedPid&&pid!=m_launchedPid)continue;
         if(m_busyHosts.contains(pid))continue;
-        if(!o["bound"].toBool())return true; // Existing host is still starting; do not spawn duplicates.
+        if(!o["bound"].toBool()){startingHostFound=true;continue;} // Scan ready hosts before waiting.
         const int port=o["port"].toInt();
         if(port<=0||port>65535||o["session"].toString().isEmpty()||o["token"].toString().size()<24)continue;
         m_port=quint16(port);m_hostPid=pid;m_session=o["session"].toString();m_token=o["token"].toString();
         trace("connected",{{"pid",double(pid)},{"port",port},{"session",m_session}});
         send("hello");return true;
     }
-    return false;
+    if(m_log.isOpen()&&(diagnostic!=lastDiagnostic||lastDiagnosticTask!=m_taskId)){lastDiagnostic=diagnostic;lastDiagnosticTask=m_taskId;trace("discovery",{{"diagnostic",diagnostic}});}
+    return startingHostFound;
 }
 bool SysplorerRunner::launchHost(){
     const auto exe=guiExecutable();

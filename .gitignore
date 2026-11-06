@@ -45,3 +45,30 @@ Makefile.*
 # 补充忽略其他 runtime 目录
 app/ui/probe_runtime/
 app/ui/runtime/
+
+# Publish excludes: retain remote rules for local settings and generated files
+/.codex/
+*.user
+*.suo
+*.VC.db
+*.VC.opendb
+debug/
+release/
+*.o
+*.ilk
+*.pch
+*.idb
+*.tlog
+*.lib
+*.exp
+*.tmp
+*.bak
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+.env.*
+!.env.example
+*.private.json
+/tools/udp_host_probe/deploy*_status.json

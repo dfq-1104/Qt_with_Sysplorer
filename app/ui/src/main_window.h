@@ -135,6 +135,7 @@ private:
     QString m_viewerJob, m_viewerMessage;
     bool m_viewerOk = false;
     bool m_stopped = true;
+    bool m_hostConnectionFailed = false;
     bool m_translateAfterDiscard = false;
     bool m_startAfterPreparation = false;
     QString m_resultBeforeTask;

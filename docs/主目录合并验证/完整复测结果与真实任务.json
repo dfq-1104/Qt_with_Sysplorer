@@ -1,0 +1,118 @@
+{
+  "run": "20261105_210311",
+  "testProcessExitCode": 0,
+  "businessCaseCount": 8,
+  "qtTestTotals": {
+    "passed": 10,
+    "failed": 0,
+    "durationMs": 181801
+  },
+  "sourcesAndBinariesUnchangedAcrossRuns": true,
+  "runtimePackageMatchesMainBuild": true,
+  "uiSmokeExitCode": 0,
+  "launcherPreflightPassed": true,
+  "results": [
+    {
+      "taskId": "1a846964-2f13-4055-b9f5-96ebc1e0484e",
+      "modelHash": "e03bd3634004ca82bb190521c214ec5fae25713120db83caf016aeac8b7472cd",
+      "complete": false,
+      "points": 4,
+      "params": {
+        "current": 1,
+        "mode": 1,
+        "soc0": 0.5,
+        "voltage": 3.45
+      },
+      "csvHash": "f4462abd0accad72df12c69d2cf1efdf41930f41d29b2e18b24068a0f77e51cd",
+      "csvHashVerified": true,
+      "firstSample": "0,0.5,1,3.26999998092651",
+      "lastSample": "2,0.500221133232117,1,3.27002215385437",
+      "taskDirectory": "C:\\Users\\TR\\AppData\\Local\\Temp\\B0cf2Jobs\\1a846964-2f13-4055-b9f5-96ebc1e0484e"
+    },
+    {
+      "taskId": "9ff8b7d1-3264-49df-8d5c-07dd0a13364a",
+      "modelHash": "e03bd3634004ca82bb190521c214ec5fae25713120db83caf016aeac8b7472cd",
+      "complete": false,
+      "points": 5,
+      "params": {
+        "current": 1,
+        "mode": 1,
+        "soc0": 0.5,
+        "voltage": 3.45
+      },
+      "csvHash": "bcd26b3acf543e415cffbe1cc45df91215347c2f09ab0e401deac1ad50c45081",
+      "csvHashVerified": true,
+      "firstSample": "0,0.5,1,3.26999998092651",
+      "lastSample": "4,0.5002760887146,-0.5,3.25502753257751",
+      "taskDirectory": "C:\\Users\\TR\\AppData\\Local\\Temp\\B0cf2Jobs\\9ff8b7d1-3264-49df-8d5c-07dd0a13364a"
+    },
+    {
+      "taskId": "a24d3e7d-962c-4241-888c-03f2e59c7a63",
+      "modelHash": "e03bd3634004ca82bb190521c214ec5fae25713120db83caf016aeac8b7472cd",
+      "complete": true,
+      "points": 124,
+      "params": {
+        "current": 5,
+        "mode": 1,
+        "soc0": 0.99,
+        "voltage": 3.45
+      },
+      "csvHash": "23d94c39cbbec34ed8ed4657c1ba8a470835342325f3b7c2711ef8d8ee9ccd88",
+      "csvHashVerified": true,
+      "firstSample": "0,0.990000009536743,5,3.44000005722046",
+      "lastSample": "120,1,0,3.40000009536743",
+      "taskDirectory": "C:\\Users\\TR\\AppData\\Local\\Temp\\B0cf2Jobs\\a24d3e7d-962c-4241-888c-03f2e59c7a63"
+    },
+    {
+      "taskId": "e3b9362a-6966-4d46-900b-3c3c571cb56b",
+      "modelHash": "e03bd3634004ca82bb190521c214ec5fae25713120db83caf016aeac8b7472cd",
+      "complete": false,
+      "points": 15,
+      "params": {
+        "current": 1.25,
+        "mode": 2,
+        "soc0": 0.6,
+        "voltage": 2.5
+      },
+      "csvHash": "ebc2ded30bc4705afd561f6811e407b4b42178cfeb06c4146eb8ee64f9f809d4",
+      "csvHashVerified": true,
+      "firstSample": "0,0.600000023841858,-1.25,3.2574999332428",
+      "lastSample": "14,0.59805554151535,-1.25,3.25730562210083",
+      "taskDirectory": "C:\\Users\\TR\\AppData\\Local\\Temp\\B0cf2Jobs\\e3b9362a-6966-4d46-900b-3c3c571cb56b"
+    },
+    {
+      "taskId": "f1110082-9e1a-4cb0-a29f-56bc2316a1b7",
+      "modelHash": "e03bd3634004ca82bb190521c214ec5fae25713120db83caf016aeac8b7472cd",
+      "complete": true,
+      "points": 124,
+      "params": {
+        "current": 5,
+        "mode": 1,
+        "soc0": 0.98,
+        "voltage": 3.45
+      },
+      "csvHash": "ee82893d539da3c530a7805b2fdffd34ccd98e16af94870d402577770eda518e",
+      "csvHashVerified": true,
+      "firstSample": "0,0.980000019073486,5,3.4300000667572",
+      "lastSample": "120,1,0,3.40000009536743",
+      "taskDirectory": "C:\\Users\\TR\\AppData\\Local\\Temp\\B0cf2Jobs\\f1110082-9e1a-4cb0-a29f-56bc2316a1b7"
+    },
+    {
+      "taskId": "f4ba7f4f-585f-4e00-a771-715a301d1cd3",
+      "modelHash": "e03bd3634004ca82bb190521c214ec5fae25713120db83caf016aeac8b7472cd",
+      "complete": true,
+      "points": 8,
+      "params": {
+        "current": 1,
+        "mode": 1,
+        "soc0": 0.5,
+        "voltage": 3.45
+      },
+      "csvHash": "78afc349520d42a63da8bba492f17caa29914fc253c3030d34a780c9482cdd34",
+      "csvHashVerified": true,
+      "firstSample": "0,0.5,1,3.26999998092651",
+      "lastSample": "6,0.500663340091705,1,3.2700662612915",
+      "taskDirectory": "C:\\Users\\TR\\AppData\\Local\\Temp\\B0cf2Jobs\\f4ba7f4f-585f-4e00-a771-715a301d1cd3"
+    }
+  ]
+}

@@ -161,6 +161,11 @@ private slots:
       QSignalSpy failed(runner,&SysplorerRunner::hostConnectionFailed);
       QTRY_COMPARE_WITH_TIMEOUT(failed.count(),1,5000);
       QVERIFY(!runner->isRunning());QVERIFY(runner->isConnecting());
+      auto prepare=w.findChild<QPushButton*>("btnPrepare");QVERIFY(prepare->isEnabled());
+      QSignalSpy preparationFailed(runner,&SysplorerRunner::finished);
+      QTest::mouseClick(prepare,Qt::LeftButton);
+      QTRY_COMPARE_WITH_TIMEOUT(preparationFailed.count(),1,5000);
+      QVERIFY(!preparationFailed.first()[0].toBool());QVERIFY(prepare->isEnabled());
       QVERIFY(w.findChild<BatteryView*>()->isEnabled());
       QVERIFY(!w.findChild<QPushButton*>("btnReplay")->isEnabled());
       QTest::qWait(200);QCOMPARE(failed.count(),1);

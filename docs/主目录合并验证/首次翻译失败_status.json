@@ -1,0 +1,39 @@
+{
+    "code": "TRANSLATE_FAILED",
+    "controller": "0x20283e91660",
+    "csvHash": "",
+    "cursor": 0,
+    "data": "0x0",
+    "duration": 6,
+    "jobDir": "C:/Users/TR/AppData/Local/Temp/B0cf2Jobs/3b317833-f054-43b6-b2dc-11a0e5bbf7c1",
+    "message": "宿主模型翻译失败，请查看 Sysplorer 输出",
+    "modelHash": "e03bd3634004ca82bb190521c214ec5fae25713120db83caf016aeac8b7472cd",
+    "modelLoaded": true,
+    "nativeResult": "",
+    "next": 0,
+    "owner": "c81e5cc0-5c20-4db5-81f7-e0659e738062",
+    "params": {
+        "current": 1,
+        "mode": 1,
+        "soc0": 0.5,
+        "voltage": 3.45
+    },
+    "phase": "Failed",
+    "pid": 22312,
+    "runtimeParams": {
+        "current": 1,
+        "iMax": 5,
+        "mode": 1,
+        "vMax": 3.45,
+        "vMin": 2.5,
+        "voltage": 3.45
+    },
+    "stage": "翻译模型",
+    "taskId": "3b317833-f054-43b6-b2dc-11a0e5bbf7c1",
+    "time": 0,
+    "total": 0,
+    "tuneHistory": [
+    ],
+    "tunePending": false,
+    "viewerMessage": ""
+}

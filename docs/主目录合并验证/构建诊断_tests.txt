@@ -1,0 +1,3 @@
+Warning: Failed to resolve include "C:/Users/TR/Documents/ChatGPT/qt????/app/ui/tests/build/release/moc_predefs.h" for moc file ..\udp_integration_test.cpp
+Warning: Failed to resolve include "C:/Users/TR/Documents/ChatGPT/qt????/app/ui/tests/build/release/moc_predefs.h" for moc file ..\..\src\main_window.h
+Warning: Failed to resolve include "C:/Users/TR/Documents/ChatGPT/qt????/app/ui/tests/build/release/moc_predefs.h" for moc file ..\..\src\sysplorer_runner.h

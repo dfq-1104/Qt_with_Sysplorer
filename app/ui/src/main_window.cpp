@@ -133,9 +133,10 @@ MainWindow::MainWindow(QWidget* parent)
     setWindowTitle(QString::fromUtf8("电池充放电仿真操作台"));
     resize(1280, 780);
     connect(m_runner,&SysplorerRunner::hostConnectionFailed,this,[this](const QString& message){
+        m_hostConnectionFailed=true;
         setStateText(QString::fromUtf8("Sysplorer 未就绪"));
         m_errorPanel->setPlainText(message);m_errorPanel->show();appendStageLog(QString::fromUtf8("错误"),message);
-        showWarning(this,QString::fromUtf8("Sysplorer 未就绪"),message);
+        showWarning(this,QString::fromUtf8("Sysplorer 未就绪"),message);refreshButtons();
     });
     QTimer::singleShot(0,m_runner,&SysplorerRunner::connectHost);
 }
@@ -463,7 +464,7 @@ void MainWindow::refreshButtons() {
     m_resultSelector->setEnabled(!busy&&!replayActive);
     const bool ready=!m_runner->isConnecting()&&!phase.isEmpty();
     m_btnLoad->setEnabled(ready&&!busy&&!pending&&!replayActive&&!m_runner->isModelLoaded());
-    m_btnPrepare->setEnabled(ready&&(!busy||(prepared&&!inputsMatchPreparation()))&&!pending&&!m_runner->isConnecting()&&!replayActive&&!m_translateAfterDiscard&&!m_startAfterPreparation);
+    m_btnPrepare->setEnabled((ready||m_hostConnectionFailed)&&(!busy||(prepared&&!inputsMatchPreparation()))&&!pending&&!replayActive&&!m_translateAfterDiscard&&!m_startAfterPreparation);
     m_btnPlay->setEnabled(ready&&(!busy||prepared)&&!pending&&!replayActive&&!m_startAfterPreparation&&!m_translateAfterDiscard);
     const auto key=m_resultSelector->currentData().toString();
     const bool validResult=(key=="cache"&&m_states[0].loaded)||key.startsWith("partial:");
@@ -488,7 +489,7 @@ void MainWindow::showSavedPreview()
 
 
 void MainWindow::onPrepare(){
-    if(m_runner->isConnecting()||m_runner->controlPending()||m_player->isPlaying())return;
+    if((m_runner->isConnecting()&&!m_hostConnectionFailed)||m_runner->controlPending()||m_player->isPlaying())return;
     if(m_runner->isPrepared()){
         if(inputsMatchPreparation())return;
         m_translateAfterDiscard=true;m_runner->invalidatePreparation();refreshButtons();return;
@@ -742,8 +743,8 @@ void MainWindow::onHostStateChanged(const QString&phase) {
             m_runner->beginSimulation();refreshButtons();
         });
     }
-    if(phase=="Loaded"){setStateText(QString::fromUtf8("模型已加载，等待翻译"));refreshButtons();return;}
-    if(phase=="Connected") {setStateText(QString::fromUtf8("Sysplorer 已连接"));refreshButtons();return;}
+    if(phase=="Loaded"){m_hostConnectionFailed=false;setStateText(QString::fromUtf8("模型已加载，等待翻译"));refreshButtons();return;}
+    if(phase=="Connected") {m_hostConnectionFailed=false;setStateText(QString::fromUtf8("Sysplorer 已连接"));refreshButtons();return;}
     if(phase=="Connecting"&&!m_runner->isRunning()){setStateText(QString::fromUtf8("后台连接 Sysplorer"));refreshButtons();return;}
     if(!m_runner->isRunning()){refreshButtons();return;}
     const QMap<QString,QString> names{
