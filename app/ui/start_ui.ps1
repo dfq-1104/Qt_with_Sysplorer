@@ -1,38 +1,28 @@
+param([switch]$Remote,[string]$RuntimeDirectory='',[switch]$SmokeTest,[switch]$PassThru)
 $ErrorActionPreference='Stop'
-$uiRoot=$PSScriptRoot
-$repoRoot=[IO.Path]::GetFullPath((Join-Path $uiRoot '..\..'))
-$package=if(Test-Path -LiteralPath (Join-Path $uiRoot 'runtime_buttons\sysplorer.ini')){'runtime_buttons'}elseif(Test-Path -LiteralPath (Join-Path $uiRoot 'runtime_tuning\sysplorer.ini')){'runtime_tuning'}else{'runtime'}
-$exe=Join-Path $uiRoot "$package\battery_console_ui.exe"
-$configPath=Join-Path $uiRoot "$package\sysplorer.ini"
-$configuredHome=''
-if(Test-Path -LiteralPath $configPath){
-    $homeLine=Get-Content -LiteralPath $configPath | Where-Object {$_ -match '^Home='} | Select-Object -First 1
-    if($homeLine){$configuredHome=$homeLine.Substring(5).Trim()}
+$repoRoot=[IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\..'))
+if(-not $RuntimeDirectory -and (Test-Path -LiteralPath (Join-Path $repoRoot '.local-sysplorer\state.json'))){
+    if($Remote){& (Join-Path $repoRoot 'tools\deployment\Start-LocalWorktree.ps1') -Remote -SmokeTest:$SmokeTest -PassThru:$PassThru}
+    else{& (Join-Path $repoRoot 'tools\deployment\Start-LocalWorktree.ps1') -PreserveConnectionMode -SmokeTest:$SmokeTest -PassThru:$PassThru}
+    return
 }
-$source=Join-Path $repoRoot 'tools\sysplorer_udp_plugin\release\battery_udp_control.dll'
-$hostRoot=if($env:SYSPLORER_HOME){$env:SYSPLORER_HOME}elseif($configuredHome){$configuredHome}else{'C:\Program Files\MWORKS\Sysplorer 2026a'}
-$target=Join-Path $hostRoot 'Bin64\addins\BatteryUdpControl\battery_udp_control.dll'
-function Get-BinaryHash([string]$path) {
-    $stream=[IO.File]::OpenRead($path)
-    $sha=[Security.Cryptography.SHA256]::Create()
-    try {return [BitConverter]::ToString($sha.ComputeHash($stream)).Replace('-','')} finally {$sha.Dispose();$stream.Dispose()}
+if($RuntimeDirectory){
+    $runtime=[IO.Path]::GetFullPath($RuntimeDirectory)
+}else{
+    $candidates=@((Join-Path $repoRoot 'dist\connection-fix\BatteryConsole-Client-win64'),
+        (Join-Path $repoRoot 'dist\remote\BatteryConsole-Client-win64'),
+        (Join-Path $PSScriptRoot 'runtime'),(Join-Path $PSScriptRoot 'runtime_buttons'),(Join-Path $PSScriptRoot 'runtime_tuning'))
+    $runtime=$candidates | Where-Object {Test-Path -LiteralPath (Join-Path $_ 'battery_console_ui.exe')} | Select-Object -First 1
 }
-try {    if(-not (Test-Path -LiteralPath $exe)){throw 'Please build and deploy the Qt application first.'}
-    if(-not (Test-Path -LiteralPath $source)){throw 'Please build tools/sysplorer_udp_plugin first.'}
-    $expected=(Get-BinaryHash $source)
-    $matches=(Test-Path -LiteralPath $target) -and ((Get-BinaryHash $target) -eq $expected)
-    if(-not $matches){
-        $running=Get-Process mworks -ErrorAction SilentlyContinue | Where-Object {$_.Path -eq (Join-Path $hostRoot 'Bin64\mworks.exe')}
-        if($running){throw 'Plugin version mismatch. Save your models and close Sysplorer, then run this launcher again.'}
-        Write-Host 'Synchronizing the matching Sysplorer plugin (Windows administrator authorization may appear)...'
-        & (Join-Path $repoRoot 'tools\sysplorer_udp_plugin\deploy.ps1') -SysplorerHome $hostRoot -Elevate
-        if($LASTEXITCODE -ne 0){throw 'Sysplorer plugin deployment failed.'}
-        if((Get-BinaryHash $target) -ne $expected){throw 'Installed plugin does not match this application build.'}
-    }
-    $env:BATTERY_PROJECT_DIR=$repoRoot
-    Start-Process -FilePath $exe -WorkingDirectory (Split-Path -Parent $exe)
-} catch {
-    Write-Host $_.Exception.Message -ForegroundColor Red
-    Read-Host 'Press Enter to close'
-    exit 1
-}
+if(-not $runtime){throw 'Build and deploy the Qt client first. No Sysplorer was started or changed.'}
+$exe=Join-Path $runtime 'battery_console_ui.exe'
+if(-not(Test-Path -LiteralPath $exe)){throw "Qt client missing: $exe"}
+# Launch only Qt; deployment and host startup require explicit user actions.
+foreach($name in @('QT_QPA_PLATFORM','QT_QPA_PLATFORM_PLUGIN_PATH','QT_PLUGIN_PATH','PYTHONHOME','PYTHONPATH')){Remove-Item "Env:$name" -ErrorAction SilentlyContinue}
+if($Remote){$env:BATTERY_CONNECTION_MODE='remote'}
+$env:BATTERY_PROJECT_DIR=$repoRoot
+$env:PATH=$runtime+';'+$env:PATH
+$options=@{FilePath=$exe;WorkingDirectory=$runtime;PassThru=$true}
+if($SmokeTest){$options.ArgumentList='--smoke-test';$options.WindowStyle='Hidden'}
+$started=Start-Process @options
+if($PassThru){return $started}

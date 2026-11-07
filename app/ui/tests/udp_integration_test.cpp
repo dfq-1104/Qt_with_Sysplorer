@@ -43,9 +43,9 @@ private slots:
       auto status=w.findChild<QToolButton*>("toggleStatus"),logs=w.findChild<QToolButton*>("toggleLog");
       QVERIFY(status&&logs);QVERIFY(!status->isChecked());QVERIFY(!logs->isChecked());
       QVERIFY(!w.findChild<QLabel*>("lblState")->isVisible());QVERIFY(!w.findChild<QPlainTextEdit*>("stageLog")->isVisible());
-      QVERIFY(w.findChild<QPlainTextEdit*>("errorPanel")->isVisible());
+      QVERIFY(!w.findChild<QPlainTextEdit*>("errorPanel")->isVisible());
       QVERIFY(!w.findChild<QPlainTextEdit*>("stageLog")->toPlainText().isEmpty());
-      QVERIFY(!w.findChild<QPushButton*>("btnPlay")->isEnabled());
+      QVERIFY(w.findChild<QPushButton*>("btnPlay")->isEnabled());
       auto runner=w.findChild<SysplorerRunner*>();
       status->setChecked(true);QVERIFY(w.findChild<QLabel*>("lblState")->isVisible());QVERIFY(!logs->isChecked());
       QVERIFY(QMetaObject::invokeMethod(&w,"onHostStateChanged",Qt::DirectConnection,Q_ARG(QString,QString("Connecting"))));
@@ -65,7 +65,9 @@ private slots:
     {MainWindow reopened;QVERIFY(!reopened.findChild<QToolButton*>("toggleStatus")->isChecked());QVERIFY(reopened.findChild<QToolButton*>("toggleLog")->isChecked());}
  }
  void modelLoadAndReuse(){
-    SysplorerRunner runner;runner.loadModel();
+    SysplorerRunner runner;runner.connectHost();
+    QTRY_VERIFY_WITH_TIMEOUT(runner.phase()=="Connected"||runner.phase()=="ConnectionFailed",180000);
+    QCOMPARE(runner.phase(),QString("Connected"));runner.loadModel();
     QTRY_VERIFY_WITH_TIMEOUT(runner.phase()=="Loaded"||runner.phase()=="Failed",180000);
     QCOMPARE(runner.phase(),QString("Loaded"));QVERIFY(!runner.isRunning());QVERIFY(runner.isModelLoaded());QVERIFY(!runner.isPrepared());QVERIFY(runner.liveSamples().isEmpty());
     QFile first(runner.lastRunDirectory()+"/plugin.log");QVERIFY(first.open(QIODevice::ReadOnly));auto loadLog=first.readAll();
@@ -75,10 +77,22 @@ private slots:
     QVERIFY(translateLog.contains("parameter_verified"));QVERIFY(runner.liveSamples().isEmpty());
     runner.invalidatePreparation();QTRY_VERIFY_WITH_TIMEOUT(!runner.isRunning(),5000);
  }
+ void incompatibleRealLocalHostIsRejected(){
+    if(!qEnvironmentVariableIsSet("BATTERY_EXPECT_OLD_PLUGIN"))QSKIP("Run explicitly against the isolated old plugin");
+    SysplorerRunner runner;QSignalSpy failure(&runner,&SysplorerRunner::hostConnectionFailed);runner.connectHost();
+    QTRY_COMPARE_WITH_TIMEOUT(runner.phase(),QString("ConnectionFailed"),180000);QCOMPARE(failure.count(),1);QVERIFY(!runner.isConnecting());QVERIFY(!runner.isRunning());
+    const auto message=failure[0][0].toString();QVERIFY(message.contains("modelLifecycle"));QVERIFY(message.contains("4670d908273243caa2996f708ce1e2692b4012eac5c3107a4209eeea16f6feb9"));
+    QVERIFY(message.contains("battery_udp_control.dll"));QVERIFY(message.contains("Update-Plugin.ps1"));
+    QFile log(runner.lastRunDirectory()+"/client.log");QVERIFY(log.open(QIODevice::ReadOnly));const auto before=log.readAll();bool verified=false;
+    for(const auto line:before.split('\n')){const auto row=QJsonDocument::fromJson(line).object();if(row["event"].toString()=="connection_failed"){
+        verified=true;QVERIFY(row["pluginPathFromProcess"].toBool());QCOMPARE(row["pluginDiskSha256"].toString(),QString("6aabfdbe317c4f4157d94682895cc864748c22745ec882496e3a7321821708b2"));
+    }}
+    QVERIFY(verified);QTest::qWait(1200);log.seek(0);QCOMPARE(log.readAll(),before);QCOMPARE(before.count("\"event\":\"launched\""),1);
+ }
 
  void startIncludesPreparation(){
     MainWindow w;w.show();auto runner=w.findChild<SysplorerRunner*>();
-    QTRY_COMPARE_WITH_TIMEOUT(runner->phase(),QString("Connected"),180000);
+    QCOMPARE(runner->phase(),QString("Idle"));
     auto start=w.findChild<QPushButton*>("btnPlay");auto prepare=w.findChild<QPushButton*>("btnPrepare");
     auto view=w.findChild<BatteryView*>("batteryView");view->setInputs(3.45,5,1,.99);
     QSignalSpy completed(runner,&SysplorerRunner::finished);QStringList phases;
@@ -97,7 +111,7 @@ private slots:
  }
  void automaticStartFailureKeepsStage(){
     MainWindow w;w.show();auto runner=w.findChild<SysplorerRunner*>();
-    QTRY_COMPARE_WITH_TIMEOUT(runner->phase(),QString("Connected"),180000);
+    QCOMPARE(runner->phase(),QString("Idle"));
     qputenv("BATTERY_SIM_WORKSPACE",QString::fromUtf8("C:/invalid/中文").toUtf8());
     QSignalSpy completed(runner,&SysplorerRunner::finished);
     QTest::mouseClick(w.findChild<QPushButton*>("btnPlay"),Qt::LeftButton);
@@ -159,8 +173,9 @@ private slots:
     {
       MainWindow w;w.show();auto runner=w.findChild<SysplorerRunner*>();
       QSignalSpy failed(runner,&SysplorerRunner::hostConnectionFailed);
+      QTest::qWait(100);QCOMPARE(failed.count(),0);QCOMPARE(runner->phase(),QString("Idle"));runner->connectHost();
       QTRY_COMPARE_WITH_TIMEOUT(failed.count(),1,5000);
-      QVERIFY(!runner->isRunning());QVERIFY(runner->isConnecting());
+      QVERIFY(!runner->isRunning());QVERIFY(!runner->isConnecting());QCOMPARE(runner->phase(),QString("ConnectionFailed"));
       auto prepare=w.findChild<QPushButton*>("btnPrepare");QVERIFY(prepare->isEnabled());
       QSignalSpy preparationFailed(runner,&SysplorerRunner::finished);
       QTest::mouseClick(prepare,Qt::LeftButton);

@@ -1,8 +1,8 @@
-param([string]$RuntimeDirectory = '', [string]$SysplorerHome = '')
+param([string]$RuntimeDirectory = '', [string]$SysplorerHome = '', [string]$QtHome='C:\Qt\Qt5.14.2\5.14.2\msvc2017_64')
 $ErrorActionPreference='Stop'
 $root=(Resolve-Path "$PSScriptRoot\..\..").Path
 $runtime=if($RuntimeDirectory){[IO.Path]::GetFullPath($RuntimeDirectory)}else{Join-Path $PSScriptRoot 'runtime'}
-$qt='C:\Qt\Qt5.14.2\5.14.2\msvc2017_64'
+$qt=$QtHome
 New-Item -ItemType Directory -Force "$runtime" | Out-Null
 if($SysplorerHome) {
     $hostHome=[IO.Path]::GetFullPath($SysplorerHome).Replace('\','/')

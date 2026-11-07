@@ -33,6 +33,10 @@
 #include <QDesktopServices>
 #include <QUrl>
 #include <QRadioButton>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QLineEdit>
+#include <QSpinBox>
 #include <cmath>
 
 namespace {
@@ -134,14 +138,41 @@ MainWindow::MainWindow(QWidget* parent)
     resize(1280, 780);
     connect(m_runner,&SysplorerRunner::hostConnectionFailed,this,[this](const QString& message){
         m_hostConnectionFailed=true;
-        setStateText(QString::fromUtf8("Sysplorer 未就绪"));
+        setStateText(QString::fromUtf8("连接失败"));
         m_errorPanel->setPlainText(message);m_errorPanel->show();appendStageLog(QString::fromUtf8("错误"),message);
-        showWarning(this,QString::fromUtf8("Sysplorer 未就绪"),message);refreshButtons();
+        showWarning(this,QString::fromUtf8("连接失败"),message);refreshButtons();
     });
-    QTimer::singleShot(0,m_runner,&SysplorerRunner::connectHost);
+    setStateText(m_runner->remoteMode()?QString::fromUtf8("尚未连接，请在连接设置中连接远端"):
+        QString::fromUtf8("尚未连接；点击连接设置，或加载、翻译、开始时按需连接本机"));
+    appendStageLog(QString::fromUtf8("连接"),QString::fromUtf8("界面已启动，仅读取配置；尚未连接或启动 Sysplorer。"));
+    refreshButtons();
 }
 
 MainWindow::~MainWindow() = default;
+
+void MainWindow::showConnectionSettings(){
+    if(m_runner->isRunning())return;
+    QDialog dialog(this);dialog.setWindowTitle(QString::fromUtf8("连接设置"));dialog.setObjectName("connectionDialog");dialog.resize(480,0);
+    auto layout=new QVBoxLayout(&dialog);auto form=new QFormLayout;
+    auto mode=new QComboBox(&dialog);mode->setObjectName("connectionMode");mode->addItems({QString::fromUtf8("本机 · 按需发现 / 启动"),QString::fromUtf8("远程 · IP 与端口")});mode->setCurrentIndex(m_runner->remoteMode()?1:0);
+    auto address=new QLineEdit(m_runner->remoteAddress(),&dialog);address->setObjectName("remoteAddress");address->setPlaceholderText("192.168.1.20");
+    auto port=new QSpinBox(&dialog);port->setObjectName("remotePort");port->setRange(1,65535);port->setValue(m_runner->remotePort());
+    auto key=new QLineEdit(&dialog);key->setObjectName("remoteAccessKey");key->setEchoMode(QLineEdit::Password);key->setPlaceholderText(QString::fromUtf8("留空使用已保存凭据；首次连接至少 32 个字符"));
+    key->setToolTip(QString::fromUtf8("填写该服务器原 access-key.txt 中的凭据。认证失败或切换服务器后请重新填写；留空会复用已保存的旧值。使用 Windows 当前用户保护后保存，不写入普通日志。"));
+    form->addRow(QString::fromUtf8("连接方式"),mode);form->addRow(QString::fromUtf8("服务器地址"),address);form->addRow(QString::fromUtf8("TCP 端口"),port);form->addRow(QString::fromUtf8("访问凭据"),key);layout->addLayout(form);
+    auto note=new QLabel(QString::fromUtf8("远程模式用于受信任的局域网或 VPN。仿真机需先安装配套插件并启用监听；Qt 所在电脑无需安装 Sysplorer。"),&dialog);note->setWordWrap(true);layout->addWidget(note);
+    auto error=new QLabel(&dialog);error->setObjectName("connectionError");error->setWordWrap(true);error->setStyleSheet("color:#972f29");layout->addWidget(error);
+    auto buttons=new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel,&dialog);buttons->button(QDialogButtonBox::Ok)->setText(QString::fromUtf8("保存并连接"));buttons->button(QDialogButtonBox::Cancel)->setText(QString::fromUtf8("取消"));layout->addWidget(buttons);
+    auto update=[=]{const bool remote=mode->currentIndex()==1;address->setEnabled(remote);port->setEnabled(remote);key->setEnabled(remote);};
+    connect(mode,QOverload<int>::of(&QComboBox::currentIndexChanged),&dialog,[update]{update();});update();
+    connect(buttons,&QDialogButtonBox::rejected,&dialog,&QDialog::reject);
+    connect(buttons,&QDialogButtonBox::accepted,&dialog,[&,this]{
+        if(!m_runner->configureConnection(mode->currentIndex()==1,address->text(),port->value(),key->text())){
+            error->setText(QString::fromUtf8("请填写服务器地址和至少 32 个字符的有效凭据；也请检查用户设置目录是否可写。"));return;
+        }
+        dialog.accept();m_hostConnectionFailed=false;m_errorPanel->hide();m_runner->connectHost();refreshButtons();
+    });dialog.exec();
+}
 
 void MainWindow::buildUi()
 {
@@ -202,6 +233,23 @@ void MainWindow::buildUi()
     auto speedGroup=new QWidget(bar);auto speedRow=new QHBoxLayout(speedGroup);speedRow->setContentsMargins(0,0,0,0);
     speedRow->addWidget(new QLabel(QString::fromUtf8("仿真倍速"),speedGroup));speedRow->addWidget(m_cmbSpeed);h->addWidget(speedGroup);h->addWidget(m_lblTime);
     root->addWidget(bar);
+    auto connectionBar=new QWidget(central);auto connectionRow=new QHBoxLayout(connectionBar);connectionRow->setContentsMargins(12,4,12,4);
+    m_connectionStatus=new QLabel(m_runner->connectionLabel(),connectionBar);m_connectionStatus->setObjectName("connectionStatus");
+    m_connectionStatus->setWordWrap(true);m_connectionStatus->setMinimumWidth(0);m_connectionStatus->setSizePolicy(QSizePolicy::Ignored,QSizePolicy::Preferred);
+    m_btnConnection=new QPushButton(QString::fromUtf8("连接设置"),connectionBar);m_btnConnection->setObjectName("btnConnection");
+    m_btnReconnect=new QPushButton(QString::fromUtf8("重连并核对"),connectionBar);m_btnReconnect->setObjectName("btnReconnect");m_btnReconnect->hide();
+    m_btnRetryDownload=new QPushButton(QString::fromUtf8("重试下载"),connectionBar);m_btnRetryDownload->setObjectName("btnRetryDownload");m_btnRetryDownload->hide();
+    m_btnAbandon=new QPushButton(QString::fromUtf8("结束跟踪"),connectionBar);m_btnAbandon->setObjectName("btnAbandonRemote");m_btnAbandon->hide();
+    connectionRow->addWidget(m_connectionStatus,1);connectionRow->addWidget(m_btnReconnect);connectionRow->addWidget(m_btnRetryDownload);connectionRow->addWidget(m_btnAbandon);connectionRow->addWidget(m_btnConnection);root->addWidget(connectionBar);
+    connect(m_btnConnection,&QPushButton::clicked,this,&MainWindow::showConnectionSettings);
+    connect(m_btnReconnect,&QPushButton::clicked,this,[this]{m_errorPanel->hide();m_runner->reconnectRemote();refreshButtons();});
+    connect(m_btnRetryDownload,&QPushButton::clicked,this,[this]{m_errorPanel->hide();m_runner->retryDownload();refreshButtons();});
+    connect(m_btnAbandon,&QPushButton::clicked,this,[this]{
+        if(QMessageBox::question(this,QString::fromUtf8("结束远程任务跟踪"),QString::fromUtf8("结束跟踪不会强制停止服务器任务；运行任务失联超过 15 秒时服务器会请求暂停。结束后不能通过本次连接继续跟踪，是否继续？"))==QMessageBox::Yes)m_runner->abandonRemoteTask();
+    });
+    connect(m_runner,&SysplorerRunner::connectionInfoChanged,m_connectionStatus,&QLabel::setText);
+    connect(m_runner,&SysplorerRunner::remoteNotice,this,[this](const QString& message){m_errorPanel->setPlainText(message);m_errorPanel->show();appendStageLog(QString::fromUtf8("连接"),message);refreshButtons();});
+    connect(m_runner,&SysplorerRunner::downloadProgress,this,[this](qint64 received,qint64 total){setStateText(QString::fromUtf8("下载远程结果 %1 / %2 KB").arg(received/1024).arg(total/1024));});
     auto info=new QWidget(central);auto infoLayout=new QVBoxLayout(info);infoLayout->setContentsMargins(12,0,12,4);
     infoLayout->addWidget(m_lblState);m_lblState->setWordWrap(true);
     m_taskInfo=new QLabel(info);m_taskInfo->setObjectName("taskInfo");m_taskInfo->setWordWrap(true);infoLayout->addWidget(m_taskInfo);
@@ -462,9 +510,13 @@ void MainWindow::refreshButtons() {
     m_batteryView->setParametersEnabled((!busy||prepared)&&!pending&&!replayActive&&!m_startAfterPreparation&&!m_translateAfterDiscard);
     m_batteryView->setApplyEnabled((!busy||prepared)&&!pending&&!replayActive&&!m_startAfterPreparation&&!m_translateAfterDiscard);
     m_resultSelector->setEnabled(!busy&&!replayActive);
-    const bool ready=!m_runner->isConnecting()&&!phase.isEmpty();
+    const bool ready=!m_runner->isConnecting()&&!phase.isEmpty()&&(!m_runner->remoteMode()||(phase!="Idle"&&phase!="Disconnected"&&phase!="ConnectionFailed"&&phase!="ConnectionLost"&&phase!="Reconnecting"));
+    m_btnConnection->setEnabled(!busy&&!replayActive);
+    m_btnReconnect->setVisible(m_runner->canReconnect());m_btnRetryDownload->setVisible(m_runner->canRetryDownload());
+    m_btnAbandon->setVisible(busy&&(m_runner->canReconnect()||m_runner->canRetryDownload()));
+    m_connectionStatus->setText(m_runner->connectionLabel());
     m_btnLoad->setEnabled(ready&&!busy&&!pending&&!replayActive&&!m_runner->isModelLoaded());
-    m_btnPrepare->setEnabled((ready||m_hostConnectionFailed)&&(!busy||(prepared&&!inputsMatchPreparation()))&&!pending&&!replayActive&&!m_translateAfterDiscard&&!m_startAfterPreparation);
+    m_btnPrepare->setEnabled(ready&&(!busy||(prepared&&!inputsMatchPreparation()))&&!pending&&!replayActive&&!m_translateAfterDiscard&&!m_startAfterPreparation);
     m_btnPlay->setEnabled(ready&&(!busy||prepared)&&!pending&&!replayActive&&!m_startAfterPreparation&&!m_translateAfterDiscard);
     const auto key=m_resultSelector->currentData().toString();
     const bool validResult=(key=="cache"&&m_states[0].loaded)||key.startsWith("partial:");
@@ -478,6 +530,11 @@ void MainWindow::refreshButtons() {
     m_btnReplayPause->setEnabled(!busy&&replayActive);m_btnReplayStop->setEnabled(!busy&&replayActive);m_replaySpeed->setEnabled(!busy);
     m_btnOpenJob->setEnabled(!m_runner->lastRunDirectory().isEmpty()&&QFileInfo(m_runner->lastRunDirectory()).isDir());
     m_taskInfo->setText(QString::fromUtf8("任务编号：%1").arg(m_runner->taskId().isEmpty()?QStringLiteral("-"):m_runner->taskId()));
+    if(m_runner->remoteMode()){
+        m_taskInfo->setText(m_taskInfo->text()+QString::fromUtf8("\n远端任务目录：%1\n本机任务目录：%2")
+            .arg(m_runner->serverRunDirectory().isEmpty()?QStringLiteral("-"):m_runner->serverRunDirectory(),m_runner->lastRunDirectory()));
+        m_taskInfo->setTextInteractionFlags(Qt::TextSelectableByMouse);
+    }
 }
 void MainWindow::showSavedPreview()
 {
@@ -674,8 +731,9 @@ void MainWindow::onSysplorerFinished(bool ok,const QString&csvPath,const QString
         auto &st=m_states[0];st.errorText=(hasHistory?QString::fromUtf8("本次操作失败；最近有效结果仍保留。\n"):QString::fromUtf8("本次操作失败。\n"))+message;
         st.hint=QString::fromUtf8("任务 %1 失败，请查看上方错误及任务日志。").arg(m_runner->taskId());
         m_errorPanel->setPlainText(st.errorText);m_errorPanel->show();m_lblHint->setText(st.hint);
-        setStateText(QString::fromUtf8("仿真失败"));refreshResultSelector();refreshButtons();return;
+        setStateText(m_runner->phase()=="ConnectionFailed"?QString::fromUtf8("连接失败"):QString::fromUtf8("仿真失败"));refreshResultSelector();refreshButtons();return;
     }
+    m_errorPanel->hide();
     ReplayData result;QString error;
     if(!result.load(csvPath,&error)){onSysplorerFinished(false,{},error);return;}
     m_states[0].realSdk=true;m_states[0].modelHash=m_runner->lastModelFingerprint();
@@ -730,7 +788,7 @@ void MainWindow::applyComputedCurve(QVector<ReplaySample> samples,double voltage
 void MainWindow::onHostStateChanged(const QString&phase) {
     if(phase!=m_lastLoggedPhase){
         m_lastLoggedPhase=phase;
-        const auto category=phase=="Failed"?QString::fromUtf8("错误"):(phase=="Connected"||phase=="Connecting")?QString::fromUtf8("连接"):
+        const auto category=(phase=="Failed"||phase=="ConnectionFailed")?QString::fromUtf8("错误"):(phase=="Connected"||phase=="Connecting")?QString::fromUtf8("连接"):
             (phase=="Loading"||phase=="Loaded"||phase=="Preparing"||phase=="Prepared"||phase=="Translating")?QString::fromUtf8("准备"):QString::fromUtf8("仿真");
         appendStageLog(category,QString::fromUtf8("任务阶段：%1").arg(phase));
     }
@@ -745,6 +803,8 @@ void MainWindow::onHostStateChanged(const QString&phase) {
     }
     if(phase=="Loaded"){m_hostConnectionFailed=false;setStateText(QString::fromUtf8("模型已加载，等待翻译"));refreshButtons();return;}
     if(phase=="Connected") {m_hostConnectionFailed=false;setStateText(QString::fromUtf8("Sysplorer 已连接"));refreshButtons();return;}
+    if(phase=="ConnectionFailed"){m_hostConnectionFailed=true;setStateText(QString::fromUtf8("连接失败，请查看具体原因后重试"));refreshButtons();return;}
+    if(phase=="Disconnected"){setStateText(QString::fromUtf8("远程未连接，请检查连接设置"));refreshButtons();return;}
     if(phase=="Connecting"&&!m_runner->isRunning()){setStateText(QString::fromUtf8("后台连接 Sysplorer"));refreshButtons();return;}
     if(!m_runner->isRunning()){refreshButtons();return;}
     const QMap<QString,QString> names{
@@ -753,7 +813,9 @@ void MainWindow::onHostStateChanged(const QString&phase) {
         {"Running",QString::fromUtf8("实时仿真中")},{"Pausing",QString::fromUtf8("正在暂停")},
         {"Paused",QString::fromUtf8("仿真已暂停")},{"Resuming",QString::fromUtf8("正在继续")},
         {"Stopping",QString::fromUtf8("正在停止")},{"Finalizing",QString::fromUtf8("核验结果")},
-        {"Completed",QString::fromUtf8("核验完整结果")},{"Stopped",QString::fromUtf8("保留部分结果")}};
+        {"Completed",QString::fromUtf8("核验完整结果")},{"Stopped",QString::fromUtf8("保留部分结果")},
+        {"Downloading",QString::fromUtf8("下载并核验远程结果")},{"DownloadFailed",QString::fromUtf8("结果下载失败，可重试")},
+        {"ConnectionLost",QString::fromUtf8("连接中断，任务状态待确认")},{"Reconnecting",QString::fromUtf8("重连并核对原任务")}};
     setStateText(names.value(phase,phase));
 
     m_lblHint->setText(QString::fromUtf8("当前任务 %1 ·%2 A %3 ·起点 %4% ·截止 %5 V")
@@ -772,6 +834,7 @@ void MainWindow::onLiveSamples(const QVector<ReplaySample>&samples) {
     const auto&s=samples.last();onTick(s.t,s.soc,s.current,s.voltage);refreshButtons();
 }
 void MainWindow::onSysplorerStopped(const QString&csvPath,const QString&message) {
+    m_errorPanel->hide();
     appendStageLog(QString::fromUtf8("结果"),QString::fromUtf8("主动停止，读取已核验部分结果。"));
     ReplayData result;QString error;
     if(!result.load(csvPath,&error)){onSysplorerFinished(false,{},error);return;}

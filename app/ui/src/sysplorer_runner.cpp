@@ -1,4 +1,5 @@
 #include "sysplorer_runner.h"
+#include "remote_link.h"
 #include <QCoreApplication>
 #include <QCryptographicHash>
 #include <QDateTime>
@@ -18,11 +19,36 @@
 #ifdef Q_OS_WIN
 #include <windows.h>
 #include <tlhelp32.h>
+#include <wincrypt.h>
 #endif
 namespace {
 QString uid(){return QUuid::createUuid().toString(QUuid::WithoutBraces);}
 QString hash(const QByteArray&b){return QString::fromLatin1(QCryptographicHash::hash(b,QCryptographicHash::Sha256).toHex());}
-bool samePath(const QString&a,const QString&b){return QDir::cleanPath(QDir::fromNativeSeparators(a)).compare(QDir::cleanPath(QDir::fromNativeSeparators(b)),Qt::CaseInsensitive)==0;}
+QByteArray protectKey(const QByteArray& value,bool encrypt){
+#ifdef Q_OS_WIN
+    DATA_BLOB input{DWORD(value.size()),reinterpret_cast<BYTE*>(const_cast<char*>(value.constData()))},output{};
+    const bool ok=encrypt?CryptProtectData(&input,L"BatteryConsole connection",nullptr,nullptr,nullptr,CRYPTPROTECT_UI_FORBIDDEN,&output)
+        :CryptUnprotectData(&input,nullptr,nullptr,nullptr,nullptr,CRYPTPROTECT_UI_FORBIDDEN,&output);
+    if(!ok)return {};const QByteArray bytes(reinterpret_cast<const char*>(output.pbData),int(output.cbData));LocalFree(output.pbData);return bytes;
+#else
+    Q_UNUSED(value);Q_UNUSED(encrypt);return {};
+#endif
+}
+bool samePath(const QString&a,const QString&b){
+    if(QDir::cleanPath(QDir::fromNativeSeparators(a)).compare(QDir::cleanPath(QDir::fromNativeSeparators(b)),Qt::CaseInsensitive)==0)return true;
+#ifdef Q_OS_WIN
+    // Windows reports the underlying image path for SUBST drives and junctions.
+    // Match file identity rather than rejecting an otherwise identical executable.
+    HANDLE first=CreateFileW(reinterpret_cast<LPCWSTR>(a.utf16()),0,FILE_SHARE_READ|FILE_SHARE_WRITE|FILE_SHARE_DELETE,nullptr,OPEN_EXISTING,0,nullptr);
+    HANDLE second=CreateFileW(reinterpret_cast<LPCWSTR>(b.utf16()),0,FILE_SHARE_READ|FILE_SHARE_WRITE|FILE_SHARE_DELETE,nullptr,OPEN_EXISTING,0,nullptr);
+    BY_HANDLE_FILE_INFORMATION x{},y{};
+    const bool same=first!=INVALID_HANDLE_VALUE&&second!=INVALID_HANDLE_VALUE&&GetFileInformationByHandle(first,&x)&&GetFileInformationByHandle(second,&y)
+        &&x.dwVolumeSerialNumber==y.dwVolumeSerialNumber&&x.nFileIndexHigh==y.nFileIndexHigh&&x.nFileIndexLow==y.nFileIndexLow;
+    if(first!=INVALID_HANDLE_VALUE)CloseHandle(first);if(second!=INVALID_HANDLE_VALUE)CloseHandle(second);return same;
+#else
+    return false;
+#endif
+}
 bool processMatches(qint64 pid,const QString&exe){
 #ifdef Q_OS_WIN
     HANDLE h=OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION,FALSE,DWORD(pid));if(!h)return false;
@@ -33,17 +59,51 @@ bool processMatches(qint64 pid,const QString&exe){
     Q_UNUSED(pid);Q_UNUSED(exe);return false;
 #endif
 }
+QJsonObject localPluginDetails(qint64 pid,const QString& executable){
+    QString path=QFileInfo(executable).absolutePath()+"/addins/BatteryUdpControl/battery_udp_control.dll";
+    bool loaded=false;
+#ifdef Q_OS_WIN
+    if(pid>0){
+        HANDLE snapshot=CreateToolhelp32Snapshot(TH32CS_SNAPMODULE|TH32CS_SNAPMODULE32,DWORD(pid));
+        if(snapshot!=INVALID_HANDLE_VALUE){
+            MODULEENTRY32W module{};module.dwSize=sizeof(module);
+            if(Module32FirstW(snapshot,&module))do{
+                if(QString::fromWCharArray(module.szModule).compare("battery_udp_control.dll",Qt::CaseInsensitive)==0){
+                    path=QString::fromWCharArray(module.szExePath);loaded=true;break;
+                }
+            }while(Module32NextW(snapshot,&module));
+            CloseHandle(snapshot);
+        }
+    }
+#endif
+    QFile file(path);const auto sha=file.open(QIODevice::ReadOnly)?hash(file.readAll()):QString();
+    return {{"pluginPath",QDir::toNativeSeparators(path)},{"pluginPathFromProcess",loaded},{"pluginDiskSha256",sha}};
+}
 }
 SysplorerRunner::SysplorerRunner(QObject*p):QObject(p),m_clientId(uid()){
     QSettings config(QCoreApplication::applicationDirPath()+"/sysplorer.ini",QSettings::IniFormat);
-    bool timeoutOk=false;const int timeout=qEnvironmentVariable("BATTERY_HOST_TIMEOUT_MS",config.value("Host/TimeoutMs",90000).toString()).toInt(&timeoutOk);
+    bool timeoutOk=false;const int timeout=qEnvironmentVariable("BATTERY_HOST_TIMEOUT_MS",config.value("Host/TimeoutMs",180000).toString()).toInt(&timeoutOk);
     if(timeoutOk)m_hostTimeoutMs=qBound(1000,timeout,600000);
+    QSettings saved(QSettings::IniFormat,QSettings::UserScope,"BatteryConsole","RemoteConnection");
+    m_remote=config.value("Connection/Mode","local").toString()=="remote";
+    m_remoteAddress=config.value("Connection/Address","127.0.0.1").toString();
+    const int configuredPort=config.value("Connection/Port",39001).toInt();
+    if(configuredPort>0&&configuredPort<=65535)m_remotePort=quint16(configuredPort);
+    if(saved.value("Configured",false).toBool()){
+        m_remote=saved.value("Remote",false).toBool();m_remoteAddress=saved.value("Address",m_remoteAddress).toString();
+        const int port=saved.value("Port",m_remotePort).toInt();if(port>0&&port<=65535)m_remotePort=quint16(port);
+        m_accessKey=QString::fromUtf8(protectKey(QByteArray::fromBase64(saved.value("ProtectedKey").toByteArray()),false));
+    }
+    const auto mode=qEnvironmentVariable("BATTERY_CONNECTION_MODE");if(!mode.isEmpty())m_remote=mode=="remote";
+    if(qEnvironmentVariableIsSet("BATTERY_REMOTE_ADDRESS"))m_remoteAddress=qEnvironmentVariable("BATTERY_REMOTE_ADDRESS");
+    if(qEnvironmentVariableIsSet("BATTERY_REMOTE_PORT")){const int port=qEnvironmentVariableIntValue("BATTERY_REMOTE_PORT");if(port>0&&port<=65535)m_remotePort=quint16(port);}
+    if(qEnvironmentVariableIsSet("BATTERY_REMOTE_KEY"))m_accessKey=qEnvironmentVariable("BATTERY_REMOTE_KEY");
     qRegisterMetaType<QVector<ReplaySample>>("QVector<ReplaySample>");
     m_socket.bind(QHostAddress::LocalHost,0,QUdpSocket::DontShareAddress);
     connect(&m_socket,&QUdpSocket::readyRead,this,&SysplorerRunner::receive);
     m_timer.setInterval(50);connect(&m_timer,&QTimer::timeout,this,&SysplorerRunner::pump);
 }
-SysplorerRunner::~SysplorerRunner(){m_timer.stop();bestEffortStop();}
+SysplorerRunner::~SysplorerRunner(){m_timer.stop();bestEffortStop();closeRemote(true);}
 QString SysplorerRunner::guiExecutable() const {
     QSettings config(QCoreApplication::applicationDirPath()+"/sysplorer.ini",QSettings::IniFormat);
     const auto home=qEnvironmentVariable("SYSPLORER_HOME",
@@ -63,11 +123,17 @@ void SysplorerRunner::setPhase(const QString&p){
 }
 void SysplorerRunner::connectHost(){
     if(m_busy)return;
+    // A new idle connection (including a mode switch) has no active task.
+    // Existing result files and the window's replay cache remain available.
+    m_taskId.clear();m_serverJobDir.clear();m_begun=false;m_resumePhase.clear();
     m_modelLoaded=false;m_modelHash=modelFingerprint();
     const auto base=qEnvironmentVariable("BATTERY_SIM_WORKSPACE",QDir::tempPath()+"/BatteryConsoleUDP");
     m_jobDir=QDir(base).absoluteFilePath("startup/"+m_clientId);QDir().mkpath(m_jobDir);
     m_log.close();m_log.setFileName(m_jobDir+"/client.log");m_log.open(QIODevice::WriteOnly|QIODevice::Append);
-    m_connectOnly=true;m_port=0;m_pending.clear();m_clock.restart();
+    m_connectOnly=true;m_port=0;m_pending.clear();m_pendingCommand.clear();m_clock.restart();m_connectionWarned=false;
+    m_autoAttempted=false;m_launchedPid=0;m_hostPid=0;m_busyHosts.clear();
+    m_remoteLost=false;m_session.clear();m_token.clear();
+    if(m_remote){closeRemote();setPhase("Connecting");m_timer.start();openRemote();return;}
     setPhase("Connecting");m_timer.start();pump();
 }
 void SysplorerRunner::loadModel(){
@@ -88,24 +154,27 @@ void SysplorerRunner::prepareSimulation(double voltage,double current,int mode,d
     m_tuned=false;m_tunePending=false;m_tuneSequence=0;m_tuneArgs={};
     m_pending.clear();m_control.clear();m_cursor=0;m_samples.clear();m_port=0;m_session.clear();m_token.clear();
     m_taskId=uid();m_modelHash=modelFingerprint();m_phase.clear();m_voltage=voltage;m_current=current;m_mode=mode;
+    m_serverJobDir.clear();m_finalStatus={};m_downloading=false;m_downloadReady=false;m_downloadFile.reset();m_remoteLost=false;
+    if(m_remote)closeRemote();
     m_soc0=soc0;m_duration=duration;m_clock.start();m_phaseClock.start();m_log.close();
     if(!std::isfinite(voltage)||voltage<2.5||voltage>3.45||!std::isfinite(current)||current<0||current>5
        ||(mode!=1&&mode!=2)||!std::isfinite(soc0)||soc0<0||soc0>1||!std::isfinite(duration)||duration<.1||duration>20000){
         QTimer::singleShot(0,this,[this]{fail(QString::fromUtf8("仿真参数不在允许范围内。"));});return;
     }
     const auto base=qEnvironmentVariable("BATTERY_SIM_WORKSPACE",QDir::tempPath()+"/BatteryConsoleUDP");
-    for(auto c:base)if(c.unicode()>127){QTimer::singleShot(0,this,[this]{fail(QString::fromUtf8("检查输出目录 · OUTPUT_DIRECTORY_INVALID：仿真目录必须使用英文路径。"));});return;}
+    if(!m_remote)for(auto c:base)if(c.unicode()>127){QTimer::singleShot(0,this,[this]{fail(QString::fromUtf8("检查输出目录 · OUTPUT_DIRECTORY_INVALID：仿真目录必须使用英文路径。"));});return;}
     m_jobDir=QDir(base).absoluteFilePath(m_taskId);
     if(!QDir().mkpath(m_jobDir)){QTimer::singleShot(0,this,[this]{fail(QString::fromUtf8("检查输出目录 · OUTPUT_DIRECTORY_FAILED：无法创建任务目录。"));});return;}
     m_log.setFileName(m_jobDir+"/client.log");m_log.open(QIODevice::WriteOnly|QIODevice::Append);
     trace("request",{{"mode",mode},{"voltage",voltage},{"current",current},{"soc0",soc0},{"duration",duration},{"modelHash",m_modelHash},{"hostExecutable",guiExecutable()}});
     trace("discovery_environment",{{"executable",QCoreApplication::applicationFilePath()},
-        {"folder",QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)+"/BatteryConsole/udp"},
+        {"folder",qEnvironmentVariable("BATTERY_DISCOVERY_DIR",QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)+"/BatteryConsole/udp")},
         {"localAppData",qEnvironmentVariable("LOCALAPPDATA")},{"target",guiExecutable()}});
     setPhase("Connecting");m_timer.start();QTimer::singleShot(0,this,&SysplorerRunner::pump);
 }
 bool SysplorerRunner::discover(){
-    const auto folder=QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)+"/BatteryConsole/udp";
+    if(m_remote)return false;
+    const auto folder=qEnvironmentVariable("BATTERY_DISCOVERY_DIR",QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)+"/BatteryConsole/udp");
     static QString lastDiagnostic;
     static QString lastDiagnosticTask;
     QString diagnostic=QString("folder=%1; target=%2; ").arg(folder,guiExecutable());
@@ -152,10 +221,11 @@ bool SysplorerRunner::discover(){
     return startingHostFound;
 }
 bool SysplorerRunner::launchHost(){
+    if(m_remote){fail(QString::fromUtf8("远程模式只连接指定地址，不启动本机 Sysplorer。"));return false;}
     const auto exe=guiExecutable();
     const auto plugin=QFileInfo(exe).absolutePath()+"/addins/BatteryUdpControl/battery_udp_control.dll";
-    if(!QFileInfo::exists(exe)){fail(QString::fromUtf8("找不到本地 Sysplorer：%1").arg(exe));return false;}
-    if(!QFileInfo::exists(plugin)){fail(QString::fromUtf8("未安装 BatteryUdpControl 插件，请先运行插件部署脚本。"));return false;}
+    if(!QFileInfo::exists(exe)){connectionFailed("HOST_NOT_FOUND",QString::fromUtf8("找不到本地 Sysplorer：%1").arg(exe));return false;}
+    if(!QFileInfo::exists(plugin)){connectionFailed("PLUGIN_NOT_FOUND",QString::fromUtf8("未安装配套插件：%1。请先部署插件。").arg(plugin));return false;}
     auto env=QProcessEnvironment::systemEnvironment();
     for(const auto&key:{"QT_QPA_PLATFORM","QT_QPA_PLATFORM_PLUGIN_PATH","QT_PLUGIN_PATH","PYTHONHOME","PYTHONPATH"})env.remove(key);
     env.insert("PATH",QDir::toNativeSeparators(QFileInfo(exe).absolutePath())+";"+env.value("PATH"));
@@ -168,7 +238,7 @@ bool SysplorerRunner::launchHost(){
     hostWork.setAutoRemove(false);const auto work=hostWork.path();
     QProcess process;process.setProcessEnvironment(env);process.setProgram(exe);
     process.setArguments({"-d",work,"-w",work});process.setWorkingDirectory(work);
-    if(!process.startDetached(&m_launchedPid)){fail(QString::fromUtf8("无法启动 Sysplorer：%1").arg(process.errorString()));return false;}
+    if(!process.startDetached(&m_launchedPid)){connectionFailed("HOST_START_FAILED",QString::fromUtf8("无法启动 Sysplorer：%1").arg(process.errorString()));return false;}
     m_launched=true;trace("launched",{{"pid",double(m_launchedPid)},{"workDir",work}});return true;
 }
 void SysplorerRunner::send(const QString&command,const QJsonObject&args){
@@ -177,20 +247,38 @@ void SysplorerRunner::send(const QString&command,const QJsonObject&args){
     QJsonObject r{{"schema",1},{"id",m_pendingId},{"session",m_session},{"token",m_token},{"client",m_clientId},
         {"taskId",m_taskId},{"command",command},{"args",args}};
     m_pending=QJsonDocument(r).toJson(QJsonDocument::Compact);m_attempts=1;m_pendingClock.start();
-    m_socket.writeDatagram(m_pending,QHostAddress::LocalHost,m_port);
+    transmitPending();
     if(command!="poll")trace("send",{{"command",command},{"id",m_pendingId}});
 }
 void SysplorerRunner::pump(){
     if(!m_busy&&!m_connectOnly)return;
+    if(m_remote){
+        if(m_remoteLost||m_phase=="DownloadFailed")return;
+        if(!m_link){openRemote();return;}
+        if(!m_link->isReady())return;
+        if(!m_pending.isEmpty()){
+            if(m_pendingClock.elapsed()>10000){
+                if(m_attempts>=3){remoteProblem(QString::fromUtf8("远程请求超时，原任务状态待核对。"));return;}
+                ++m_attempts;m_pendingClock.restart();transmitPending();
+            }return;
+        }
+        if(m_connectOnly||!m_begun){
+            if(m_clock.elapsed()>m_hostTimeoutMs){connectionFailed("HOST_NOT_READY_TIMEOUT",QString::fromUtf8("远程 Sysplorer 就绪等待超时。"));return;}
+            send("hello");return;
+        }
+        if(m_downloading){nextDownload();return;}
+        if(m_phase=="Translating"&&m_phaseClock.elapsed()>300000){fail(QString::fromUtf8("模型翻译超时。"));return;}
+        if(!m_control.isEmpty()){
+            auto cmd=m_control;m_control.clear();send(cmd,cmd=="tune"?m_tuneArgs:(cmd=="speed"||cmd=="start")?QJsonObject{{"speed",m_speed}}:QJsonObject{});return;
+        }
+        send("poll",{{"cursor",m_cursor}});return;
+    }
     if(m_connectOnly){
         if(!m_pending.isEmpty()){
             if(m_pendingClock.elapsed()>3000){m_pending.clear();m_port=0;}
             else return;
         }
-        if(m_clock.elapsed()>m_hostTimeoutMs&&!m_connectionWarned){
-            m_connectionWarned=true;m_launchedPid=0;
-            emit hostConnectionFailed(QString::fromUtf8("未能打开 Sysplorer，请自行启动。"));
-        }
+        if(m_clock.elapsed()>m_hostTimeoutMs){connectionFailed("HOST_NOT_READY_TIMEOUT",QString::fromUtf8("等待本机 Sysplorer 就绪超时，请检查宿主初始化或插件状态。"));return;}
         if(discover())return;
         if(!m_autoAttempted){m_autoAttempted=true;launchHost();}
         return;
@@ -203,11 +291,11 @@ void SysplorerRunner::pump(){
         }return;
     }
     if(!m_port){
-        if(m_clock.elapsed()>m_hostTimeoutMs){fail(QString::fromUtf8("Sysplorer 插件连接超时，请检查插件部署与启动日志。"));return;}
+        if(m_clock.elapsed()>m_hostTimeoutMs){connectionFailed("HOST_NOT_READY_TIMEOUT",QString::fromUtf8("Sysplorer 插件连接超时，请检查插件部署与启动日志。"));return;}
         if(!discover()&&!m_launched)launchHost();return;
     }
     if(!m_begun){
-        if(m_clock.elapsed()>m_hostTimeoutMs){fail(QString::fromUtf8("Sysplorer 尚未就绪，请查看宿主输出。"));return;}
+        if(m_clock.elapsed()>m_hostTimeoutMs){connectionFailed("HOST_NOT_READY_TIMEOUT",QString::fromUtf8("Sysplorer 尚未就绪，请查看宿主输出。"));return;}
         send("hello");return;
     }
     if(m_phase=="Translating"&&m_phaseClock.elapsed()>300000){fail(QString::fromUtf8("模型翻译超时。"));return;}
@@ -219,79 +307,73 @@ void SysplorerRunner::pump(){
 }
 void SysplorerRunner::receive(){
     while(m_socket.hasPendingDatagrams()){
-        auto d=m_socket.receiveDatagram(16384);
-        if((!m_busy&&!m_connectOnly)||m_pending.isEmpty()||d.senderAddress()!=QHostAddress::LocalHost||d.senderPort()!=m_port)continue;
-        auto r=QJsonDocument::fromJson(d.data()).object();
-        if(r["schema"].toInt()!=1||r["id"].toString()!=m_pendingId||r["session"].toString()!=m_session
-            ||r["taskId"].toString()!=m_taskId)continue;
-        const auto cmd=m_pendingCommand;m_pending.clear();m_pendingCommand.clear();
-        if(m_connectOnly){
-            if(r["ok"].toBool()&&r["ready"].toBool()){
-                const auto hostPhase=r["status"].toObject()["phase"].toString();
-                if(!r["modelLifecycle"].toBool()||r["modelHash"].toString()!=modelFingerprint()){
-                    fail(QString::fromUtf8("宿主插件缺少独立加载/翻译能力，或模型版本不一致；请更新配套插件。"));m_port=0;continue;
-                }
-                if(r["controllerState"].toString()!="Idle"||(hostPhase!="Ready"&&hostPhase!="Loaded"&&hostPhase!="Completed"&&hostPhase!="Stopped"&&hostPhase!="Failed")){
-                    fail(QString::fromUtf8("Sysplorer 正被其他任务占用，未接管该任务。"));m_port=0;continue;
-                }
-                m_modelLoaded=r["modelLoaded"].toBool();m_connectOnly=false;m_timer.stop();setPhase("Connected");
-            }else m_port=0;
-            continue;
+        const auto d=m_socket.receiveDatagram(16384);
+        if(m_remote||(!m_busy&&!m_connectOnly)||m_pending.isEmpty()||d.senderAddress()!=QHostAddress::LocalHost||d.senderPort()!=m_port)continue;
+        handleResponse(QJsonDocument::fromJson(d.data()).object());
+    }
+}
+void SysplorerRunner::handleResponse(const QJsonObject& r){
+    if(m_pending.isEmpty())return;
+    if(r["schema"].toInt()!=1||r["id"].toString()!=m_pendingId||r["session"].toString()!=m_session
+        ||r["taskId"].toString()!=m_taskId)return;
+    const auto cmd=m_pendingCommand;m_pending.clear();m_pendingCommand.clear();
+    if(cmd=="download"){consumeDownload(r);return;}
+    if(m_connectOnly){
+        if(r["ok"].toBool()&&r["ready"].toBool()){
+            const auto hostPhase=r["status"].toObject()["phase"].toString();
+            if(!checkCompatibility(r))return;
+            if(r["controllerState"].toString()!="Idle"||(hostPhase!="Ready"&&hostPhase!="Loaded"&&hostPhase!="Completed"&&hostPhase!="Stopped"&&hostPhase!="Failed")){
+                connectionFailed("HOST_BUSY",QString::fromUtf8("Sysplorer 正被其他任务占用，未接管该任务。"));return;
+            }
+            m_modelLoaded=r["modelLoaded"].toBool();m_connectOnly=false;m_timer.stop();m_connectionWarned=false;setPhase("Connected");emit connectionInfoChanged(connectionLabel());
+        }else if(!r["ok"].toBool()&&r["code"].toString()!="HOST_STARTING")connectionFailed("HELLO_REJECTED",QString::fromUtf8("宿主拒绝连接查询：%1 %2").arg(r["code"].toString(),r["message"].toString()));
+        return;
+    }
+    if(!r["ok"].toBool()){
+        auto code=r["code"].toString();
+        if((cmd=="hello"||cmd=="begin"||cmd=="load"||cmd=="translate")&&code=="HOST_STARTING")return;
+        if(cmd=="hello"){connectionFailed("HELLO_REJECTED",QString::fromUtf8("宿主拒绝连接查询：%1 %2").arg(code,r["message"].toString()));return;}
+        if(cmd=="tune"){m_tunePending=false;emit tuneRejected(r["message"].toString());emit stateChanged(m_phase);return;}
+        fail(QString::fromUtf8("Sysplorer 操作 %1 失败：%2。任务 %3；日志 %4/client.log").arg(cmd,code+": "+r["message"].toString(),m_taskId,m_jobDir));return;
+    }
+    if(cmd=="hello"){
+        if(r["ready"].toBool()&&!checkCompatibility(r))return;
+        const auto st=r["status"].toObject();
+        const auto p=st["phase"].toString();
+        const bool idlePhase=p=="Ready"||p=="Loaded"||p=="Completed"||p=="Stopped"||p=="Failed";
+        // A bound plugin can still be initializing. Wait on this instance
+        // instead of classifying initialization as another client's task.
+        if(idlePhase&&r["controllerState"].toString()=="Idle"&&!r["ready"].toBool())return;
+        if((p!="Ready"&&p!="Loaded"&&p!="Completed"&&p!="Stopped"&&p!="Failed")||r["controllerState"].toString()!="Idle"
+            ||(!m_remote&&!m_launchedPid&&(p=="Failed"||!r["ready"].toBool()))){
+            if(m_remote||m_launchedPid){connectionFailed("HOST_BUSY",m_remote?QString::fromUtf8("远程 Sysplorer 正被其他任务占用，未接管该任务。")
+                :QString::fromUtf8("新启动的 Sysplorer 求解器仍被占用，请查看宿主任务。"));return;}
+            trace("host_busy_skipped",{{"pid",double(m_hostPid)},{"phase",p},{"controllerState",r["controllerState"]}});
+            m_busyHosts.insert(m_hostPid);m_port=0;m_hostPid=0;m_session.clear();m_token.clear();
+            // Keep the other client's simulation intact. Discovery tries
+            // other hosts, then starts one dedicated instance if needed.
+            return;
         }
-        if(!r["ok"].toBool()){
-            auto code=r["code"].toString();
-            if((cmd=="begin"||cmd=="load"||cmd=="translate")&&code=="HOST_STARTING")continue;
-            if(cmd=="tune"){m_tunePending=false;emit tuneRejected(r["message"].toString());emit stateChanged(m_phase);continue;}
-            fail(QString::fromUtf8("Sysplorer 操作 %1 失败：%2。任务 %3；日志 %4/client.log").arg(cmd,code+": "+r["message"].toString(),m_taskId,m_jobDir));continue;
+        if(!r["ready"].toBool())return;
+        m_modelLoaded=r["modelLoaded"].toBool();
+        send(m_loadOnly?"load":"translate",{{"modelHash",m_modelHash},{"mode",m_mode},{"voltage",m_voltage},{"current",m_current},
+            {"soc0",m_soc0},{"duration",m_duration},{"speed",m_speed}});
+    }else{
+        if(cmd=="discard"){
+            m_busy=false;m_timer.stop();m_begun=false;setPhase("Connected");return;
         }
-        if(cmd=="hello"){
-            if(!r["splitLifecycle"].toBool()||!r["modelLifecycle"].toBool()){
-                fail(QString::fromUtf8("宿主插件版本过旧，请部署支持独立加载／翻译／开始的新插件。"));continue;
-            }
-            if(r["modelHash"].toString()!=m_modelHash){
-                trace("host_model_mismatch",{{"pid",double(m_hostPid)},{"expected",m_modelHash},{"actual",r["modelHash"]}});
-                if(m_launchedPid){
-                    fail(QString::fromUtf8("所配置宿主的插件模型版本不一致。宿主：%1；客户端模型：%2；宿主模型：%3。请更新隔离测试包，日志：%4/client.log")
-                        .arg(guiExecutable(),m_modelHash,r["modelHash"].toString(),m_jobDir));
-                }else{
-                    m_busyHosts.insert(m_hostPid);m_port=0;m_hostPid=0;m_session.clear();m_token.clear();
-                }
-                continue;
-            }
-            const auto st=r["status"].toObject();
-            const auto p=st["phase"].toString();
-            const bool idlePhase=p=="Ready"||p=="Loaded"||p=="Completed"||p=="Stopped"||p=="Failed";
-            // A bound plugin can still be initializing. Wait on this instance
-            // instead of classifying initialization as another client's task.
-            if(idlePhase&&r["controllerState"].toString()=="Idle"&&!r["ready"].toBool())continue;
-            if((p!="Ready"&&p!="Loaded"&&p!="Completed"&&p!="Stopped"&&p!="Failed")||r["controllerState"].toString()!="Idle"
-                ||(!m_launchedPid&&(p=="Failed"||!r["ready"].toBool()))){
-                if(m_launchedPid){fail(QString::fromUtf8("新启动的 Sysplorer 求解器仍被占用，请查看宿主任务。"));continue;}
-                trace("host_busy_skipped",{{"pid",double(m_hostPid)},{"phase",p},{"controllerState",r["controllerState"]}});
-                m_busyHosts.insert(m_hostPid);m_port=0;m_hostPid=0;m_session.clear();m_token.clear();
-                // Keep the other client's simulation intact. Discovery tries
-                // other hosts, then starts one dedicated instance if needed.
-                continue;
-            }
-            if(!r["ready"].toBool())continue;
-            m_modelLoaded=r["modelLoaded"].toBool();
-            send(m_loadOnly?"load":"translate",{{"modelHash",m_modelHash},{"mode",m_mode},{"voltage",m_voltage},{"current",m_current},
-                {"soc0",m_soc0},{"duration",m_duration},{"speed",m_speed}});
-        }else{
-            if(cmd=="discard"){
-                m_busy=false;m_timer.stop();m_begun=false;setPhase("Connected");continue;
-            }
-            if(cmd=="begin"||cmd=="load"||cmd=="translate")m_begun=true;
-            consume(r["status"].toObject());
-            if(m_busy)emit stateChanged(m_phase);
-        }
+        if(cmd=="begin"||cmd=="load"||cmd=="translate")m_begun=true;
+        consume(r["status"].toObject());
+        if(m_busy)emit stateChanged(m_phase);
     }
 }
 void SysplorerRunner::consume(const QJsonObject&s){
     if(s["taskId"].toString()!=m_taskId||s["owner"].toString()!=m_clientId||s["modelHash"].toString()!=m_modelHash){
         fail(QString::fromUtf8("收到不属于本次任务的结果。"));return;
     }
-    if(!s["jobDir"].toString().isEmpty())m_jobDir=s["jobDir"].toString();
+    if(!s["jobDir"].toString().isEmpty()){
+        if(m_remote)m_serverJobDir=s["jobDir"].toString();else m_jobDir=s["jobDir"].toString();
+    }
     const auto p=s["params"].toObject();
     const auto history=s["tuneHistory"].toArray();
     if(history.size()>m_tuneSequence){
@@ -326,7 +408,44 @@ void SysplorerRunner::consume(const QJsonObject&s){
     if(phase=="Failed"){fail(s["stage"].toString()+" · "+s["code"].toString()+": "+s["message"].toString());return;}
     if((phase=="Completed"||phase=="Stopped")&&m_cursor>=s["total"].toInt())finalize(s);
 }
+
+bool SysplorerRunner::checkCompatibility(const QJsonObject& response){
+    QStringList missing;QJsonArray fields;
+    for(const auto name:{"modelLifecycle","splitLifecycle"})if(!response[name].toBool()){missing<<QString::fromLatin1(name);fields.append(QString::fromLatin1(name));}
+    const auto expected=m_modelHash.isEmpty()?modelFingerprint():m_modelHash,actual=response["modelHash"].toString();
+    QStringList reasons;
+    if(!missing.isEmpty())reasons<<QString::fromUtf8("缺少插件能力：%1（要求为 true）").arg(missing.join(", "));
+    if(actual!=expected)reasons<<QString::fromUtf8("模型不匹配：期望 %1；实际 %2").arg(expected,actual.isEmpty()?QString::fromUtf8("未返回模型哈希"):actual);
+    if(reasons.isEmpty())return true;
+    QJsonObject details{{"missingCapabilities",fields},{"expectedModelHash",expected},{"actualModelHash",actual}};
+    QString target;
+    if(!m_remote){
+        const auto plugin=localPluginDetails(m_hostPid,guiExecutable());
+        for(auto it=plugin.begin();it!=plugin.end();++it)details.insert(it.key(),it.value());
+        target=QString::fromUtf8("\n目标本机宿主（PID %1）：%2\n%3：%4")
+            .arg(m_hostPid).arg(QDir::toNativeSeparators(guiExecutable()))
+            .arg(plugin["pluginPathFromProcess"].toBool()?QString::fromUtf8("进程已加载插件"):QString::fromUtf8("预期插件路径"))
+            .arg(plugin["pluginPath"].toString());
+    }
+    connectionFailed(missing.isEmpty()?"MODEL_MISMATCH":"CAPABILITY_MISMATCH",
+        QString::fromUtf8("连接失败：宿主插件不兼容。\n%1%2\n请退出目标安装目录下全部 Sysplorer，使用配套服务器包中的 Update-Plugin.ps1 同步 DLL，再重新连接。").arg(reasons.join("\n"),target),details);
+    return false;
+}
+void SysplorerRunner::connectionFailed(const QString& code,const QString& message,const QJsonObject& details){
+    if(m_phase=="ConnectionFailed")return;
+    const bool task=m_busy;auto diagnostic=details;
+    diagnostic["code"]=code;diagnostic["message"]=message;diagnostic["mode"]=m_remote?"remote":"local";
+    diagnostic["hostExecutable"]=m_remote?QString():guiExecutable();diagnostic["hostPid"]=double(m_hostPid);
+    diagnostic["address"]=m_remote?m_remoteAddress:QString("127.0.0.1");diagnostic["port"]=m_port;
+    trace("connection_failed",diagnostic);
+    m_timer.stop();m_busy=false;m_connectOnly=false;m_begun=false;m_modelLoaded=false;
+    m_pending.clear();m_pendingCommand.clear();m_pendingId.clear();m_control.clear();m_tunePending=false;
+    m_remoteLost=m_remote;m_resumePhase.clear();m_port=0;m_session.clear();m_token.clear();closeRemote();
+    setPhase("ConnectionFailed");m_log.close();emit connectionInfoChanged(connectionLabel());
+    if(task)emit finished(false,{},message);else emit hostConnectionFailed(message);
+}
 void SysplorerRunner::finalize(const QJsonObject&s){
+    if(m_remote&&!m_downloadReady){if(!m_downloading)beginDownload(s);return;}
     QFile manifest(m_jobDir+"/result.json"),csv(m_jobDir+"/result.csv");
     if(!manifest.open(QIODevice::ReadOnly)||!csv.open(QIODevice::ReadOnly)){fail(QString::fromUtf8("本次结果文件缺失。"));return;}
     auto j=QJsonDocument::fromJson(manifest.readAll()).object();auto bytes=csv.readAll();
@@ -356,6 +475,7 @@ void SysplorerRunner::finalize(const QJsonObject&s){
         fail(QString::fromUtf8("结果起点或完成时间不一致。"));return;
     }
     m_busy=false;m_timer.stop();m_control.clear();
+    if(m_remote)setPhase(complete?"Completed":"Stopped");
     const auto message=s["viewerMessage"].toString();trace("verified",{{"complete",complete},{"points",parsed.size()},{"lastTime",parsed.duration()}});
     m_log.close();
     if(complete)emit finished(true,m_jobDir+"/result.csv",message);
@@ -366,6 +486,7 @@ void SysplorerRunner::bestEffortStop(){
     const QJsonObject r{{"schema",1},{"id",uid()},{"session",m_session},{"token",m_token},{"client",m_clientId},
         {"taskId",m_taskId},{"command",m_phase=="Prepared"?"discard":"stop"},{"args",QJsonObject{}}};
     auto bytes=QJsonDocument(r).toJson(QJsonDocument::Compact);
+    if(m_remote){if(m_link&&m_link->isReady())m_link->send(r);return;}
     for(int n=0;n<3;++n)m_socket.writeDatagram(bytes,QHostAddress::LocalHost,m_port);
 }
 void SysplorerRunner::fail(const QString&message){
@@ -377,9 +498,8 @@ void SysplorerRunner::fail(const QString&message){
             m_jobDir=fallback;m_log.setFileName(fallback+"/client.log");m_log.open(QIODevice::WriteOnly|QIODevice::Append);
         }
     }
-    if(m_connectOnly){
-        if(!m_connectionWarned){m_connectionWarned=true;trace("connection_failed",{{"message",message}});emit hostConnectionFailed(QString::fromUtf8("未能打开 Sysplorer，请自行启动。\n%1").arg(message));}
-        return;
+    if(m_connectOnly||(!m_begun&&m_phase=="Connecting"&&(m_pending.isEmpty()||m_pendingCommand=="hello"))){
+        connectionFailed("CONNECTION_FAILED",message);return;
     }
     if(!m_busy)return;trace("failed",{{"message",message}});bestEffortStop();m_busy=false;m_timer.stop();
     m_modelLoaded=false;m_pending.clear();m_control.clear();m_tunePending=false;setPhase("Failed");m_log.close();
@@ -395,4 +515,142 @@ void SysplorerRunner::stop(){if(m_busy&&(m_phase=="Running"||m_phase=="Paused"||
 void SysplorerRunner::setSpeed(double s){
     if(!std::isfinite(s)||s<.5||s>60)return;m_speed=s;
     if(m_busy&&m_begun&&(m_phase=="Running"||m_phase=="Paused")&&m_control.isEmpty())m_control="speed";
+}
+
+QString SysplorerRunner::connectionLabel() const {
+    if(m_phase=="ConnectionFailed")return m_remote?QString::fromUtf8("远程 %1:%2 · 连接失败").arg(m_remoteAddress).arg(m_remotePort):QString::fromUtf8("本机模式 · 连接失败");
+    if(!m_remote)return m_phase=="Idle"?QString::fromUtf8("本机模式 · 未连接，操作时按需启动"):
+        (m_connectOnly?QString::fromUtf8("本机模式 · 正在连接 Sysplorer"):QString::fromUtf8("本机模式 · 按需连接 Sysplorer"));
+    return QString::fromUtf8("远程 %1:%2 · %3").arg(m_remoteAddress).arg(m_remotePort)
+        .arg(m_remoteLost?QString::fromUtf8("连接中断，任务状态待确认"):(m_link&&m_link->isReady()?QString::fromUtf8("已认证连接"):QString::fromUtf8("未连接")));
+}
+bool SysplorerRunner::configureConnection(bool remote,const QString& address,int port,const QString& key,bool persist){
+    const auto chosenKey=key.isEmpty()?m_accessKey:key;
+    if(m_busy||port<1||port>65535||(remote&&(address.trimmed().isEmpty()||chosenKey.size()<32)))return false;
+    const auto protectedKey=!persist||chosenKey.isEmpty()?QByteArray():protectKey(chosenKey.toUtf8(),true);
+    if(persist&&!chosenKey.isEmpty()&&protectedKey.isEmpty())return false;
+    m_timer.stop();closeRemote();m_connectOnly=false;m_pending.clear();m_pendingCommand.clear();m_control.clear();m_session.clear();
+    m_remote=remote;m_remoteAddress=address.trimmed();m_remotePort=quint16(port);m_accessKey=chosenKey;m_remoteLost=false;m_modelLoaded=false;
+    if(persist){
+        QSettings saved(QSettings::IniFormat,QSettings::UserScope,"BatteryConsole","RemoteConnection");
+        saved.setValue("Configured",true);saved.setValue("Remote",remote);saved.setValue("Address",m_remoteAddress);saved.setValue("Port",port);
+        saved.setValue("ProtectedKey",protectedKey.toBase64());saved.sync();if(saved.status()!=QSettings::NoError)return false;
+    }
+    m_phase="Idle";emit connectionInfoChanged(connectionLabel());return true;
+}
+void SysplorerRunner::closeRemote(bool graceful){
+    m_closingRemote=true;
+    if(m_link){
+        auto link=m_link.data();m_link=nullptr;disconnect(link,nullptr,this,nullptr);
+        if(graceful&&link->socket()->state()==QAbstractSocket::ConnectedState){
+            link->socket()->disconnectFromHost();
+            if(link->socket()->state()!=QAbstractSocket::UnconnectedState)link->socket()->waitForDisconnected(150);
+        }else link->socket()->abort();
+        link->deleteLater();
+    }
+    m_closingRemote=false;
+}
+void SysplorerRunner::openRemote(){
+    if(m_link||m_remoteLost)return;
+    if(m_remoteAddress.isEmpty()||m_accessKey.size()<32){remoteProblem(QString::fromUtf8("请在连接设置中填写服务器地址、端口，以及至少 32 个字符的访问凭据。"));return;}
+    auto socket=new QTcpSocket;auto link=new RemoteLink(socket,false,m_accessKey,m_clientId,QString(),this);m_link=link;m_port=m_remotePort;
+    connect(socket,&QTcpSocket::connected,link,&RemoteLink::start);
+    connect(link,&RemoteLink::ready,this,[this,link]{
+        if(m_link!=link)return;
+        if(m_busy&&!m_session.isEmpty()&&m_session!=link->session()){
+            // The original host was restarted: never send old controls to its new session.
+            m_begun=false;fail(QString::fromUtf8("远程 Sysplorer 会话已更换，原任务无法恢复。请确认服务器结果后重新开始。"));closeRemote();return;
+        }
+        m_session=link->session();m_token.clear();m_port=m_remotePort;m_remoteLost=false;m_connectionWarned=false;
+        emit connectionInfoChanged(connectionLabel());
+        if(m_busy&&!m_resumePhase.isEmpty()){
+            // Poll first on an empty queue; a pending request retains its original id and bytes.
+            m_phase="Reconnecting";emit stateChanged(m_phase);m_resumePhase.clear();
+        }
+        if(!m_pending.isEmpty()){m_attempts=1;m_pendingClock.restart();transmitPending();}
+        m_timer.start();pump();
+    });
+    connect(link,&RemoteLink::message,this,&SysplorerRunner::handleResponse);
+    connect(link,&RemoteLink::failed,this,[this,link](const QString& reason){if(m_link==link)remoteProblem(reason);});
+    connect(link,&RemoteLink::disconnected,this,[this,link]{if(m_link==link)remoteProblem(QString::fromUtf8("远程连接已关闭，请检查 Sysplorer、网络和双方访问凭据。"));});
+    socket->connectToHost(m_remoteAddress,m_remotePort);
+    QTimer::singleShot(10000,link,[this,link]{if(m_link==link&&!link->isReady())remoteProblem(QString::fromUtf8("远程连接或认证超时。"));});
+    emit connectionInfoChanged(connectionLabel());
+}
+void SysplorerRunner::remoteProblem(const QString& reason){
+    if(m_closingRemote||m_remoteLost||m_phase=="ConnectionFailed")return;
+    const bool establishing=!m_begun&&(m_pending.isEmpty()||m_pendingCommand=="hello");
+    if(!m_busy||establishing){
+        QString detail=reason;
+        if(reason=="AUTH_CONNECTION_CLOSED")detail=QString::fromUtf8("服务器在认证完成前关闭连接。请在连接设置中重新填写该服务器原 access-key.txt 中的访问凭据；留空会继续复用已保存的旧值。若凭据确认无误，再检查服务器认证日志和网络。");
+        else if(reason=="AUTH_FAILED")detail=QString::fromUtf8("访问凭据校验失败。请重新填写该服务器原 access-key.txt 中的凭据；留空会继续使用已保存的值。");
+        else if(reason=="CLOSED_BEFORE_CHALLENGE")detail=QString::fromUtf8("服务器在发送认证挑战前关闭连接。请核对 IP、端口及目标服务是否为配套 Sysplorer 插件。");
+        connectionFailed(reason.contains("AUTH")?"AUTH_FAILED":"TRANSPORT_FAILED",QString::fromUtf8("远程连接失败：%1").arg(detail));return;
+    }
+    m_timer.stop();
+    trace("remote_disconnected",{{"message",reason}});
+    m_resumePhase=m_phase;m_remoteLost=true;setPhase("ConnectionLost");
+    emit remoteNotice(QString::fromUtf8("远程连接中断：%1。原任务状态待确认，未重新启动仿真。请重连；服务器运行任务失联超过 15 秒时会请求暂停。").arg(reason));
+    closeRemote();emit connectionInfoChanged(connectionLabel());
+}
+void SysplorerRunner::reconnectRemote(){
+    if(!m_remote)return;
+    if(!m_busy){connectHost();return;}
+    m_remoteLost=false;closeRemote();m_clock.restart();setPhase("Reconnecting");openRemote();
+}
+void SysplorerRunner::abandonRemoteTask(){
+    if(!m_remote||(!m_remoteLost&&m_phase!="DownloadFailed"))return;
+    m_busy=false;m_connectOnly=false;m_begun=false;m_timer.stop();m_pending.clear();m_pendingCommand.clear();m_control.clear();
+    m_downloading=false;m_downloadFile.reset();closeRemote();m_remoteLost=false;m_modelLoaded=false;m_log.close();setPhase("Disconnected");
+    emit finished(false,{},QString::fromUtf8("已结束本次远程任务跟踪；服务器任务未被重新启动或强制停止。"));
+}
+void SysplorerRunner::transmitPending(){
+    if(m_remote){if(m_link&&m_link->isReady())m_link->send(QJsonDocument::fromJson(m_pending).object());}
+    else m_socket.writeDatagram(m_pending,QHostAddress::LocalHost,m_port);
+}
+void SysplorerRunner::beginDownload(const QJsonObject& status){
+    m_finalStatus=status;m_downloading=true;m_downloadReady=false;m_downloadIndex=0;m_downloadOffset=0;m_downloadSize=-1;m_downloadFile.reset();
+    trace("download_started",{{"serverDirectory",m_serverJobDir},{"localDirectory",m_jobDir}});
+    setPhase("Downloading");m_timer.start();nextDownload();
+}
+void SysplorerRunner::retryDownload(){
+    if(!canRetryDownload())return;
+    if(!m_link||!m_link->isReady()){m_resumePhase="Downloading";m_remoteLost=true;reconnectRemote();return;}
+    m_pending.clear();m_pendingCommand.clear();beginDownload(m_finalStatus);
+}
+void SysplorerRunner::nextDownload(){
+    if(!m_downloading||!m_pending.isEmpty())return;
+    if(m_downloadIndex>=2){m_downloading=false;m_downloadReady=true;finalize(m_finalStatus);return;}
+    const auto name=m_downloadIndex==0?QString("result.json"):QString("result.csv");
+    if(!m_downloadFile){
+        m_downloadFile.reset(new QSaveFile(m_jobDir+"/"+name));
+        if(!m_downloadFile->open(QIODevice::WriteOnly)){downloadProblem(QString::fromUtf8("无法写入本机结果目录：%1").arg(m_jobDir));return;}
+    }
+    send("download",{{"file",name},{"offset",double(m_downloadOffset)}});
+}
+void SysplorerRunner::consumeDownload(const QJsonObject& response){
+    if(!m_downloading)return;
+    setPhase("Downloading");
+    if(!response["ok"].toBool()){downloadProblem(response["code"].toString());return;}
+    const auto name=m_downloadIndex==0?QString("result.json"):QString("result.csv");
+    const double size=response["size"].toDouble(-1),offset=response["offset"].toDouble(-1);
+    const auto encoded=response["data"].toString().toLatin1();const auto bytes=QByteArray::fromBase64(encoded);
+    if(response["file"].toString()!=name||offset!=m_downloadOffset||!std::isfinite(size)||size<1||size>128*1024*1024||size!=std::floor(size)
+        ||(m_downloadSize>=0&&size!=m_downloadSize)||bytes.size()>48*1024||bytes.toBase64()!=encoded||hash(bytes)!=response["chunkHash"].toString()
+        ||m_downloadOffset+bytes.size()>size||(!response["eof"].toBool()&&bytes.isEmpty())){
+        downloadProblem(QString::fromUtf8("结果分块的标识、大小或哈希无效。"));return;
+    }
+    m_downloadSize=qint64(size);
+    if(!m_downloadFile||m_downloadFile->write(bytes)!=bytes.size()){downloadProblem(QString::fromUtf8("本机结果写入失败。"));return;}
+    m_downloadOffset+=bytes.size();emit downloadProgress(m_downloadOffset,m_downloadSize);
+    if(response["eof"].toBool()){
+        if(m_downloadOffset!=m_downloadSize||!m_downloadFile->commit()){downloadProblem(QString::fromUtf8("结果下载不完整或保存失败。"));return;}
+        m_downloadFile.reset();++m_downloadIndex;m_downloadOffset=0;m_downloadSize=-1;
+    }
+    nextDownload();
+}
+void SysplorerRunner::downloadProblem(const QString& reason){
+    trace("download_failed",{{"message",reason}});
+    m_timer.stop();m_downloading=false;m_downloadFile.reset();m_pending.clear();m_pendingCommand.clear();setPhase("DownloadFailed");
+    emit remoteNotice(QString::fromUtf8("仿真已结束，结果下载失败：%1。可重试下载，无需重新仿真。").arg(reason));
 }

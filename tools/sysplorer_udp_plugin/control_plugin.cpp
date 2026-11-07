@@ -1,4 +1,6 @@
 #include "control_plugin.h"
+#include "task_status_compat.h"
+#include "remote_server.h"
 #include <mw_develop/mw_app.h>
 #include <mw_develop/mw_workbench.h>
 #include <mw_develop/mw_workbench_core.h>
@@ -72,7 +74,7 @@ bool BatteryUdpControl::initialize(QString*) {
     QFile model(":/battery/BatterySim.mo");
     if(!model.open(QIODevice::ReadOnly)) return false;
     const auto bytes=model.readAll();modelText=QString::fromUtf8(bytes);modelHash=digest(bytes);
-    const auto root=QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)+"/BatteryConsole/udp";
+    const auto root=qEnvironmentVariable("BATTERY_DISCOVERY_DIR",QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)+"/BatteryConsole/udp");
     QDir().mkpath(root);endpoint=root+"/"+QString::number(QCoreApplication::applicationPid())+".json";
     socket=new QUdpSocket(this);
     if(!socket->bind(QHostAddress::LocalHost,0,QUdpSocket::DontShareAddress)) return false;
@@ -80,6 +82,9 @@ bool BatteryUdpControl::initialize(QString*) {
     advertiseTimer.setInterval(2000);
     connect(&advertiseTimer,&QTimer::timeout,this,&BatteryUdpControl::advertise);advertiseTimer.start();
     collectTimer.setInterval(100);connect(&collectTimer,&QTimer::timeout,this,&BatteryUdpControl::collect);
+    remote=new RemoteServer(this);
+    connect(remote,&RemoteServer::request,this,&BatteryUdpControl::receiveRemote);
+    remote->start(qEnvironmentVariable("BATTERY_REMOTE_CONFIG",QCoreApplication::applicationDirPath()+"/addins/BatteryUdpControl/remote.ini"),session);
     advertise();return true;
 }
 void BatteryUdpControl::extensionsInitialized() {
@@ -88,6 +93,7 @@ void BatteryUdpControl::extensionsInitialized() {
 MwPlugin::ShutdownFlag BatteryUdpControl::aboutToShutdown() {
     shutdown=true;advertiseTimer.stop();collectTimer.stop();
     if(socket)socket->close();
+    if(remote)remote->close();
     if(!endpoint.isEmpty())QFile::remove(endpoint);
     if(listenerAttached && control) static_cast<MwSimControl*>(control.data())->GetAniService()->RemoveListener(&listener);
     return SynchronousShutdown;
@@ -136,6 +142,14 @@ QString BatteryUdpControl::controllerState() const {
 bool BatteryUdpControl::ownsController() const {
     return control&&data&&get<MwSimData*>(control.data(),L"mw_sim_inst.dll","?GetSimData@MwSimControl@@QEBAPEAVMwSimData@@XZ")==data.data();
 }
+bool BatteryUdpControl::hostTaskRunning() const {
+    auto app=MwAppPtr;
+    require(app&&app->GetTaskManager(),"HOST_TASK_MANAGER_UNAVAILABLE");
+    // Prefer the original API; otherwise use the SDK's running-task getter.
+    // Unknown hosts remain blocked rather than being assumed idle.
+    const auto module=GetModuleHandleW(L"mw_global.dll");
+    return batteryHostTaskRunning(app->GetTaskManager(),[module](const char* name){return GetProcAddress(module,name);});
+}
 void BatteryUdpControl::advertise() {
     if(shutdown)return;
     QString error;const bool bound=bindHost(error);
@@ -163,7 +177,7 @@ QJsonObject BatteryUdpControl::snapshot(int cursor) const {
 }
 void BatteryUdpControl::beginTask(const QJsonObject &a,const QString &client,const QString &id,bool loadOnly) {
     require(!active()&&controllerState()=="Idle","HOST_BUSY");
-    auto app=MwAppPtr;require(app&&app->GetTaskManager()&&!app->GetTaskManager()->IsRunning(),"HOST_STARTING");
+    auto app=MwAppPtr;require(app&&!hostTaskRunning(),"HOST_STARTING");
     require(!QUuid(id).isNull(),"Invalid task identifier");
     require(a.value("modelHash").toString()==modelHash,"MODEL_MISMATCH");
     auto v=a["voltage"].toDouble(loadOnly?3.45:-1),i=a["current"].toDouble(loadOnly?2.5:-1),s=a["soc0"].toDouble(loadOnly?.5:-1);
@@ -176,7 +190,7 @@ void BatteryUdpControl::beginTask(const QJsonObject &a,const QString &client,con
     pendingTune={};tuneHistory={};resumeAfterTune=false;tuneAwaitingSample=false;tuneBoundary={};
     runtimeParams={{"current",current},{"voltage",voltage},{"mode",mode},
         {"vMin",mode==2?voltage:2.5},{"vMax",mode==1?voltage:3.45},{"iMax",5.0}};
-    QString base=qEnvironmentVariable("BATTERY_SIM_WORKSPACE",QDir::tempPath()+"/BatteryConsoleUDP");
+    QString base=qEnvironmentVariable("BATTERY_SIM_WORKSPACE",remote&&remote->isListening()&&!remote->workspace().isEmpty()?remote->workspace():QDir::tempPath()+"/BatteryConsoleUDP");
     for(QChar c:base)require(c.unicode()<128,"ASCII_WORKSPACE_REQUIRED");
     jobDir=QDir(base).absoluteFilePath(taskId);require(QDir().mkpath(jobDir),"Cannot create task directory");
     stage=QString::fromUtf8("加载模型");taskClock.start();lastClientMs=heartbeat.elapsed();persist();log("accepted",a);
@@ -188,7 +202,7 @@ void BatteryUdpControl::prepare() {
     try {
         QString error;require(bindHost(error),qPrintable(error));
         auto app=MwAppPtr;
-        if(app->GetTaskManager()->IsRunning()){
+        if(hostTaskRunning()){
             if(taskClock.elapsed()>60000)throw std::runtime_error("Host initialization timeout");
             QTimer::singleShot(300,this,&BatteryUdpControl::prepare);return;
         }
@@ -385,11 +399,17 @@ void BatteryUdpControl::finish(int code) {
 }
 void BatteryUdpControl::showNativePlots() {
     try{
+        // Native plotting is optional. An unavailable plotting ABI must not
+        // prevent plugin loading, command handling or verified CSV export.
+        auto entry=GetProcAddress(GetModuleHandleW(L"mw_develop.dll"),"?CreatePlotWin@MwPlotWindowManager@@QEAAPEAVMwSimPlotWindow@@_NH0@Z");
+        if(!entry){viewMessage=QString::fromUtf8("当前宿主未提供匹配的原生绘图接口；结果已保留，可在 Qt 查看和回放。");return;}
+        using CreatePlot= MwSimPlotWindow*(*)(MwPlotWindowManager*,bool,int,bool);
+        const auto createPlot=reinterpret_cast<CreatePlot>(entry);
         auto p=static_cast<MwSimInstPanel*>(panel.data());auto result=p->GetLastResult();
         require(result!=nullptr,"Native result not available");
         auto plots=core->GetMdiArea()->GetPlotWindowManager();
         for(const QString &name:{QString("cell.SOC"),QString("cell.V_term"),QString("cell.I_act")}){
-            auto w=plots->CreatePlotWin();require(w!=nullptr,"Cannot create native result plot");
+            auto w=createPlot(plots,true,-1,false);require(w!=nullptr,"Cannot create native result plot");
             require(w->AddCurveToCurrentView(name,result)!=nullptr,"Cannot add native result variable");w->show();w->ReplotAll();
         }
         viewMessage="Sysplorer 已显示本次原生结果";
@@ -406,13 +426,24 @@ QJsonObject BatteryUdpControl::execute(const QJsonObject&r) {
     QString e;require(bindHost(e),qPrintable(e));
     const QString cmd=r["command"].toString(),client=r["client"].toString(),id=r["taskId"].toString();
     require(!client.isEmpty(),"Missing client identifier");
-    if(cmd=="hello")return {{"modelLifecycle",true},{"modelLoaded",modelLoaded},{"splitLifecycle",true},{"ok",true},{"status",snapshot()},{"modelHash",modelHash},{"ready",!MwAppPtr->GetTaskManager()->IsRunning()},{"controllerState",controllerState()}};
+    if(cmd=="hello")return {{"modelLifecycle",true},{"modelLoaded",modelLoaded},{"splitLifecycle",true},{"ok",true},{"status",snapshot()},{"modelHash",modelHash},{"ready",!hostTaskRunning()},{"controllerState",controllerState()}};
     if(cmd=="begin"||cmd=="translate"||cmd=="load"){
         if(id==taskId&&client==owner)return {{"ok",true},{"status",snapshot()}};
         beginTask(r["args"].toObject(),client,id,cmd=="load");return {{"ok",true},{"status",snapshot()}};
     }
     require(id==taskId&&client==owner,"TASK_OWNERSHIP_MISMATCH");lastClientMs=heartbeat.elapsed();
     if(cmd=="poll")return {{"ok",true},{"status",snapshot(r["args"].toObject()["cursor"].toInt())}};
+    if(cmd=="download"){
+        require(phase=="Completed"||phase=="Stopped","RESULT_NOT_READY");
+        const auto a=r["args"].toObject();const auto name=a["file"].toString();
+        require(name=="result.csv"||name=="result.json","INVALID_RESULT_FILE");
+        const double offset=a["offset"].toDouble(-1);require(finite(offset)&&offset>=0&&offset==std::floor(offset)&&offset<=128*1024*1024,"INVALID_OFFSET");
+        QFile f(jobDir+"/"+name);require(f.open(QIODevice::ReadOnly),"RESULT_FILE_UNAVAILABLE");
+        require(f.size()>0&&f.size()<=128*1024*1024&&offset<=f.size()&&f.seek(qint64(offset)),"RESULT_FILE_LIMIT");
+        const auto bytes=f.read(48*1024);require(!bytes.isEmpty()||offset==f.size(),"RESULT_READ_FAILED");
+        return {{"ok",true},{"file",name},{"offset",offset},{"size",double(f.size())},{"data",QString::fromLatin1(bytes.toBase64())},
+            {"eof",f.pos()==f.size()},{"chunkHash",QString::fromLatin1(digest(bytes))}};
+    }
     if(cmd=="start"){
         require(phase=="Prepared"&&controllerState()=="Idle","INVALID_STATE");
         require(data&&panel&&control,"PREPARED_MODEL_REMOVED");
@@ -458,16 +489,40 @@ void BatteryUdpControl::receive() {
         auto d=socket->receiveDatagram(8192);if(d.senderAddress()!=QHostAddress::LocalHost||d.data().size()>4096)continue;
         auto r=QJsonDocument::fromJson(d.data()).object();
         if(r["token"].toString()!=token||r["session"].toString()!=session||r["schema"].toInt()!=1)continue;
-        const auto id=r["id"].toString();if(id.isEmpty())continue;
-        if(replies.contains(id)){
-            if(replyRequests[id]==d.data())socket->writeDatagram(replies[id],d.senderAddress(),d.senderPort());continue;
-        }
-        QJsonObject out;
-        try{out=execute(r);}catch(const std::exception&e){out={{"ok",false},{"code",QString::fromUtf8(e.what())},{"message",QString::fromUtf8(e.what())}};}
-        out["schema"]=1;out["id"]=id;out["session"]=session;out["taskId"]=r["taskId"];out["command"]=r["command"];
-        auto bytes=QJsonDocument(out).toJson(QJsonDocument::Compact);
-        if(replies.size()>=512){auto old=replies.firstKey();replies.remove(old);replyRequests.remove(old);}
-        replies[id]=bytes;replyRequests[id]=d.data();socket->writeDatagram(bytes,d.senderAddress(),d.senderPort());
-        if(r["command"].toString()!="poll"&&r["command"].toString()!="hello")log("request",{{"command",r["command"]},{"response",out}});
+        if(r["id"].toString().isEmpty()||r["command"].toString()=="download")continue;
+        socket->writeDatagram(QJsonDocument(dispatch(r)).toJson(QJsonDocument::Compact),d.senderAddress(),d.senderPort());
     }
+}
+QJsonObject BatteryUdpControl::dispatch(const QJsonObject& r){
+    const auto id=r["id"].toString();const auto request=QJsonDocument(r).toJson(QJsonDocument::Compact);
+    if(replies.contains(id)){
+        if(replyRequests[id]==request)return QJsonDocument::fromJson(replies[id]).object();
+        return {{"schema",1},{"id",id},{"session",session},{"taskId",r["taskId"]},{"command",r["command"]},{"ok",false},{"code","REQUEST_ID_REUSED"}};
+    }
+    QJsonObject out;
+    try{out=execute(r);}catch(const std::exception&e){out={{"ok",false},{"code",QString::fromUtf8(e.what())},{"message",QString::fromUtf8(e.what())}};}
+    out["schema"]=1;out["id"]=id;out["session"]=session;out["taskId"]=r["taskId"];out["command"]=r["command"];
+    // Fingerprinting must remain readable even when a host ABI/readiness check
+    // rejects hello. Keep ok=false and ready=false so no task can proceed.
+    if(r["command"].toString()=="hello"){
+        out["modelHash"]=modelHash;out["modelLifecycle"]=true;out["splitLifecycle"]=true;out["modelLoaded"]=modelLoaded;
+        if(!out["ok"].toBool()){out["ready"]=false;out["status"]=snapshot();}
+    }
+    if(replies.size()>=512){auto old=replies.firstKey();replies.remove(old);replyRequests.remove(old);}
+    replies[id]=QJsonDocument(out).toJson(QJsonDocument::Compact);replyRequests[id]=request;
+    const auto cmd=r["command"].toString();
+    if(cmd!="poll"&&cmd!="hello"&&cmd!="download")log("request",{{"command",cmd},{"response",out}});
+    return out;
+}
+void BatteryUdpControl::receiveRemote(RemoteLink* link,const QJsonObject& value){
+    auto r=value;
+    if(r["schema"].toInt()!=1||r["client"].toString()!=link->clientId()||r["session"].toString()!=session||QUuid(r["id"].toString()).isNull()){
+        link->socket()->abort();return;
+    }
+    // Authentication belongs to the TCP channel. Never publish the local UDP token.
+    r["token"]=token;auto response=dispatch(r);
+    if(response.contains("status")){
+        auto status=response["status"].toObject();status.remove("controller");status.remove("data");response["status"]=status;
+    }
+    link->send(response);
 }

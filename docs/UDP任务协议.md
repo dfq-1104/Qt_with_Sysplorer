@@ -10,6 +10,12 @@
 
 令牌不进入普通客户端日志，也不对外分发发现记录。
 
+## 固定模型的来源
+
+`model/BatterySim.mo` 在构建时分别嵌入 Qt EXE 与宿主插件 DLL。Qt 只发送资源模型的 SHA-256 和命令/参数；UDP 请求不携带 `.mo` 文本。插件读取自身 `:/battery/BatterySim.mo` 资源，并在 Sysplorer 进程内通过 `NewModel(modelText, ...)` 加载。修改模型必须同步两端构建，不能通过只替换 Qt 自动更新宿主模型。
+
+就绪握手同时要求 `modelLifecycle=true`、`splitLifecycle=true` 和模型哈希一致。能力或模型不匹配进入 `ConnectionFailed` 并停止本次尝试，不通过启动其他实例绕过版本检查。本机诊断记录目标 PID、宿主和已加载插件路径、磁盘 DLL 哈希；磁盘哈希仅描述该文件，实际能力与模型仍以目标进程的 `hello` 为准。
+
 ## 请求
 
 | 字段 | 类型 | 说明 |

@@ -9,6 +9,8 @@
 #include <QElapsedTimer>
 #include <QVector>
 class QUdpSocket;
+class RemoteServer;
+class RemoteLink;
 class MwSimControl;
 class MwSimInstPanel;
 class MwClassManager;
@@ -41,9 +43,12 @@ private:
     bool bindHost(QString&);
     bool active() const;
     bool ownsController() const;
+    bool hostTaskRunning() const;
     QString controllerState() const;
     void advertise();
     void receive();
+    void receiveRemote(RemoteLink*,const QJsonObject&);
+    QJsonObject dispatch(const QJsonObject&);
     QJsonObject execute(const QJsonObject&);
     QJsonObject snapshot(int cursor=0) const;
     void beginTask(const QJsonObject&,const QString&,const QString&,bool loadOnly=false);
@@ -59,6 +64,7 @@ private:
     bool saveResult(const QVector<LiveRow>&,bool);
     void persist();
     QUdpSocket *socket=nullptr;
+    RemoteServer *remote=nullptr;
     QTimer advertiseTimer,collectTimer;
     QElapsedTimer taskClock,startClock;
     QPointer<QObject> control,panel,data;

@@ -1,0 +1,7 @@
+[Remote]
+; Install-Server.ps1 generates the real enabled config and a unique access key.
+Enabled=false
+ListenAddress=0.0.0.0
+Port=39001
+Workspace=C:/BatteryJobs
+AccessKey=

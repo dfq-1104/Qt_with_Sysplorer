@@ -11,3 +11,7 @@ SOURCES += udp_integration_test.cpp \
     ../src/replay_data.cpp ../src/replay_player.cpp ../src/sysplorer_runner.cpp
 HEADERS += ../src/main_window.h ../src/battery_view.h ../src/plot_widget.h \
     ../src/replay_data.h ../src/replay_player.h ../src/sysplorer_runner.h
+INCLUDEPATH += ../../../common
+HEADERS += ../../../common/remote_link.h
+SOURCES += ../../../common/remote_link.cpp
+win32:LIBS += -lcrypt32

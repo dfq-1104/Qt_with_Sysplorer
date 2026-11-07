@@ -13,6 +13,7 @@
 *.pdb
 build/
 dist/
+/.local-sysplorer/
 app/ui/runtime_udp/
 app/ui/runtime_tuning/
 app/ui/runtime_buttons/
@@ -45,6 +46,11 @@ Makefile.*
 # 补充忽略其他 runtime 目录
 app/ui/probe_runtime/
 app/ui/runtime/
+app/ui/tests/build_remote/
+app/ui/tests/build_startup_fixture/
+app/ui/tests/build_local_check/
+app/ui/tests/build_local_real/
+app/ui/tests/build_local_detailed/
 
 # Publish excludes: retain remote rules for local settings and generated files
 /.codex/

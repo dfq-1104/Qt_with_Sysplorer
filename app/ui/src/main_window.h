@@ -73,6 +73,7 @@ private slots:
 
 private:
     void buildUi();
+    void showConnectionSettings();
     void refreshResultSelector();
     bool inputsMatchPreparation() const;
     void appendStageLog(const QString& category, const QString& message);
@@ -96,6 +97,8 @@ private:
     QVector<ReplaySample> m_latestSamples;
     bool m_latestPartial=false;
     QPushButton* m_btnPrepare=nullptr;
+    QPushButton *m_btnConnection=nullptr,*m_btnReconnect=nullptr,*m_btnRetryDownload=nullptr,*m_btnAbandon=nullptr;
+    QLabel* m_connectionStatus=nullptr;
     QPushButton* m_btnLoad=nullptr;
     QPushButton* m_btnReplay=nullptr;
     QPushButton* m_btnReplayPause=nullptr;

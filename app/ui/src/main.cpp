@@ -10,6 +10,7 @@
 #include <QJsonObject>
 #include <QSaveFile>
 #include <QPushButton>
+#include <memory>
 #include "battery_view.h"
 #include "sysplorer_runner.h"
 int main(int argc,char** argv) {
@@ -21,6 +22,26 @@ int main(int argc,char** argv) {
      p.drawRoundedRect(QRectF(12,13,40,45),7,7);p.drawRect(26,5,12,8);}
     app.setWindowIcon(QIcon(icon));
     MainWindow window; window.show();
+    if(app.arguments().contains("--verify-remote-connection")) {
+        auto runner=window.findChild<SysplorerRunner*>();
+        auto finished=std::make_shared<bool>(false);
+        auto report=[&app,&window,runner,finished](bool ok,const QString& message){
+            if(*finished)return;*finished=true;
+            const auto output=qEnvironmentVariable("BATTERY_TEST_ARTIFACTS");
+            if(!output.isEmpty()){
+                QDir().mkpath(output);window.grab().save(QDir(output).filePath("remote_connection.png"));
+                QSaveFile file(QDir(output).filePath("remote_connection.json"));
+                if(file.open(QIODevice::WriteOnly)){file.write(QJsonDocument(QJsonObject{{"ok",ok},{"message",message},{"phase",runner->phase()},
+                    {"remoteMode",runner->remoteMode()},{"address",runner->remoteAddress()},{"port",runner->remotePort()},
+                    {"modelHash",runner->modelFingerprint()},{"taskId",runner->taskId()},{"running",runner->isRunning()}}).toJson());file.commit();}
+            }
+            QTimer::singleShot(50,&app,[&app,ok]{app.exit(ok?0:1);});
+        };
+        QObject::connect(runner,&SysplorerRunner::stateChanged,&app,[report](const QString& phase){if(phase=="Connected")report(true,QString());});
+        QObject::connect(runner,&SysplorerRunner::hostConnectionFailed,&app,[report](const QString& message){report(false,message);});
+        QTimer::singleShot(15000,&app,[report]{report(false,QString::fromUtf8("远程连接验证超时"));});
+        QTimer::singleShot(0,&app,[runner,report]{if(!runner->remoteMode())report(false,QString::fromUtf8("此验证入口仅支持远程模式"));else runner->connectHost();});
+    }
     if(app.arguments().contains("--verify-custom")) {
         auto runner=window.findChild<SysplorerRunner*>();
         QObject::connect(runner,&SysplorerRunner::finished,&app,[&app,runner](bool ok,const QString& csv,const QString& message){
@@ -48,7 +69,17 @@ int main(int argc,char** argv) {
     }
     if(app.arguments().contains("--smoke-test")) QTimer::singleShot(500,&app,[&]{
         const auto output=qEnvironmentVariable("BATTERY_TEST_ARTIFACTS");
-        if(!output.isEmpty()) window.grab().save(QDir(output).filePath("ui_startup.png"));
+        if(!output.isEmpty()) {
+            window.grab().save(QDir(output).filePath("ui_startup.png"));
+            auto runner=window.findChild<SysplorerRunner*>();
+            QSaveFile report(QDir(output).filePath("ui_startup.json"));
+            if(report.open(QIODevice::WriteOnly)){
+                report.write(QJsonDocument(QJsonObject{{"phase",runner->phase()},{"remoteMode",runner->remoteMode()},
+                    {"connecting",runner->isConnecting()},{"running",runner->isRunning()},
+                    {"taskId",runner->taskId()},{"jobDirectory",runner->lastRunDirectory()},{"modelHash",runner->modelFingerprint()},
+                    {"remoteAddress",runner->remoteAddress()},{"remotePort",runner->remotePort()}}).toJson());report.commit();
+            }
+        }
         app.quit();
     });
     return app.exec();

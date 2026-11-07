@@ -23,4 +23,8 @@ HEADERS += src/main_window.h \
            src/replay_data.h \
            src/replay_player.h \
            src/sysplorer_runner.h
+INCLUDEPATH += ../../common
+HEADERS += ../../common/remote_link.h
+SOURCES += ../../common/remote_link.cpp
+win32:LIBS += -lcrypt32
 
