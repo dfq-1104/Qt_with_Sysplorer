@@ -1,4 +1,6 @@
 #include "main_window.h"
+#include "model_file.h"
+#include <QTextStream>
 #include <QApplication>
 #include <QFont>
 #include <QIcon>
@@ -12,12 +14,21 @@
 #include <QPushButton>
 #include <QMessageBox>
 #include <QSettings>
+#include <QStandardPaths>
 #include <memory>
 #include "battery_view.h"
 #include "sysplorer_runner.h"
 #include "runtime_environment.h"
 int main(int argc,char** argv) {
     QApplication app(argc,argv);
+    if(app.arguments().contains("--check-model")){
+        const auto output=qEnvironmentVariable("BATTERY_MODEL_DIAGNOSTICS",QCoreApplication::applicationDirPath()+"/diagnostics");
+        const auto result=ModelFile::read(ModelFile::defaultPath(),output);
+        QTextStream stream(stdout);stream.setCodec("UTF-8");
+        stream<<(result.ok?QString::fromUtf8("模型自检通过：合法 UTF-8，BatterySim.SingleRun 接口存在。\n"):QString::fromUtf8("模型自检失败：")+result.error+"\n");
+        stream<<QString::fromUtf8("发布标识：")<<BATTERY_RELEASE_ID<<"\n"<<QString::fromUtf8("诊断文件：")<<result.diagnostic<<"\n";stream.flush();
+        return result.ok?0:1;
+    }
     const auto testConfig=qEnvironmentVariable("BATTERY_TEST_CONFIG_ROOT");
     if(!testConfig.isEmpty())QSettings::setPath(QSettings::IniFormat,QSettings::UserScope,testConfig);
     QString environmentError;
@@ -30,6 +41,24 @@ int main(int argc,char** argv) {
         if(!app.arguments().contains("--smoke-test")&&!app.arguments().contains("--verify-remote-connection")&&!app.arguments().contains("--verify-local-connection"))QMessageBox::warning(nullptr,QString::fromUtf8("运行环境错误"),environmentError);
         return 2;
     }
+    QString startupModelError;
+    if(app.arguments().contains("--startup-model-check")){
+        // Check in the actual UI process, using its own ordinary file access.
+        // The release client reads its compiled Qt resource, never an external
+        // model file. Task preparation validates the same model again.
+        const auto output=qEnvironmentVariable("BATTERY_MODEL_DIAGNOSTICS",
+            QDir(QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)).filePath("BatteryConsole/diagnostics"));
+        const auto result=ModelFile::read(ModelFile::defaultPath(),output);
+        const auto artifacts=qEnvironmentVariable("BATTERY_TEST_ARTIFACTS");
+        if(!artifacts.isEmpty()){
+            QDir().mkpath(artifacts);QSaveFile report(QDir(artifacts).filePath("startup_model_check.json"));
+            if(report.open(QIODevice::WriteOnly)){
+                report.write(QJsonDocument(QJsonObject{{"ok",result.ok},{"diagnostic",result.diagnostic},
+                    {"message",result.error},{"pid",double(QCoreApplication::applicationPid())}}).toJson());report.commit();
+            }
+        }
+        if(!result.ok)startupModelError=result.error;
+    }
     app.setFont(QFont(QStringLiteral("Microsoft YaHei"),10));
     QPixmap icon(64,64); icon.fill(Qt::transparent);
     {QPainter p(&icon);p.setRenderHint(QPainter::Antialiasing);
@@ -37,6 +66,11 @@ int main(int argc,char** argv) {
      p.drawRoundedRect(QRectF(12,13,40,45),7,7);p.drawRect(26,5,12,8);}
     app.setWindowIcon(QIcon(icon));
     MainWindow window; window.show();
+    if(!startupModelError.isEmpty()&&!app.arguments().contains("--smoke-test"))QTimer::singleShot(0,&window,[&window,startupModelError]{
+        QMessageBox::warning(&window,QString::fromUtf8("模型启动检查未通过"),
+            QString::fromUtf8("尚未连接或启动 Sysplorer。客户端内置模型校验失败。仍可使用连接设置；请完整解压配套客户端包后重试。\n\n")+
+            startupModelError);
+    });
     if(app.arguments().contains("--verify-remote-connection")||app.arguments().contains("--verify-local-connection")) {
         const bool expectedRemote=app.arguments().contains("--verify-remote-connection");
         auto runner=window.findChild<SysplorerRunner*>();
@@ -103,7 +137,7 @@ int main(int argc,char** argv) {
                     {"discoveryDirectory",qEnvironmentVariable("BATTERY_DISCOVERY_DIR")}}).toJson());report.commit();
             }
         }
-        app.quit();
+        app.exit(startupModelError.isEmpty()?0:3);
     });
     return app.exec();
 }

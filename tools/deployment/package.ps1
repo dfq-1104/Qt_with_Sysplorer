@@ -1,4 +1,4 @@
-param([string]$OutputDirectory='', [string]$PluginDll='', [switch]$LocalDocumentation, [string]$QtHome='C:\Qt\Qt5.14.2\5.14.2\msvc2017_64',
+param([string]$OutputDirectory='', [string]$PluginDll='', [string]$ClientExe='', [switch]$LocalDocumentation, [string]$QtHome='C:\Qt\Qt5.14.2\5.14.2\msvc2017_64',
       [string]$VcRedist='C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\VC\Redist\MSVC\14.16.27012\x64\Microsoft.VC141.CRT')
 $ErrorActionPreference='Stop'
 $root=[IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\..'))
@@ -10,7 +10,7 @@ foreach($path in @($client,$server)){
     if(Test-Path -LiteralPath $path){throw "Output already exists; use a new worktree-local -OutputDirectory: $path"}
     [IO.Directory]::CreateDirectory($path)|Out-Null
 }
-& (Join-Path $root 'app\ui\deploy.ps1') -RuntimeDirectory $client -QtHome $QtHome
+& (Join-Path $root 'app\ui\deploy.ps1') -RuntimeDirectory $client -QtHome $QtHome -ClientExe $ClientExe
 if(-not(Test-Path -LiteralPath (Join-Path $VcRedist 'vcruntime140.dll'))){throw 'VC++ x64 runtime DLLs missing; provide -VcRedist'}
 Get-ChildItem -LiteralPath $VcRedist -Filter '*.dll' | ForEach-Object {Copy-Item -LiteralPath $_.FullName -Destination $client}
 foreach($name in @('libEGL.dll','libGLESv2.dll','d3dcompiler_47.dll','opengl32sw.dll')){
@@ -18,6 +18,7 @@ foreach($name in @('libEGL.dll','libGLESv2.dll','d3dcompiler_47.dll','opengl32sw
 }
 Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'Start-Client.ps1') -Destination $client
 Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'Start-Client.cmd') -Destination $client
+Copy-Item -LiteralPath (Join-Path $root 'docs\双击启动与模型读取说明.txt') -Destination (Join-Path $client '双击启动说明.txt')
 Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'Check-Local.ps1') -Destination $client
 Copy-Item -LiteralPath (Join-Path $root 'docs\可移植部署说明.md') -Destination (Join-Path $client '本机运行说明.md')
 "[Connection]`r`nMode=local`r`nAddress=127.0.0.1`r`nPort=39001`r`n`r`n[Host]`r`nHome=`r`nTimeoutMs=180000`r`n" | Set-Content -LiteralPath (Join-Path $client 'sysplorer.ini') -Encoding UTF8
@@ -26,21 +27,26 @@ Copy-Item -LiteralPath $pluginSource -Destination (Join-Path $server 'battery_ud
 Copy-Item -LiteralPath $pluginSource -Destination (Join-Path $client 'battery_udp_control.dll')
 foreach($folder in @($client,$server)){
     Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'Setup-Deployment.ps1') -Destination $folder
+    Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'PrivateFile.Common.ps1') -Destination $folder
 }
 Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'Setup-Local.ps1') -Destination $client
 Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'Update-Plugin.ps1') -Destination $client
 foreach($name in @('Setup-Server.cmd','Setup-Server.ps1')){Copy-Item -LiteralPath (Join-Path $PSScriptRoot $name) -Destination $server}
-foreach($name in @('Update-Plugin.ps1','Check-Server.ps1','Diagnose-Server.ps1','remote.ini.example')){Copy-Item -LiteralPath (Join-Path $PSScriptRoot $name) -Destination $server}
+foreach($name in @('Update-ServerPlugin.cmd','Update-ConfiguredServer.ps1')){Copy-Item -LiteralPath (Join-Path $PSScriptRoot $name) -Destination $server}
+foreach($name in @('Update-Plugin.ps1','Check-Server.ps1','Check-Server.cmd','Server-Info.ps1','Server-Info.cmd','Test-RemoteModel.ps1','Diagnose-Server.ps1','Diagnose-Plugin.ps1','Diagnose-Plugin.cmd','remote.ini.example')){Copy-Item -LiteralPath (Join-Path $PSScriptRoot $name) -Destination $server}
+Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'Check-Model.cmd') -Destination $client
 Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'Test-RemoteModel.ps1') -Destination $client
 foreach($folder in @($client,$server)){
     $deploymentDoc='docs\可移植部署说明.md'
-    $verificationDoc='docs\可移植改造测试报告.md'
+    $verificationDoc='docs\内置模型交付测试报告.md'
     Copy-Item -LiteralPath (Join-Path $root $deploymentDoc) -Destination (Join-Path $folder '部署说明.md')
     Copy-Item -LiteralPath (Join-Path $root $verificationDoc) -Destination (Join-Path $folder '验证记录.md')
     $manifest=@(Get-ChildItem -LiteralPath $folder -File -Recurse|Sort-Object FullName|ForEach-Object {
         [ordered]@{path=$_.FullName.Substring($folder.Length+1).Replace('\','/');bytes=$_.Length;sha256=(Get-FileHash -LiteralPath $_.FullName -Algorithm SHA256).Hash.ToLowerInvariant()}
     })
-    [ordered]@{protocol='battery-tcp/1';modelTransferVersion=1;modelInterface='battery-console/1';modelTextSource='client/models/BatterySim.mo';validation='candidate-see-report';architecture='win64';modelHash=(Get-FileHash -LiteralPath (Join-Path $root 'model\BatterySim.mo')).Hash.ToLowerInvariant();builtAt=(Get-Date).ToString('o');files=$manifest} | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath (Join-Path $folder 'manifest.json') -Encoding UTF8
+    $releaseId=[regex]::Match([IO.File]::ReadAllText((Join-Path $root 'common\release_id.h')),'BATTERY_RELEASE_ID\s+"([^"]+)"').Groups[1].Value
+    [ordered]@{releaseId=$releaseId;protocol='battery-tcp/1';modelTransferVersion=1;modelInterface='battery-console/1';modelTextSource='client-embedded-resource';validation='candidate-see-report';architecture='win64';modelHash=(Get-FileHash -LiteralPath (Join-Path $root 'model\BatterySim.mo')).Hash.ToLowerInvariant();builtAt=(Get-Date).ToString('o');files=$manifest} | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath (Join-Path $folder 'manifest.json') -Encoding UTF8
     Compress-Archive -LiteralPath $folder -DestinationPath ($folder+'.zip') -CompressionLevel Optimal
 }
 Get-ChildItem -LiteralPath $output -Filter '*.zip' | Select-Object FullName,Length
+Get-ChildItem -LiteralPath $output -Filter '*.zip' | ForEach-Object {(Get-FileHash -LiteralPath $PSItem.FullName).Hash+'  '+$PSItem.Name} | Set-Content -LiteralPath (Join-Path $output 'SHA256SUMS.txt') -Encoding ascii

@@ -23,14 +23,8 @@ if(-not $SysplorerHome){
     }
 }
 if(-not $ExpectedModelHash){
-    $runtimeModel=Join-Path $PSScriptRoot 'models\BatterySim.mo'
-    if(Test-Path -LiteralPath $runtimeModel){$ExpectedModelHash=(Get-FileHash -LiteralPath $runtimeModel).Hash.ToLowerInvariant()}
     $manifest=Join-Path $PSScriptRoot 'manifest.json'
     if(-not $ExpectedModelHash -and (Test-Path -LiteralPath $manifest)){$ExpectedModelHash=(Get-Content -LiteralPath $manifest -Raw|ConvertFrom-Json).modelHash}
-    if(-not $ExpectedModelHash){
-        $modelSource=Join-Path $PSScriptRoot '..\..\model\BatterySim.mo'
-        if(Test-Path -LiteralPath $modelSource){$ExpectedModelHash=(Get-FileHash -LiteralPath $modelSource).Hash.ToLowerInvariant()}
-    }
 }
 if(-not $ExpectedModelHash -or $ExpectedModelHash -notmatch '^[0-9a-fA-F]{64}$'){throw 'Expected model SHA-256 missing. Supply -ExpectedModelHash or use a complete client package.'}
 if(-not $DiscoveryDirectory){$DiscoveryDirectory=$env:BATTERY_DISCOVERY_DIR}
@@ -76,7 +70,7 @@ foreach($localProcess in @(Get-Process mworks -ErrorAction SilentlyContinue)){
                 if($reply.modelInterface -ne 'battery-console/1'){$missing+='modelInterface=battery-console/1'}
                 $modelMatches=$null
                 $entry.hello=[ordered]@{ok=($reply.ok -eq $true);ready=($reply.ready -eq $true);modelLifecycle=($reply.modelLifecycle -eq $true);splitLifecycle=($reply.splitLifecycle -eq $true);missingCapabilities=$missing;actualModelHash=$reply.modelHash;modelMatches=$modelMatches;controllerState=$reply.controllerState;phase=$reply.status.phase}
-                $entry.state=if(-not $reply.ok){'HELLO_REJECTED'}elseif(-not $reply.ready){'NOT_READY'}elseif($missing.Count){'INCOMPATIBLE'}elseif($reply.controllerState -ne 'Idle'){'BUSY'}else{'COMPATIBLE'}
+                $entry.state=if($reply.controllerState -eq 'Unavailable'){'NOT_READY'}elseif(-not $reply.ok){'HELLO_REJECTED'}elseif(-not $reply.ready){'NOT_READY'}elseif($missing.Count){'INCOMPATIBLE'}elseif($reply.controllerState -ne 'Idle'){'BUSY'}else{'COMPATIBLE'}
             }finally{$udp.Dispose()}
         }catch{$entry.state='DISCOVERY_OR_HELLO_FAILED';$entry['error']=$_.Exception.Message}
     }
@@ -84,7 +78,7 @@ foreach($localProcess in @(Get-Process mworks -ErrorAction SilentlyContinue)){
 }
 if(-not $records.Count){$issues+='TARGET_NOT_RUNNING'}
 # Never write discovery tokens, session credentials, remote.ini or access keys.
-$report=[ordered]@{schema=1;mode='local';checkedAt=(Get-Date).ToString('o');hostExecutable=$exe;pluginOnDisk=[ordered]@{path=$plugin;sha256=(File-Hash $plugin)};expectedModelHash=$ExpectedModelHash;modelTextSource='client models/BatterySim.mo; verified after chunk upload';processes=$records;issues=$issues;readOnly=$true}
+$report=[ordered]@{schema=1;mode='local';checkedAt=(Get-Date).ToString('o');hostExecutable=$exe;pluginOnDisk=[ordered]@{path=$plugin;sha256=(File-Hash $plugin)};expectedModelHash=$ExpectedModelHash;modelTextSource='client embedded resource; verified after chunk upload';processes=$records;issues=$issues;readOnly=$true}
 $outputPath=[IO.Path]::GetFullPath($OutputFile)
 [IO.Directory]::CreateDirectory([IO.Path]::GetDirectoryName($outputPath))|Out-Null
 $report|ConvertTo-Json -Depth 8|Set-Content -LiteralPath $outputPath -Encoding UTF8

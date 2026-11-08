@@ -10,9 +10,12 @@ try{
     # bindings inherited from an unrelated shell must not select a private host.
     foreach($name in $clean){Remove-Item "Env:$name" -ErrorAction SilentlyContinue}
     $env:PATH=$PSScriptRoot+';'+$saved['PATH']
-    $options=@{FilePath=(Join-Path $PSScriptRoot 'battery_console_ui.exe');WorkingDirectory=$PSScriptRoot;WindowStyle='Normal'}
-    if($SmokeTest){$options.ArgumentList='--smoke-test';$options.WindowStyle='Hidden'}
-    Start-Process @options
+    $options=@{FilePath=(Join-Path $PSScriptRoot 'battery_console_ui.exe');WorkingDirectory=$PSScriptRoot;WindowStyle='Normal';ArgumentList='--startup-model-check'}
+    if($SmokeTest){$options.ArgumentList='--startup-model-check --smoke-test';$options.WindowStyle='Hidden'}
+    Start-Process @options | Out-Null
+}catch{
+    Write-Error $_ -ErrorAction Continue
+    exit 1
 }finally{
     foreach($name in $saved.Keys){if($null -eq $saved[$name]){Remove-Item "Env:$name" -ErrorAction SilentlyContinue}else{[Environment]::SetEnvironmentVariable($name,$saved[$name],'Process')}}
 }

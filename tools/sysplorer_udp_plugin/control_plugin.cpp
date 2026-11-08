@@ -1,4 +1,5 @@
 #include "control_plugin.h"
+#include "model_file.h"
 #include "task_status_compat.h"
 #include "remote_server.h"
 #include <mw_develop/mw_app.h>
@@ -114,13 +115,18 @@ bool BatteryUdpControl::bindHost(QString &error) {
         auto app=sym<MwApp*(*)()>(L"mw_develop.dll","?Instance@MwApp@@SAPEAV1@XZ")();
         if(!app||!app->GetWorkbench()) {error="Host is starting";return false;}
         core=get<MwWorkbenchCore*>(app->GetWorkbench(),L"mw_develop.dll","?GetCore@MwWorkbench@@QEAAPEAVMwWorkbenchCore@@XZ");
+        if(!core){error="Host is starting";return false;}
+        auto nextManager=app->GetClassManager();if(!nextManager){error="Host is starting";return false;}
         auto p=core->GetSimInstPanel();if(!p){error="Simulation panel unavailable";return false;}
         auto c=get<MwSimControl*>(p,L"mw_develop.dll","?GetSimControl@MwSimInstPanel@@QEAAPEAVMwSimControl@@XZ");
         if(!c){error="Simulation controller unavailable";return false;}
         if(control && control!=c && active()) {error="Host controller changed";return false;}
-        if(control!=c) {
+        const bool changed=control.data()!=c||panel.data()!=p;
+        manager=nextManager;
+        if(changed) {
             if(control)disconnect(control,nullptr,this,nullptr);
-            control=c;panel=p;manager=app->GetClassManager();
+            if(panel)disconnect(panel,nullptr,this,nullptr);
+            control=c;panel=p;
             connect(c,&MwSimControl::SigSimPaused,this,[this]{
                 if(!active()||!ownsController())return;phase="Paused";collect();
                 if(!pendingTune.isEmpty()&&!tuneAwaitingSample)applyTune();persist();});
@@ -133,6 +139,7 @@ bool BatteryUdpControl::bindHost(QString &error) {
                 data=d;preparing=false;phase="Prepared";persist();
             });
         }
+        if(!control||!panel||!manager){error="Simulation controller unavailable";return false;}
         return true;
     } catch(const std::exception&e){error=QString::fromUtf8(e.what());return false;}
 }
@@ -211,7 +218,7 @@ QString BatteryUdpControl::currentModelSource() const {
 void BatteryUdpControl::restoreTaskPaths(){
     if(!pathsChanged||!manager)return;
     auto options=manager->GetCoreOption();
-    options->SetWorkPath(savedWork.toStdString());options->SetCodePath(savedCode.toStdString());options->SetSimResultPath(savedResult.toStdString());
+    options->SetCodePath(savedCode.toStdString());options->SetSimResultPath(savedResult.toStdString());
     if(panel){auto p=static_cast<MwSimInstPanel*>(panel.data());p->SetSolverPath(savedSolverPath);p->SetResultPath(savedPanelResult);}
     QDir::setCurrent(savedCurrentDirectory);
     pathsChanged=false;
@@ -220,7 +227,7 @@ void BatteryUdpControl::prepare() {
     if((phase!="Preparing"&&phase!="Loading")||shutdown)return;
     const bool loadOnly=phase=="Loading";
     try {
-        QString error;require(bindHost(error),qPrintable(error));
+        QString error;if(!bindHost(error))throw std::runtime_error(error.toUtf8().constData());
         auto app=MwAppPtr;
         if(hostTaskRunning()){
             if(taskClock.elapsed()>60000)throw std::runtime_error("Host initialization timeout");
@@ -271,11 +278,16 @@ void BatteryUdpControl::prepare() {
         auto p=static_cast<MwSimInstPanel*>(panel.data());
         stage=QString::fromUtf8("检查输出目录");require(QDir().mkpath(jobDir+"/solver"),"OUTPUT_DIRECTORY_FAILED");
         restoreTaskPaths();auto options=manager->GetCoreOption();
-        savedWork=QString::fromStdString(options->WorkPath());savedCode=QString::fromStdString(options->CodePath());savedResult=QString::fromStdString(options->SimResultPath());
+        savedCode=QString::fromStdString(options->CodePath());savedResult=QString::fromStdString(options->SimResultPath());
         savedSolverPath=p->GetSolverPath();savedPanelResult=p->GetResultPath();pathsChanged=true;
         savedCurrentDirectory=QDir::currentPath();require(QDir::setCurrent(jobDir),"OUTPUT_DIRECTORY_FAILED");
-        options->SetWorkPath(jobDir.toStdString());options->SetCodePath((jobDir+"/solver").toStdString());options->SetSimResultPath(jobDir.toStdString());
+        // WorkPath is a persistent global option whose setter ABI changed in
+        // 2026b (extra opaque context). Task-specific paths are sufficient for
+        // this fixed, in-memory model; leave the user's global WorkPath alone.
+        options->SetCodePath((jobDir+"/solver").toStdString());options->SetSimResultPath(jobDir.toStdString());
         p->SetSolverPath(jobDir+"/solver");p->SetResultPath(jobDir+"/Result.msr");
+        log("task_paths",{{"codePath",QString::fromStdString(options->CodePath())},{"resultPath",QString::fromStdString(options->SimResultPath())},
+            {"solverPath",p->GetSolverPath()},{"workingDirectory",QDir::currentPath()},{"globalWorkPathChanged",false}});
         stage=QString::fromUtf8("翻译模型");phase="Translating";persist();preparing=true;
         if(!p->TranslateModel("BatterySim.SingleRun",false))fail("TRANSLATE_REJECTED","宿主未接受翻译请求");
     } catch(const std::exception&e){
@@ -469,10 +481,15 @@ void BatteryUdpControl::persist() {
     auto o=snapshot(live.size());o.remove("rows");writeJson(jobDir+"/status.json",o);
 }
 QJsonObject BatteryUdpControl::execute(const QJsonObject&r) {
-    QString e;require(bindHost(e),qPrintable(e));
+    QString e;if(!bindHost(e))throw std::runtime_error(e.toUtf8().constData());
     const QString cmd=r["command"].toString(),client=r["client"].toString(),id=r["taskId"].toString();
     require(!client.isEmpty(),"Missing client identifier");
-    if(cmd=="hello")return {{"modelLifecycle",true},{"modelLoaded",modelLoaded},{"splitLifecycle",true},{"ok",true},{"status",snapshot()},{"modelHash",modelHash},{"ready",!hostTaskRunning()},{"controllerState",controllerState()}};
+    if(cmd=="hello"){
+        const auto state=controllerState();const bool taskRunning=hostTaskRunning();
+        return {{"modelLifecycle",true},{"modelLoaded",modelLoaded},{"splitLifecycle",true},{"ok",true},{"status",snapshot()},{"modelHash",modelHash},
+            {"ready",control&&panel&&manager&&state=="Idle"&&!taskRunning},
+            {"busy",state!="Unavailable"&&(state!="Idle"||active())},{"backgroundTaskRunning",taskRunning},{"controllerState",state}};
+    }
     if(cmd.startsWith("model.")){
         require(!active()&&controllerState()=="Idle"&&!hostTaskRunning(),"HOST_BUSY");
         return modelUploads.execute(client,cmd,r["args"].toObject(),r["_tcp"].toBool()?ModelTransfer::TcpChunk:ModelTransfer::UdpChunk,heartbeat.elapsed());
@@ -556,11 +573,12 @@ QJsonObject BatteryUdpControl::dispatch(const QJsonObject& r){
         return {{"schema",1},{"id",id},{"session",session},{"taskId",r["taskId"]},{"command",r["command"]},{"ok",false},{"code","REQUEST_ID_REUSED"}};
     }
     QJsonObject out;
-    try{out=execute(r);}catch(const std::exception&e){out={{"ok",false},{"code",QString::fromUtf8(e.what())},{"message",QString::fromUtf8(e.what())}};}
+    try{out=execute(r);}catch(const ModelTransfer::ValidationError& e){out={{"ok",false},{"code",QString::fromLatin1(e.what())},{"message",e.reason},{"byteOffset",e.offset}};}catch(const std::exception&e){out={{"ok",false},{"code",QString::fromUtf8(e.what())},{"message",QString::fromUtf8(e.what())}};}
     out["schema"]=1;out["id"]=id;out["session"]=session;out["taskId"]=r["taskId"];out["command"]=r["command"];
     // Fingerprinting must remain readable even when a host ABI/readiness check
     // rejects hello. Keep ok=false and ready=false so no task can proceed.
     if(r["command"].toString()=="hello"){
+        out["releaseId"]=BATTERY_RELEASE_ID;
         out["modelHash"]=modelHash;out["modelLifecycle"]=true;out["splitLifecycle"]=true;out["modelLoaded"]=modelLoaded;
         out["modelTransferVersion"]=1;out["modelInterface"]=ModelTransfer::interfaceName();
         if(!out["ok"].toBool()){out["ready"]=false;out["status"]=snapshot();}

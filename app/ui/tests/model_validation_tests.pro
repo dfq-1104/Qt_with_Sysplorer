@@ -1,0 +1,9 @@
+QT += core testlib
+TEMPLATE = app
+TARGET = model_validation_test
+CONFIG += console c++11 testcase
+RESOURCES += ../models.qrc
+QMAKE_CXXFLAGS += /utf-8
+INCLUDEPATH += ../../../common
+SOURCES += model_validation_test.cpp
+HEADERS += ../../../common/model_file.h ../../../common/model_transfer.h ../../../common/release_id.h

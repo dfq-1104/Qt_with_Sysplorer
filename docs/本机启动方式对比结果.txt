@@ -1,0 +1,58 @@
+﻿普通双击与测试启动对比（2026-11-08，北京时间）
+
+历史范围：R3 外部模型阶段。R5 已改用客户端内置模型，普通双击本机完整流程已通过；当前状态见“内置模型交付测试报告.md”。本文保留对照证据，不作为新版操作步骤。
+
+结论
+1. 已复现同一路径、同一 EXE 因启动来源不同而读到不同模型内容。
+2. 未发现通过修改普通启动脚本即可修复的证据；直接普通双击原 EXE 同样失败。
+3. 普通启动进程在未连接 Sysplorer 时就读到保护内容，因此“先连接再加载”不是出现此差异的必要条件。
+4. 可以确认读取视图与启动来源有关，尚未读取或确认天喻具体信任/策略规则，不能断言是哪一条父进程规则。
+5. 未修改天喻策略、进程权限、EXE、模型或插件，也未使用其他进程为客户端代读模型。
+
+已排除的差异
+- EXE：F14C8DAC456CDE9AA14E66B0E697FFFF4FC399DA5E2D06FC1C51F29AF5FDE7A2，完全相同。
+- 程序及模型路径：均为当前 R3 包在 C 盘的真实路径，本轮对照未通过 Z 盘启动。
+- 工作目录：均为当前 R3 客户端目录。
+- Windows 用户：与观察进程相同；两个无参数长驻对照进程都在会话 3。
+- 权限：两个长驻对照进程均未提权，完整性 RID 8192（中等），ElevationType=3。
+- Qt：Core/Gui/Widgets/Network 和 qwindows 均来自当前包，版本及 SHA-256 一致。
+- 天喻模块：稳定运行后两个进程均加载相同版本及哈希的 TyEnc64.dll、intefsctrl64.dll；刚启动时尚未加载不作为持久差异结论。
+- 特殊诊断参数：测试启动的无参数、可见普通界面也读到正常模型；不是仅 --verify-custom 才能读取。
+- PowerShell 版本/启动脚本：测试上下文调用原 Windows PowerShell 5 启动脚本，仍读取正常模型；普通双击同脚本读取保护内容。
+- 模型包：诊断进程读取 ZIP 模型条目为 14000 字节、SHA-256 e03bd363…。
+
+实测矩阵
+A. 测试上下文 -> pwsh -> 原路径 EXE，无参数、可见界面、存活数分钟后加载：14000 字节，e03bd363…，UTF-8 校验通过。为避免意外操作真实宿主，该组指定不存在的宿主，校验后按预期报告 HOST_NOT_FOUND。
+B. 测试上下文 -> Windows PowerShell 5 -> 原 Start-Client.ps1 -SmokeTest：未连接，模型哈希 e03bd363…。
+C. 用户普通双击 Start-Client.cmd，长驻窗口 PID 24076 -> 连接 -> 加载：18096 字节，f9fc71eb…，文件起始 cbd5d6ddcdacd4aa（GBK 为“苏州同元”）。
+D. 用户普通双击 Check-Startup-BeforeConnect.cmd -> 同一原启动脚本 -SmokeTest：Idle、未连接、无任务，模型哈希 f9fc71eb…，与 C 相同。该组只采样哈希，未直接采样字节数。
+E. 用户从 Explorer 直接普通双击原 EXE，无参数 -> 连接 -> 加载：同样为 18096 字节、f9fc71eb…；父进程确认为 Explorer，仍未提权。
+
+正常模型哈希
+E03BD3634004CA82BB190521C214EC5FAE25713120DB83CAF016AEAC8B7472CD
+保护内容哈希
+F9FC71EB711CF354D07BD0A8FDC9776281BCEC3B17CD64A0D1EC6DFD5A4F4500
+
+剩余启动上下文差异
+测试调用来源为 Codex 工具运行上下文；普通调用来源为用户 Explorer。测试环境还设置了隔离配置、缓存和诊断目录。在应用代码中，这些变量不切换解密算法、不替换模型来源；本轮模型路径相同。当前数据支持文件保护对进程呈现不同内容，但不能从这些用户态元数据确定其内部决策规则。
+
+不改天喻策略的后续路线
+- 由单位文件安全管理员按现有批准流程，提供这一个 BatterySim.mo 的获准明文副本，或执行获准的单文件解密。
+- 保留 R3 程序及现有策略，不以其他进程代读、特殊身份或更名启动作为发布方案。
+- 批准处理后，通过普通 Start-Client.cmd 启动，以“加载 -> 翻译 -> 开始 -> 结果校验”完整流程验收。
+- 若当前策略不允许该明文使用方式，则需要单位管理员明确批准应用读取，程序侧不应代替这项授权。
+
+本机实际计算链路已在测试启动上下文验证：实际安装 2026a、正式 EXE、1566.52 秒模型、1571 行 CSV 校验通过。该证据不能替代普通用户启动路径的验收。
+
+证据目录
+logs/startup-comparison-20261108/
+- user-original.json、user-context-settled.json
+- reference-context.json、reference-context-settled.json
+- basic-comparison.json
+- reference-model-reads/model-*.json
+- windows-powershell-wrapper/ui_startup.json
+- user-before-connect.json、user-after-connect.json
+- user-direct-exe-context.json、user-direct-exe-model.json
+- zip-model.json
+
+新对照脚本仅用于诊断，不替换正式 EXE；最初漏建输出目录的一次结果未落盘，修正后才采纳 D 组结果。用户窗口未被自动关闭。

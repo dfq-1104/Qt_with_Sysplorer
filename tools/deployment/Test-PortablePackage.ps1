@@ -4,14 +4,22 @@ $root=[IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\..'))
 $output=Join-Path $root ('logs\portable\packages-'+[guid]::NewGuid().ToString('N'))
 [IO.Directory]::CreateDirectory($output)|Out-Null
 $zip=Join-Path ([IO.Path]::GetFullPath($PackageDirectory)) 'BatteryConsole-Client-win64.zip'
-$saved=@{};$names=@('PATH','BATTERY_TEST_ARTIFACTS','BATTERY_TEST_CONFIG_ROOT','BATTERY_MODEL_FILE','BATTERY_CONNECTION_MODE','SYSPLORER_HOME','BATTERY_SIM_WORKSPACE','BATTERY_WORKTREE_ROOT','BATTERY_LOCAL_CONFIG')
+$saved=@{};$names=@('PATH','BATTERY_TEST_ARTIFACTS','BATTERY_TEST_CONFIG_ROOT','BATTERY_MODEL_FILE','BATTERY_MODEL_DIAGNOSTICS','BATTERY_CONNECTION_MODE','SYSPLORER_HOME','BATTERY_SIM_WORKSPACE','BATTERY_WORKTREE_ROOT','BATTERY_LOCAL_CONFIG')
 foreach($name in $names){$saved[$name]=[Environment]::GetEnvironmentVariable($name,'Process')}
 $results=@()
+function Read-CompletedTestJson([string]$Path){
+    $deadline=(Get-Date).AddSeconds(5)
+    do{
+        try{return (Get-Content -LiteralPath $Path -Encoding UTF8 -Raw -ErrorAction Stop|ConvertFrom-Json -ErrorAction Stop)}
+        catch{if((Get-Date) -ge $deadline){throw};Start-Sleep -Milliseconds 100}
+    }while($true)
+}
 try{
     foreach($name in @('ascii-extract','中文 解压 空格')){
         $extract=Join-Path $output $name;Expand-Archive -LiteralPath $zip -DestinationPath $extract
         $client=Join-Path $extract 'BatteryConsole-Client-win64'
         $manifest=Get-Content -LiteralPath (Join-Path $client 'manifest.json') -Raw|ConvertFrom-Json
+        if($manifest.modelTextSource -ne 'client-embedded-resource' -or (Get-ChildItem -LiteralPath $client -Recurse -Filter '*.mo' -File)){throw 'Package must use the embedded model only'}
         $files=@(Get-ChildItem -LiteralPath $client -Recurse -File)
         if($files.Count -ne $manifest.files.Count+1){throw 'Unexpected package file count'}
         foreach($entry in $manifest.files){
@@ -26,7 +34,7 @@ try{
             }
         }
         $artifacts=Join-Path $extract 'evidence';[IO.Directory]::CreateDirectory($artifacts)|Out-Null
-        $env:BATTERY_TEST_ARTIFACTS=$artifacts;$env:BATTERY_TEST_CONFIG_ROOT=Join-Path $artifacts 'settings';$env:BATTERY_CONNECTION_MODE='local'
+        $env:BATTERY_TEST_ARTIFACTS=$artifacts;$env:BATTERY_TEST_CONFIG_ROOT=Join-Path $artifacts 'settings';$env:BATTERY_CONNECTION_MODE='local';$env:BATTERY_MODEL_DIAGNOSTICS=Join-Path $artifacts 'diagnostics'
         foreach($variable in @('BATTERY_MODEL_FILE','SYSPLORER_HOME','BATTERY_WORKTREE_ROOT','BATTERY_SIM_WORKSPACE','BATTERY_LOCAL_CONFIG')){Remove-Item "Env:$variable" -ErrorAction SilentlyContinue}
         # This PATH contains Windows utilities only. Qt/SDK/developer tools are
         # not available to the extracted client through the environment.
@@ -37,11 +45,14 @@ try{
         $deadline=(Get-Date).AddSeconds(20);$report=Join-Path $artifacts 'ui_startup.json'
         while(-not(Test-Path -LiteralPath $report) -and (Get-Date) -lt $deadline){Start-Sleep -Milliseconds 100}
         if(-not(Test-Path -LiteralPath $report)){throw 'Extracted client startup did not produce its report'}
-        $startup=Get-Content -LiteralPath $report -Raw|ConvertFrom-Json
+        $startup=Read-CompletedTestJson $report
         if($startup.phase -ne 'Idle' -or $startup.connecting -or $startup.running -or $startup.taskId){throw 'Client auto-connected or started a task'}
         $newHosts=@(Get-Process mworks -ErrorAction SilentlyContinue|Where-Object {$PSItem.Id -notin $before})
         if($newHosts.Count){throw 'Client startup launched a host'}
-        if($startup.modelHash -ne (Get-FileHash -LiteralPath (Join-Path $client 'models\BatterySim.mo')).Hash.ToLowerInvariant()){throw 'Client did not read its external packaged model'}
+        if($startup.modelHash -ne $manifest.modelHash){throw 'Client embedded model hash differs from manifest'}
+        $preflight=Read-CompletedTestJson (Join-Path $artifacts 'startup_model_check.json')
+        $modelRecord=Read-CompletedTestJson $preflight.diagnostic
+        if(-not $preflight.ok -or $modelRecord.source -ne 'embedded-resource' -or $modelRecord.sha256 -ne $manifest.modelHash){throw 'Client did not validate its embedded resource'}
         $results+=@{directory=$client;fileCount=$files.Count;manifestVerified=$true;noWorktreeBinding=$true;noDeveloperPathRequired=$true;startup=$startup}
     }
     $serverExtract=Join-Path $output 'server-extract'

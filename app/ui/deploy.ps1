@@ -1,4 +1,4 @@
-param([string]$RuntimeDirectory = '', [string]$SysplorerHome = '', [string]$QtHome='C:\Qt\Qt5.14.2\5.14.2\msvc2017_64')
+param([string]$RuntimeDirectory = '', [string]$SysplorerHome = '', [string]$QtHome='C:\Qt\Qt5.14.2\5.14.2\msvc2017_64',[string]$ClientExe='')
 $ErrorActionPreference='Stop'
 $root=(Resolve-Path "$PSScriptRoot\..\..").Path
 $runtime=if($RuntimeDirectory){[IO.Path]::GetFullPath($RuntimeDirectory)}else{Join-Path $PSScriptRoot 'runtime'}
@@ -20,9 +20,9 @@ function Copy-VerifiedBinary([string]$source,[string]$target) {
         throw "Deployment hash mismatch: $target"
     }
 }
-Copy-VerifiedBinary "$PSScriptRoot\build\release\battery_console_ui.exe" "$runtime\battery_console_ui.exe"
-[IO.Directory]::CreateDirectory((Join-Path $runtime 'models')) | Out-Null
-Copy-Item -LiteralPath (Join-Path $root 'model\BatterySim.mo') -Destination (Join-Path $runtime 'models\BatterySim.mo')
+if(-not $ClientExe){$ClientExe="$PSScriptRoot\build\release\battery_console_ui.exe"}
+Copy-VerifiedBinary $ClientExe "$runtime\battery_console_ui.exe"
+# The model is compiled by rcc into the EXE; do not publish an external model.
 foreach($name in @('Qt5Core.dll','Qt5Network.dll','Qt5Gui.dll','Qt5Widgets.dll','Qt5Svg.dll')) {
     Copy-VerifiedBinary "$qt\bin\$name" "$runtime\$name"
 }

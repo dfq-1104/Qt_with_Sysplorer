@@ -197,6 +197,11 @@ foreach($spec in $runtimeSpecs){
         $runtimeHostExports+=[PSCustomObject]@{Dll=$spec.dll;Status=$(if($missing.Count){'MISSING_RUNTIME_EXPORTS'}else{'RUNTIME_EXPORTS_FOUND'});MissingExports=$missing}
     }catch{$runtimeHostExports+=[PSCustomObject]@{Dll=$spec.dll;Status='INSPECTION_ERROR';Error=$_.Exception.Message}}
 }
+$pathExports=@()
+try{
+    $classPath=Find-Provider 'mw_class_manager.dll'
+    if($classPath){$classExports=Get-PeExports (Get-PeImage $classPath);$pathExports=@($classExports.Names|Where-Object {$PSItem -match '^\?(SetWorkPath|WorkPath|SetCodePath|CodePath|SetSimResultPath|SimResultPath)@MwCoreOption@@'}|Sort-Object)}
+}catch{}
 $pluginExports=Get-PeExports $image
 $compatibility=[ordered]@{taskStatusSupported=$false;supportedTaskStatusExports=@();availableTaskStatusExports=@();nativePlotSupported=$false;availableNativePlotExports=@();inspectionErrors=@()}
 try{
@@ -221,6 +226,7 @@ $report=[ordered]@{
     pluginMachine=('0x{0:X4}' -f $image.Machine)
     qtPluginEntryPointsPresent=($pluginExports.Names.Contains('qt_plugin_instance') -and $pluginExports.Names.Contains('qt_plugin_query_metadata'))
     hostPids=$hostProcesses;pluginLoaded=(@($loaded|Where-Object {$_.Name -eq 'battery_udp_control.dll'}).Count -gt 0)
+    availableCorePathExports=$pathExports
     selectedLoadedModules=$loaded;processInspectionErrors=$inspectionErrors;directDependencies=$dependencies;hostCompatibility=$compatibility;runtimeHostExports=$runtimeHostExports
     scope='Read-only PE import and exact runtime symbol presence checks. No plugin execution. Does not prove recursive dependencies, plugin discovery, enablement or general ABI compatibility. OS API sets are not inspected. Credentials are not read.'
 }

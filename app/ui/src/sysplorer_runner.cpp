@@ -1,6 +1,7 @@
 #include "sysplorer_runner.h"
 #include "remote_link.h"
 #include "model_transfer.h"
+#include "model_file.h"
 #include <QCoreApplication>
 #include <QCryptographicHash>
 #include <QDateTime>
@@ -154,16 +155,15 @@ bool SysplorerRunner::ensureLocalConfiguration(){
     process->start();return false;
 }
 QString SysplorerRunner::modelFingerprint() const {
-    QFile f(qEnvironmentVariable("BATTERY_MODEL_FILE",QCoreApplication::applicationDirPath()+"/models/BatterySim.mo"));
+    QFile f(ModelFile::defaultPath());
     if(!f.open(QIODevice::ReadOnly)||f.size()>ModelTransfer::Limit)return {};return hash(f.readAll());
 }
 bool SysplorerRunner::readModelSnapshot(){
-    QFile f(qEnvironmentVariable("BATTERY_MODEL_FILE",QCoreApplication::applicationDirPath()+"/models/BatterySim.mo"));
-    QString error;
-    if(!f.open(QIODevice::ReadOnly))error=QString::fromUtf8("MODEL_FILE_MISSING：无法读取客户端模型 %1").arg(f.fileName());
-    else if(f.size()>ModelTransfer::Limit)error="MODEL_SIZE_INVALID: maximum 1 MiB";
-    else {m_modelSnapshot=f.readAll();try{ModelTransfer::validate(m_modelSnapshot);}catch(const std::exception& e){error=QString::fromUtf8(e.what());}}
-    if(!error.isEmpty()){QTimer::singleShot(0,this,[this,error]{fail(error);});return false;}
+    const auto base=qEnvironmentVariable("BATTERY_MODEL_DIAGNOSTICS",qEnvironmentVariable("BATTERY_SIM_WORKSPACE",QDir::tempPath()+"/BatteryConsoleUDP")+"/diagnostics");
+    const auto result=ModelFile::read(ModelFile::defaultPath(),base);
+    trace("model_read",result.record);
+    if(!result.ok){const auto error=result.error;QTimer::singleShot(0,this,[this,error]{fail(error);});return false;}
+    m_modelSnapshot=result.bytes;
     m_modelHash=hash(m_modelSnapshot);m_uploadId=uid();m_uploadOffset=0;m_uploadChunk=m_remote?ModelTransfer::TcpChunk:ModelTransfer::UdpChunk;return true;
 }
 void SysplorerRunner::nextModelChunk(){
@@ -226,7 +226,6 @@ void SysplorerRunner::prepareSimulation(double voltage,double current,int mode,d
     m_serverJobDir.clear();m_finalStatus={};m_downloading=false;m_downloadReady=false;m_downloadFile.reset();m_remoteLost=false;
     if(m_remote)closeRemote();
     m_soc0=soc0;m_duration=duration;m_clock.start();m_phaseClock.start();m_log.close();
-    if(!readModelSnapshot())return;
     if(!std::isfinite(voltage)||voltage<2.5||voltage>3.45||!std::isfinite(current)||current<0||current>5
        ||(mode!=1&&mode!=2)||!std::isfinite(soc0)||soc0<0||soc0>1||!std::isfinite(duration)||duration<.1||duration>20000){
         QTimer::singleShot(0,this,[this]{fail(QString::fromUtf8("仿真参数不在允许范围内。"));});return;
@@ -237,6 +236,7 @@ void SysplorerRunner::prepareSimulation(double voltage,double current,int mode,d
     m_jobDir=QDir(base).absoluteFilePath(m_taskId);
     if(!QDir().mkpath(m_jobDir)){QTimer::singleShot(0,this,[this]{fail(QString::fromUtf8("检查输出目录 · OUTPUT_DIRECTORY_FAILED：无法创建任务目录。"));});return;}
     m_log.setFileName(m_jobDir+"/client.log");m_log.open(QIODevice::WriteOnly|QIODevice::Append);
+    if(!readModelSnapshot())return;
     trace("request",{{"mode",mode},{"voltage",voltage},{"current",current},{"soc0",soc0},{"duration",duration},{"modelHash",m_modelHash},{"hostExecutable",guiExecutable()}});
     trace("discovery_environment",{{"executable",QCoreApplication::applicationFilePath()},
         {"folder",qEnvironmentVariable("BATTERY_DISCOVERY_DIR",QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)+"/BatteryConsole/udp")},
@@ -267,8 +267,13 @@ bool SysplorerRunner::discover(){
     }
 #endif
     diagnostic+=QString("entries=%1; exists=%2; readable=%3; ").arg(files.size()).arg(QDir(folder).exists()).arg(QFileInfo(folder).isReadable());
-    bool startingHostFound=false;
+    bool startingHostFound=m_hostPid>0&&!m_busyHosts.contains(m_hostPid)&&processMatches(m_hostPid,guiExecutable());
     for(const auto&f:files){
+        const auto filePid=f.completeBaseName().toLongLong();
+        // A locked or partially replaced discovery record is not permission to
+        // launch a second copy of a verified live host. Busy isolation remains
+        // limited to hosts explicitly recorded in m_busyHosts.
+        if(filePid>0&&!m_busyHosts.contains(filePid)&&(!m_launchedPid||filePid==m_launchedPid)&&processMatches(filePid,guiExecutable()))startingHostFound=true;
         QFile file(f.absoluteFilePath());if(!file.open(QIODevice::ReadOnly)){
             diagnostic+=QString("file=%1 openError=%2; ").arg(f.fileName(),file.errorString());continue;
         }
@@ -404,7 +409,13 @@ void SysplorerRunner::handleResponse(const QJsonObject& r){
         ||r["taskId"].toString()!=m_taskId)return;
     const auto cmd=m_pendingCommand;m_pending.clear();m_pendingCommand.clear();
     if(cmd=="download"){consumeDownload(r);return;}
+    if(cmd=="hello"&&r["ok"].toBool()&&r["controllerState"].toString()=="Unavailable"){
+        trace("host_not_ready",{{"reason","controller-unavailable"},{"releaseId",r["releaseId"]}});return;
+    }
     if(m_connectOnly){
+        if(r["ok"].toBool()&&r["busy"].toBool()){
+            connectionFailed("HOST_BUSY",QString::fromUtf8("Sysplorer 正被其他任务占用，未接管该任务。"));return;
+        }
         if(r["ok"].toBool()&&r["ready"].toBool()){
             const auto hostPhase=r["status"].toObject()["phase"].toString();
             if(!checkCompatibility(r))return;
@@ -440,7 +451,7 @@ void SysplorerRunner::handleResponse(const QJsonObject& r){
         const bool idlePhase=p=="Ready"||p=="Loaded"||p=="Completed"||p=="Stopped"||p=="Failed";
         // A bound plugin can still be initializing. Wait on this instance
         // instead of classifying initialization as another client's task.
-        if(idlePhase&&r["controllerState"].toString()=="Idle"&&!r["ready"].toBool())return;
+        if(idlePhase&&r["controllerState"].toString()=="Idle"&&!r["ready"].toBool()&&!r["busy"].toBool())return;
         if((p!="Ready"&&p!="Loaded"&&p!="Completed"&&p!="Stopped"&&p!="Failed")||r["controllerState"].toString()!="Idle"
             ||(!m_remote&&!m_launchedPid&&((p=="Failed"&&!st["code"].toString().startsWith("MODEL_"))||!r["ready"].toBool()))){
             if(m_remote||m_launchedPid){connectionFailed("HOST_BUSY",m_remote?QString::fromUtf8("远程 Sysplorer 正被其他任务占用，未接管该任务。")

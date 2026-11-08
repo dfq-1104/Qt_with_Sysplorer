@@ -1,5 +1,5 @@
 param([Parameter(Mandatory=$true)][string]$Address,[int]$Port=39001,
-      [string]$KeyFile='', [string]$ExpectedModelHash='', [string]$OutputFile='')
+      [string]$KeyFile='', [string]$ExpectedModelHash='', [string]$OutputFile='', [string]$CredentialConfigPath='')
 $ErrorActionPreference='Stop'
 # A Qt-launched Windows PowerShell process can inherit PowerShell 7 module
 # paths. Load the host's own standard utility cmdlets explicitly.
@@ -7,6 +7,7 @@ Import-Module (Join-Path $PSHOME 'Modules\Microsoft.PowerShell.Utility\Microsoft
 if(-not $OutputFile){$OutputFile=Join-Path $PSScriptRoot 'remote-diagnostic.json'}
 $output=[IO.Path]::GetFullPath($OutputFile)
 function Get-ExistingRemoteKey([string]$Path){
+    if($CredentialConfigPath){return [regex]::Match([IO.File]::ReadAllText($CredentialConfigPath),'(?m)^\s*AccessKey\s*=\s*([^\r\n]*)').Groups[1].Value.Trim()}
     if($Path){return [IO.File]::ReadAllText([IO.Path]::GetFullPath($Path),[Text.Encoding]::UTF8).Trim()}
     $settings=Join-Path ([Environment]::GetFolderPath('ApplicationData')) 'BatteryConsole\RemoteConnection.ini'
     $text=[IO.File]::ReadAllText($settings,[Text.Encoding]::UTF8)
@@ -70,6 +71,8 @@ try{
     $report['capabilities']=[ordered]@{modelLifecycle=($reply.modelLifecycle -eq $true);splitLifecycle=($reply.splitLifecycle -eq $true)}
     $report['ready']=($reply.ready -eq $true);$report['modelLoaded']=($reply.modelLoaded -eq $true);$report['phase']=$reply.status.phase;$report['hostPid']=$reply.status.pid
     $report['controllerState']=$reply.controllerState
+    $report['backgroundTaskRunning']=($reply.backgroundTaskRunning -eq $true)
+    $report['releaseId']=$reply.releaseId
     $report['lastTask']=[ordered]@{taskId=$reply.status.taskId;phase=$reply.status.phase;stage=$reply.status.stage;code=$reply.status.code;message=$reply.status.message;serverRunDirectory=$reply.status.jobDir}
     $report.comparison=if($report.capabilitiesMatch){'upload-capable; model verified after upload'}else{'capability-mismatch'}
     $report.stage='complete'

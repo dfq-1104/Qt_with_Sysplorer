@@ -2,6 +2,7 @@ QT += core gui widgets network
 
 TEMPLATE = app
 TARGET = battery_console_ui
+RESOURCES += models.qrc
 CONFIG += c++11
 CONFIG -= app_bundle console
 QMAKE_CXXFLAGS += /utf-8

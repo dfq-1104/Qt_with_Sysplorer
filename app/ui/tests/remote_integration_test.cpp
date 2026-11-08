@@ -22,6 +22,7 @@
 #include <QNetworkProxyFactory>
 #include <QNetworkInterface>
 #include <QtEndian>
+#include <windows.h>
 #include "remote_server.h"
 #include "model_transfer.h"
 #include "sysplorer_runner.h"
@@ -50,7 +51,7 @@ public:
     bool autoComplete=true,failDownload=false,badChunk=false,modelLifecycle=true,splitLifecycle=true,ready=true,dropPreparationReply=false,helloApiError=false;
     int starts=0,polls=0,downloads=0,hellos=0,preparations=0;
     int transferVersion=1;
-    QString startingError;
+    QString startingError,controllerOverride;
     explicit FixtureHost(const QString& dir,const QString& listenAddress="127.0.0.1"){
         SysplorerRunner fingerprint;model=fingerprint.modelFingerprint();
         config=dir+"/remote.ini";QSettings settings(config,QSettings::IniFormat);
@@ -59,7 +60,7 @@ public:
         QObject::connect(&server,&RemoteServer::request,this,[this](RemoteLink* link,const QJsonObject& r){
             if(!clients.contains(link))clients.append(link);
             QJsonObject out{{"ok",true}};const auto cmd=r["command"].toString();
-            if(cmd=="hello"){++hellos;out={{"ok",true},{"ready",ready},{"modelTransferVersion",transferVersion},{"modelInterface",ModelTransfer::interfaceName()},{"splitLifecycle",splitLifecycle},{"modelLifecycle",modelLifecycle},{"modelLoaded",false},{"modelHash",model},{"controllerState",phase=="Running"?"Running":"Idle"},{"status",snapshot(0)}};}
+            if(cmd=="hello"){++hellos;out={{"ok",true},{"ready",ready},{"modelTransferVersion",transferVersion},{"modelInterface",ModelTransfer::interfaceName()},{"splitLifecycle",splitLifecycle},{"modelLifecycle",modelLifecycle},{"modelLoaded",false},{"modelHash",model},{"controllerState",controllerOverride.isEmpty()?(phase=="Running"?"Running":"Idle"):controllerOverride},{"status",snapshot(0)}};}
             else if(cmd.startsWith("model.")){out=uploads.execute(r["client"].toString(),cmd,r["args"].toObject(),ModelTransfer::TcpChunk,0);}
             else if(cmd=="translate"||cmd=="load"){
                 model=ModelTransfer::sha(uploads.take(r["client"].toString(),r["args"].toObject()["modelHash"].toString(),1));
@@ -310,6 +311,20 @@ private slots:
             runner.connectHost();QTRY_COMPARE(runner.phase(),QString("Connected"));QCOMPARE(failed.count(),1);fixture.kill();QVERIFY(fixture.waitForFinished(3000));
         }
     }
+    void localLockedDiscoveryWaitsWithoutLaunchingAnotherHost(){
+        QString marker;QVERIFY(installLaunchFixture(marker));qputenv("BATTERY_FIXTURE_UDP","1");
+        QProcess fixture;fixture.start(QDir(qEnvironmentVariable("SYSPLORER_HOME")).absoluteFilePath("Bin64/mworks.exe"));QVERIFY(fixture.waitForStarted());
+        const auto folder=qEnvironmentVariable("BATTERY_DISCOVERY_DIR");QTRY_VERIFY(!QDir(folder).entryList({"*.json"},QDir::Files).isEmpty());
+        const auto endpoint=QDir(folder).absoluteFilePath(QString::number(fixture.processId())+".json");
+        struct Lock {HANDLE handle=INVALID_HANDLE_VALUE;~Lock(){if(handle!=INVALID_HANDLE_VALUE)CloseHandle(handle);}} lock;
+        QTRY_VERIFY(lock.handle!=INVALID_HANDLE_VALUE||(lock.handle=CreateFileW(reinterpret_cast<LPCWSTR>(QDir::toNativeSeparators(endpoint).utf16()),GENERIC_READ,0,nullptr,OPEN_EXISTING,0,nullptr))!=INVALID_HANDLE_VALUE);
+        SysplorerRunner runner;QSignalSpy failed(&runner,&SysplorerRunner::hostConnectionFailed);runner.connectHost();QTest::qWait(450);
+        QCOMPARE(runner.phase(),QString("Connecting"));QCOMPARE(failed.count(),0);
+        QFile record(marker);QVERIFY(record.open(QIODevice::ReadOnly));QCOMPARE(record.readAll().count("\"arguments\""),1);record.close();
+        CloseHandle(lock.handle);lock.handle=INVALID_HANDLE_VALUE;QTRY_COMPARE(runner.phase(),QString("Connected"));
+        QVERIFY(record.open(QIODevice::ReadOnly));QCOMPARE(record.readAll().count("\"arguments\""),1);
+        fixture.kill();QVERIFY(fixture.waitForFinished(3000));
+    }
     void connectionFailureKeepsUiAndResults(){
         FixtureHost host(dir->path());qputenv("BATTERY_CONNECTION_MODE","remote");qputenv("BATTERY_REMOTE_ADDRESS","127.0.0.1");
         qputenv("BATTERY_REMOTE_PORT",QByteArray::number(host.server.port()));qputenv("BATTERY_REMOTE_KEY",key.toUtf8());
@@ -332,6 +347,38 @@ private slots:
         QSignalSpy failed(&runner,&SysplorerRunner::hostConnectionFailed);runner.connectHost();QTest::qWait(220);QCOMPARE(runner.phase(),QString("Connecting"));QCOMPARE(failed.count(),0);
         host.ready=true;host.modelLifecycle=false;QTRY_COMPARE(runner.phase(),QString("ConnectionFailed"));QCOMPARE(failed.count(),1);const int count=host.hellos;QTest::qWait(250);QCOMPARE(host.hellos,count);
         host.modelLifecycle=true;runner.connectHost();QTRY_COMPARE(runner.phase(),QString("Connected"));QCOMPARE(failed.count(),1);
+    }
+    void unavailableControllerWaitsAndCanRecover(){
+        FixtureHost host(dir->path());host.controllerOverride="Unavailable";host.ready=true;
+        SysplorerRunner runner;QVERIFY(runner.configureConnection(true,"127.0.0.1",host.server.port(),key,false));
+        QSignalSpy failed(&runner,&SysplorerRunner::hostConnectionFailed);runner.connectHost();QTest::qWait(350);
+        QCOMPARE(runner.phase(),QString("Connecting"));QCOMPARE(failed.count(),0);QCOMPARE(host.preparations,0);
+        host.controllerOverride="Idle";QTRY_COMPARE(runner.phase(),QString("Connected"));
+        host.controllerOverride="Unavailable";runner.loadModel();QTest::qWait(350);QCOMPARE(host.preparations,0);QCOMPARE(failed.count(),0);
+        host.controllerOverride="Idle";QTRY_COMPARE(runner.phase(),QString("Loaded"));
+    }
+    void ordinaryUiModelFailureRecovery(){
+        const auto original=qEnvironmentVariable("BATTERY_MODEL_FILE");QFile source(original);QVERIFY(source.open(QIODevice::ReadOnly));const auto valid=source.readAll();source.close();
+        FixtureHost host(dir->path());qputenv("BATTERY_CONNECTION_MODE","remote");qputenv("BATTERY_REMOTE_ADDRESS","127.0.0.1");
+        qputenv("BATTERY_REMOTE_PORT",QByteArray::number(host.server.port()));qputenv("BATTERY_REMOTE_KEY",key.toUtf8());
+        MainWindow window;window.show();auto runner=window.findChild<SysplorerRunner*>();runner->connectHost();QTRY_COMPARE(runner->phase(),QString("Connected"));
+        const auto path=dir->path()+"/ordinary-ui.mo";
+        struct Restore {QString value;~Restore(){_wputenv_s(L"BATTERY_MODEL_FILE",reinterpret_cast<const wchar_t*>(value.utf16()));}} restore{original};
+        _wputenv_s(L"BATTERY_MODEL_FILE",reinterpret_cast<const wchar_t*>(path.utf16()));
+        QSignalSpy done(runner,&SysplorerRunner::finished);
+        for(const auto name:{"btnLoad","btnPrepare","btnPlay"}){
+            QFile f(path);QVERIFY(f.open(QIODevice::WriteOnly));f.write(valid+QByteArray::fromHex("e4b8"));f.close();
+            auto button=window.findChild<QPushButton*>(name);QVERIFY(button->isEnabled());const auto count=done.count();button->click();QTRY_COMPARE(done.count(),count+1);
+            QVERIFY(!done.last()[0].toBool());QVERIFY(done.last()[2].toString().contains("MODEL_UTF8_INVALID"));QVERIFY(done.last()[2].toString().contains(QString::number(valid.size())));
+            QCOMPARE(runner->phase(),QString("Failed"));QVERIFY(!runner->isRunning());QCOMPARE(host.preparations,0);QCOMPARE(host.starts,0);
+            QFile log(runner->lastRunDirectory()+"/client.log");QVERIFY(log.open(QIODevice::ReadOnly));QVERIFY(log.readAll().contains("model_read"));
+            for(auto widget:QApplication::topLevelWidgets())if(auto box=qobject_cast<QMessageBox*>(widget))box->accept();
+        }
+        QFile f(path);QVERIFY(f.open(QIODevice::WriteOnly));f.write(valid);f.close();
+        window.findChild<QPushButton*>("btnLoad")->click();QTRY_COMPARE(runner->phase(),QString("Loaded"));
+        window.findChild<QPushButton*>("btnPrepare")->click();QTRY_COMPARE(runner->phase(),QString("Prepared"));
+        const auto count=done.count();window.findChild<QPushButton*>("btnPlay")->click();QTRY_COMPARE_WITH_TIMEOUT(done.count(),count+1,10000);QVERIFY(done.last()[0].toBool());
+        QVERIFY(window.findChild<ReplayPlayer*>()->samples().size()>0);
     }
     void missingHostPluginAndTimeoutAreTerminal(){
         QString marker;QVERIFY(installLaunchFixture(marker));SysplorerRunner runner;QSignalSpy failures(&runner,&SysplorerRunner::hostConnectionFailed);

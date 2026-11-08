@@ -4,7 +4,6 @@
 #include <QJsonObject>
 #include <QMap>
 #include <QRegularExpression>
-#include <QTextCodec>
 #include <QUuid>
 #include <cmath>
 #include <stdexcept>
@@ -15,11 +14,30 @@ const int Limit=1024*1024, UdpChunk=768, TcpChunk=48*1024;
 inline QString interfaceName(){return QStringLiteral("battery-console/1");}
 inline QString sha(const QByteArray& b){return QString::fromLatin1(QCryptographicHash::hash(b,QCryptographicHash::Sha256).toHex());}
 inline void need(bool ok,const char* code){if(!ok)throw std::runtime_error(code);}
+struct ValidationError : std::runtime_error {
+    QString reason; int offset;
+    ValidationError(const char* code,const QString& why,int at=-1):std::runtime_error(code),reason(why),offset(at){}
+};
 inline void validate(const QByteArray& b){
-    need(!b.isEmpty()&&b.size()<=Limit,"MODEL_SIZE_INVALID");
-    QTextCodec::ConverterState state;
-    const auto text=QTextCodec::codecForName("UTF-8")->toUnicode(b.constData(),b.size(),&state);
-    need(state.invalidChars==0&&state.remainingChars==0&&!text.contains(QChar(0)),"MODEL_UTF8_INVALID");
+    if(b.isEmpty()||b.size()>Limit)throw ValidationError("MODEL_SIZE_INVALID",QString::fromUtf8("模型必须为 1 字节至 1 MiB"));
+    const auto bytes=reinterpret_cast<const unsigned char*>(b.constData());
+    auto bad=[](const QString& why,int at){throw ValidationError("MODEL_UTF8_INVALID",why,at);};
+    if(b.startsWith("\xff\xfe")||b.startsWith("\xfe\xff"))bad(QString::fromUtf8("检测到 UTF-16；请提供 UTF-8 文件"),0);
+    // RFC 3629 byte validation, independent of codec registries, locale and
+    // converter state. In particular, reject overlongs, surrogates and >U+10FFFF.
+    for(int i=0;i<b.size();){
+        const auto c=bytes[i];
+        if(c==0)bad(QString::fromUtf8("检测到 NUL 字节（可能是 UTF-16）"),i);
+        if(c<0x80){++i;continue;}
+        const int n=c>=0xc2&&c<=0xdf?2:c>=0xe0&&c<=0xef?3:c>=0xf0&&c<=0xf4?4:0;
+        if(!n)bad(QString::fromUtf8("非法 UTF-8 起始字节"),i);
+        if(i+n>b.size())bad(QString::fromUtf8("UTF-8 多字节字符被截断"),i);
+        for(int j=1;j<n;++j)if(bytes[i+j]<0x80||bytes[i+j]>0xbf)bad(QString::fromUtf8("非法 UTF-8 延续字节"),i+j);
+        const auto next=bytes[i+1];
+        if((c==0xe0&&next<0xa0)||(c==0xed&&next>0x9f)||(c==0xf0&&next<0x90)||(c==0xf4&&next>0x8f))bad(QString::fromUtf8("非法 Unicode 码点或过长编码"),i);
+        i+=n;
+    }
+    const auto text=QString::fromUtf8(b.constData(),b.size());
     // This product supports one interface. The host parser validates Modelica syntax.
     need(QRegularExpression("\\bpackage\\s+BatterySim\\b").match(text).hasMatch()
          &&QRegularExpression("\\bmodel\\s+SingleRun\\b").match(text).hasMatch(),"MODEL_INTERFACE_INVALID");

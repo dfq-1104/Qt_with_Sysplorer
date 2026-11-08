@@ -1,4 +1,4 @@
-param(
+﻿param(
     [ValidateSet('Local','Server')][string]$Mode='Local',
     [string]$SysplorerHome='',
     [string]$Workspace='C:\BatteryConsoleData\jobs',
@@ -6,12 +6,16 @@ param(
     [string]$ListenAddress='0.0.0.0',
     [string]$AllowedClientAddress='LocalSubnet',
     [string]$ClientStatePath='',
+    [string]$ServerStateDirectory='',
+    [string]$ResultFile='',
     [string]$UserSid=[Security.Principal.WindowsIdentity]::GetCurrent().User.Value,
     [switch]$Elevated,
     [switch]$SkipFirewall,
+    [switch]$NonInteractive,
     [switch]$DryRun
 )
 $ErrorActionPreference='Stop'
+trap { if($ResultFile){[IO.File]::WriteAllText($ResultFile,$PSItem.Exception.Message);exit 1}; throw $PSItem }
 # A GUI launched from PowerShell 7 can inherit its module search path. Load
 # this PowerShell executable's own Windows modules, never a development module.
 foreach($module in @('Utility','Management','Security')){
@@ -24,6 +28,16 @@ function Read-IniValue([string]$Text,[string]$Name){
     $match=[regex]::Match($Text,'(?m)^\s*'+[regex]::Escape($Name)+'\s*=\s*([^\r\n]*)')
     if($match.Success){return $match.Groups[1].Value.Trim()};return ''
 }
+function Set-IniValue([string]$Text,[string]$Name,[string]$Value){
+    if((Read-IniValue $Text $Name) -ceq $Value){return $Text}
+    $pattern='(?m)^(\s*'+[regex]::Escape($Name)+'\s*=)[^\r\n]*'
+    if([regex]::IsMatch($Text,$pattern)){return [regex]::Replace($Text,$pattern,[Text.RegularExpressions.MatchEvaluator]{param($match) $match.Groups[1].Value+$Value})}
+    $section=[regex]::Match($Text,'(?im)^\[Remote\][^\r\n]*\r?\n')
+    if(-not $section.Success){return $Text+"`r`n[Remote]`r`n$Name=$Value`r`n"}
+    return $Text.Insert($section.Index+$section.Length,"$Name=$Value`r`n")
+}
+. (Join-Path $PSScriptRoot 'PrivateFile.Common.ps1')
+function Protect-PrivateFile([string]$Path){Set-PrivateFile $Path $UserSid}
 function Select-CustomHome {
     Add-Type -AssemblyName System.Windows.Forms
     $picker=New-Object Windows.Forms.OpenFileDialog
@@ -83,7 +97,7 @@ $configExists=Test-Path -LiteralPath $config
 # Updating an existing deployment preserves its complete INI byte for byte.
 if($configExists){
     $configuredWorkspace=Read-IniValue $existingConfig 'Workspace';if($configuredWorkspace){$taskRoot=[IO.Path]::GetFullPath($configuredWorkspace)}
-    elseif($taskRoot -ne 'C:\BatteryConsoleData\jobs'){throw 'Existing remote.ini has no Workspace. Explicitly configure Workspace before selecting a custom task directory.'}
+
     if($taskRoot -match '[^\x00-\x7F]'){throw 'Existing Workspace must use an ASCII path'}
     $configuredPort=Read-IniValue $existingConfig 'Port';if($configuredPort){$Port=[int]$configuredPort}
 }
@@ -95,27 +109,53 @@ if(Test-Path -LiteralPath $manifest){
 }
 $needsCopy=-not(Test-Path -LiteralPath $target)
 if(-not $needsCopy){$needsCopy=(Get-FileHash -LiteralPath $target -Algorithm SHA256).Hash -ne $pluginHash}
-if($Mode -eq 'Server' -and $configExists -and (Read-IniValue $existingConfig 'Enabled') -ne 'true'){
-    throw 'Existing remote.ini has remote mode disabled. Review Enabled=true, Port, AccessKey and Workspace explicitly; setup preserves existing configuration.'
+$desiredConfig=$existingConfig
+if(-not $configExists){$desiredConfig="[Remote]`r`nEnabled=false`r`nListenAddress=$ListenAddress`r`nPort=$Port`r`nWorkspace=$($taskRoot.Replace('\','/'))`r`nAccessKey=`r`n"}
+if($Mode -eq 'Server'){
+    $desiredConfig=Set-IniValue $desiredConfig 'Enabled' 'true'
+    # Explicit server setup promotes a local-only deployment. Preserve valid
+    # credentials and port; never rotate a deployed credential implicitly.
+    if((Read-IniValue $desiredConfig 'AccessKey').Length -lt 32){
+        if(-not $DryRun){
+            $bytes=New-Object byte[] 32;$rng=[Security.Cryptography.RandomNumberGenerator]::Create()
+            try{$rng.GetBytes($bytes)}finally{$rng.Dispose()}
+            $newKey=[BitConverter]::ToString($bytes).Replace('-','').ToLowerInvariant()
+        }else{$newKey='GENERATED-ONLY-DURING-REAL-SETUP'}
+        $desiredConfig=Set-IniValue $desiredConfig 'AccessKey' $newKey
+    }
+    $oldAddress=Read-IniValue $desiredConfig 'ListenAddress'
+    if(-not $oldAddress -or $oldAddress -eq '127.0.0.1' -or $oldAddress -eq '::1'){$desiredConfig=Set-IniValue $desiredConfig 'ListenAddress' $ListenAddress}
+    if(-not (Read-IniValue $desiredConfig 'Workspace')){$desiredConfig=Set-IniValue $desiredConfig 'Workspace' $taskRoot.Replace('\','/')}
+    if(-not (Read-IniValue $desiredConfig 'Port')){$desiredConfig=Set-IniValue $desiredConfig 'Port' ([string]$Port)}
 }
+$configChanged= -not $configExists -or $desiredConfig -cne $existingConfig
+if($Mode -eq 'Server' -and ($Port -lt 1 -or $Port -gt 65535)){throw 'Configured server port must be 1-65535; configuration was not changed'}
 $isAdmin=([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
-$needsSetup=$needsCopy -or -not $configExists -or -not(Test-Path -LiteralPath $taskRoot)
+$needsSetup=$needsCopy -or $configChanged -or -not(Test-Path -LiteralPath $taskRoot)
 if($DryRun){
-    [ordered]@{mode=$Mode;sysplorerHome=$hostRoot;workspace=$taskRoot;port=$Port;wouldCopyPlugin=$needsCopy;preserveConfig=$configExists;wouldConfigureFirewall=($Mode -eq 'Server' -and -not $SkipFirewall);firewallProfiles=@('Domain','Private');allowedClientAddress=$AllowedClientAddress;firewallProgram=$hostExe;pluginSha256=$pluginHash}|ConvertTo-Json
+    [ordered]@{mode=$Mode;sysplorerHome=$hostRoot;workspace=$taskRoot;port=$Port;wouldCopyPlugin=$needsCopy;preserveConfig=($configExists -and -not $configChanged);wouldEnableRemote=($Mode -eq 'Server' -and $configChanged);wouldConfigureFirewall=($Mode -eq 'Server' -and -not $SkipFirewall);firewallProfiles=@('Domain','Private');allowedClientAddress=$AllowedClientAddress;firewallProgram=$hostExe;pluginSha256=$pluginHash}|ConvertTo-Json
     return
 }
 $protectedRoot=$hostRoot.StartsWith($env:ProgramFiles+'\',[StringComparison]::OrdinalIgnoreCase) -or $hostRoot.StartsWith($env:SystemRoot+'\',[StringComparison]::OrdinalIgnoreCase) -or $taskRoot -eq 'C:\BatteryConsoleData' -or $taskRoot.StartsWith('C:\BatteryConsoleData\',[StringComparison]::OrdinalIgnoreCase)
 $requiresAdmin=($needsSetup -and $protectedRoot) -or ($Mode -eq 'Server' -and -not $SkipFirewall)
 if($requiresAdmin -and -not $isAdmin){
     if($Elevated){throw 'Administrator permission was not granted'}
+    $elevationReport=Join-Path ([IO.Path]::GetTempPath()) ('BatteryConsole-setup-'+[guid]::NewGuid().ToString('N')+'.txt')
     $command='& '+(Quote-Literal $PSCommandPath)+' -Elevated -Mode '+(Quote-Literal $Mode)+' -SysplorerHome '+(Quote-Literal $hostRoot)+' -Workspace '+(Quote-Literal $taskRoot)+' -Port '+$Port+' -ListenAddress '+(Quote-Literal $ListenAddress)+' -AllowedClientAddress '+(Quote-Literal $AllowedClientAddress)+' -UserSid '+(Quote-Literal $UserSid)
     if($SkipFirewall){$command+=' -SkipFirewall'}
+    if($NonInteractive){$command+=' -NonInteractive'}
+    $command+=' -ResultFile '+(Quote-Literal $elevationReport)
     # Client state is written by the original user below after elevation returns.
     $encoded=[Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes($command))
     $process=Start-Process -FilePath powershell.exe -Verb RunAs -WindowStyle Hidden -Wait -PassThru -ArgumentList @('-NoProfile','-ExecutionPolicy','Bypass','-EncodedCommand',$encoded)
-    if($process.ExitCode -ne 0){throw 'Setup failed or was cancelled. Save and close target Sysplorer, then retry Setup-Local/Setup-Server from a PowerShell window to read the error.'}
+    if($process.ExitCode -ne 0){
+        $detail=if(Test-Path -LiteralPath $elevationReport){[IO.File]::ReadAllText($elevationReport)}else{'Administrator setup was cancelled or could not start.'}
+        if(Test-Path -LiteralPath $elevationReport){Remove-Item -LiteralPath $elevationReport}
+        throw ('Setup failed: '+$detail)
+    }
+    if(Test-Path -LiteralPath $elevationReport){Remove-Item -LiteralPath $elevationReport}
 }else{
-    if($needsCopy){
+    if($needsCopy -or $configChanged){
         foreach($process in @(Get-Process mworks -ErrorAction SilentlyContinue)){
             try{$image=$process.Path}catch{throw 'Cannot inspect a running Sysplorer; close target instances before updating'}
             if(-not $image -or [IO.Path]::GetFullPath($image) -eq $hostExe){throw 'Save your work and close all target Sysplorer instances before plugin update. No process was stopped.'}
@@ -130,20 +170,14 @@ if($requiresAdmin -and -not $isAdmin){
         if($needsCopy){
             & (Join-Path $PSScriptRoot 'Update-Plugin.ps1') -SysplorerHome $hostRoot
         }
-        if(-not $configExists){
-            $accessKey='';$enabled='false'
-            if($Mode -eq 'Server'){
-                $bytes=New-Object byte[] 32;$rng=[Security.Cryptography.RandomNumberGenerator]::Create()
-                try{$rng.GetBytes($bytes)}finally{$rng.Dispose()}
-                $accessKey=[BitConverter]::ToString($bytes).Replace('-','').ToLowerInvariant();$enabled='true'
-            }
-            [IO.File]::WriteAllText($config,'')
-            $acl=New-Object Security.AccessControl.FileSecurity;$acl.SetAccessRuleProtection($true,$false)
-            foreach($principal in @($UserSid,'S-1-5-18','S-1-5-32-544')){
-                $acl.AddAccessRule((New-Object Security.AccessControl.FileSystemAccessRule((New-Object Security.Principal.SecurityIdentifier($principal)),'FullControl','Allow')))
-            }
-            Set-Acl -LiteralPath $config -AclObject $acl
-            [IO.File]::WriteAllText($config,"[Remote]`r`nEnabled=$enabled`r`nListenAddress=$ListenAddress`r`nPort=$Port`r`nWorkspace=$($taskRoot.Replace('\','/'))`r`nAccessKey=$accessKey`r`n",(New-Object Text.UTF8Encoding($false)))
+        if($configChanged){
+            if($configExists){
+                $configBackup=$config+'.before-server-setup.bak'
+                if(-not(Test-Path -LiteralPath $configBackup)){[IO.File]::WriteAllText($configBackup,'');Protect-PrivateFile $configBackup;[IO.File]::WriteAllBytes($configBackup,[IO.File]::ReadAllBytes($config))}
+                Protect-PrivateFile $configBackup
+            }else{[IO.File]::WriteAllText($config,'')}
+            Protect-PrivateFile $config
+            [IO.File]::WriteAllText($config,$desiredConfig,(New-Object Text.UTF8Encoding($false)))
         }
     }
     if($Mode -eq 'Server' -and -not $SkipFirewall){
@@ -160,4 +194,6 @@ if($ClientStatePath){
     [ordered]@{schema=1;sysplorerHome=$hostRoot;workspace=$taskRoot;pluginSha256=$pluginHash}|ConvertTo-Json|Set-Content -LiteralPath $ClientStatePath -Encoding UTF8
 }
 Write-Output 'Setup completed. Start Sysplorer normally; no special launch script is required.'
-if($Mode -eq 'Server'){Write-Output "Credentials remain in: $config (AccessKey). Existing configuration was preserved."}
+if($Mode -eq 'Server' -and -not $Elevated){
+    & (Join-Path $PSScriptRoot 'Server-Info.ps1') -SysplorerHome $hostRoot -NonInteractive:$NonInteractive -StateDirectory $ServerStateDirectory
+}

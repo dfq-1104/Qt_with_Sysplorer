@@ -115,7 +115,7 @@ private slots:
         for(int variant=0;variant<2;++variant){
             auto source=text;if(variant==1)source.replace("Q_rated=2.5*3600","Q_rated=5.0*3600");
             const auto path=dir->path()+QString("/model-%1-%2.mo").arg(remote).arg(variant);QFile f(path);QVERIFY(f.open(QIODevice::WriteOnly));QCOMPARE(f.write(source),qint64(source.size()));f.close();modelFile(path);
-            SysplorerRunner runner;QCOMPARE(runner.modelFingerprint(),sha(source));QVERIFY(runner.configureConnection(remote,"127.0.0.1",e["port"].toInt(),key,false));QSignalSpy finished(&runner,&SysplorerRunner::finished);QString error;
+            SysplorerRunner runner;QCOMPARE(runner.modelFingerprint(),sha(source));QVERIFY(runner.configureConnection(remote,e["address"].toString("127.0.0.1"),e["port"].toInt(),key,false));QSignalSpy finished(&runner,&SysplorerRunner::finished);QString error;
             connect(&runner,&SysplorerRunner::finished,&runner,[&](bool,const QString&,const QString& message){error=message;});
             runner.connectHost();QTRY_COMPARE_WITH_TIMEOUT(runner.phase(),QString("Connected"),180000);runner.loadModel();QTRY_VERIFY_WITH_TIMEOUT(runner.phase()=="Loaded"||!runner.isRunning(),30000);QVERIFY2(runner.phase()=="Loaded",qPrintable(error));
             runner.setSpeed(20);runner.prepareSimulation(3.45,2,1,.5,6);QTRY_VERIFY_WITH_TIMEOUT(runner.isPrepared()||!runner.isRunning(),180000);QVERIFY2(runner.isPrepared(),qPrintable(error));
@@ -132,7 +132,7 @@ private slots:
         QFile ef(qEnvironmentVariable("BATTERY_REAL_HOST_ENV"));QVERIFY(ef.open(QIODevice::ReadOnly));auto bytes=ef.readAll();if(bytes.startsWith("\xef\xbb\xbf"))bytes.remove(0,3);const auto e=QJsonDocument::fromJson(bytes).object();
         QFile keyFile(e["keyFile"].toString());QVERIFY(keyFile.open(QIODevice::ReadOnly));const auto key=QString::fromUtf8(keyFile.readAll());
         const auto oldModel=qEnvironmentVariable("BATTERY_MODEL_FILE"),path=dir->path()+"/rejected-model.mo";
-        SysplorerRunner runner;QVERIFY(runner.configureConnection(true,"127.0.0.1",e["port"].toInt(),key,false));QSignalSpy finished(&runner,&SysplorerRunner::finished);
+        SysplorerRunner runner;QVERIFY(runner.configureConnection(true,e["address"].toString("127.0.0.1"),e["port"].toInt(),key,false));QSignalSpy finished(&runner,&SysplorerRunner::finished);
         const QByteArray sources[]={"package BatterySim model SingleRun Real bad = ; end SingleRun; end BatterySim;","package BatterySim model SingleRun Real other; end SingleRun; end BatterySim;"};
         for(int n=0;n<2;++n){
             QFile model(path);QVERIFY(model.open(QIODevice::WriteOnly));model.write(sources[n]);model.close();modelFile(path);finished.clear();runner.loadModel();

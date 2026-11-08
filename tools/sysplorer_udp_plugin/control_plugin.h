@@ -80,7 +80,7 @@ private:
     ModelTransfer::Store modelUploads;
     quint64 ownedModelKey=0;
     QString ownedModelHash,ownedModelSource;
-    QString savedWork,savedCode,savedResult,savedSolverPath,savedPanelResult,savedCurrentDirectory;
+    QString savedCode,savedResult,savedSolverPath,savedPanelResult,savedCurrentDirectory;
     bool pathsChanged=false;
     double voltage=3.45,current=2.5,soc0=.5,duration=120,speed=20,stopAt=-1;
     int mode=1;
