@@ -14,6 +14,7 @@
 build/
 dist/
 /.local-sysplorer/
+/inputs/
 /mw_crash_handler/
 app/ui/runtime_udp/
 app/ui/runtime_tuning/
@@ -52,6 +53,7 @@ app/ui/tests/build_startup_fixture/
 app/ui/tests/build_local_check/
 app/ui/tests/build_local_real/
 app/ui/tests/build_local_detailed/
+app/ui/tests/build_model_transfer/
 
 # Publish excludes: retain remote rules for local settings and generated files
 /.codex/

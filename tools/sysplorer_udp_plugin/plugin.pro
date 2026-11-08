@@ -10,7 +10,6 @@ DEFINES += UNICODE _UNICODE
 HEADERS += control_plugin.h
 HEADERS += task_status_compat.h
 SOURCES += control_plugin.cpp
-RESOURCES += models.qrc
 INCLUDEPATH += ../../common
 HEADERS += ../../common/remote_link.h ../../common/remote_server.h
 SOURCES += ../../common/remote_link.cpp ../../common/remote_server.cpp

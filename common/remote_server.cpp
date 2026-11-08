@@ -25,6 +25,7 @@ RemoteServer::RemoteServer(QObject* parent):QObject(parent){
 bool RemoteServer::start(const QString& configPath,const QString& session){
     close();QSettings config(configPath,QSettings::IniFormat);config.setIniCodec("UTF-8");
     m_session=session;m_enabled=config.value("Remote/Enabled",false).toBool();
+    m_workspace=config.value("Remote/Workspace").toString();
     m_statusFile=config.value("Remote/StatusFile",QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)+"/BatteryConsole/remote/"+QString::number(QCoreApplication::applicationPid())+".json").toString();
     if(!m_enabled){publish();return true;}
     m_key=config.value("Remote/AccessKey").toString();m_address=config.value("Remote/ListenAddress","127.0.0.1").toString();

@@ -8,6 +8,7 @@
 #include <QTimer>
 #include <QElapsedTimer>
 #include <QVector>
+#include "model_transfer.h"
 class QUdpSocket;
 class RemoteServer;
 class RemoteLink;
@@ -53,6 +54,8 @@ private:
     QJsonObject snapshot(int cursor=0) const;
     void beginTask(const QJsonObject&,const QString&,const QString&,bool loadOnly=false);
     void prepare();
+    void restoreTaskPaths();
+    QString currentModelSource() const;
     void startSolver();
     void applyTune();
     void simulationStopped(int);
@@ -74,6 +77,11 @@ private:
     QString session,token,endpoint,modelHash,modelText,taskId,owner,phase="Ready",jobDir,errorCode,errorMessage;
     QString csvHash,nativeResult,viewMessage;
     QString stage;
+    ModelTransfer::Store modelUploads;
+    quint64 ownedModelKey=0;
+    QString ownedModelHash,ownedModelSource;
+    QString savedWork,savedCode,savedResult,savedSolverPath,savedPanelResult,savedCurrentDirectory;
+    bool pathsChanged=false;
     double voltage=3.45,current=2.5,soc0=.5,duration=120,speed=20,stopAt=-1;
     int mode=1;
     bool modelLoaded=false,stopRequested=false,listenerAttached=false,shutdown=false,preparing=false;

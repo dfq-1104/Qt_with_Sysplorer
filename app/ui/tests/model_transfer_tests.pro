@@ -1,0 +1,9 @@
+QT += core gui widgets network testlib
+TEMPLATE = app
+TARGET = model_transfer_test
+CONFIG += console c++11 testcase
+QMAKE_CXXFLAGS += /utf-8
+INCLUDEPATH += ../src ../../../common
+SOURCES += model_transfer_test.cpp ../src/sysplorer_runner.cpp ../src/replay_data.cpp ../../../common/remote_link.cpp ../../../common/remote_server.cpp
+HEADERS += ../src/sysplorer_runner.h ../src/replay_data.h ../../../common/remote_link.h ../../../common/remote_server.h ../../../common/model_transfer.h
+win32:LIBS += -lcrypt32

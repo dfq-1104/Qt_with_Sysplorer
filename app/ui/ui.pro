@@ -1,5 +1,4 @@
 QT += core gui widgets network
-RESOURCES += models.qrc
 
 TEMPLATE = app
 TARGET = battery_console_ui

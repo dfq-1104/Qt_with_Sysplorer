@@ -21,6 +21,8 @@ function Copy-VerifiedBinary([string]$source,[string]$target) {
     }
 }
 Copy-VerifiedBinary "$PSScriptRoot\build\release\battery_console_ui.exe" "$runtime\battery_console_ui.exe"
+[IO.Directory]::CreateDirectory((Join-Path $runtime 'models')) | Out-Null
+Copy-Item -LiteralPath (Join-Path $root 'model\BatterySim.mo') -Destination (Join-Path $runtime 'models\BatterySim.mo')
 foreach($name in @('Qt5Core.dll','Qt5Network.dll','Qt5Gui.dll','Qt5Widgets.dll','Qt5Svg.dll')) {
     Copy-VerifiedBinary "$qt\bin\$name" "$runtime\$name"
 }

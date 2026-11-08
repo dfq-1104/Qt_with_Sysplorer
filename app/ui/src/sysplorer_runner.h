@@ -11,6 +11,7 @@
 #include "replay_data.h"
 class RemoteLink;
 class QSaveFile;
+class QProcess;
 
 // Task client only. The host plugin owns model loading, compilation and solving.
 class SysplorerRunner : public QObject {
@@ -31,7 +32,7 @@ public:
     void retryDownload();
     void abandonRemoteTask();
     void loadModel();
-    bool isModelLoaded() const {return m_modelLoaded;}
+    bool isModelLoaded() const {return m_modelLoaded&&modelFingerprint()==m_modelHash;}
     void beginSimulation();
     void invalidatePreparation();
     bool isPrepared() const {return m_busy && m_phase=="Prepared";}
@@ -70,6 +71,9 @@ private:
     void receive();
     void handleResponse(const QJsonObject&);
     bool checkCompatibility(const QJsonObject&);
+    bool readModelSnapshot();
+    void nextModelChunk();
+    void sendPreparation();
     void connectionFailed(const QString& code,const QString& message,const QJsonObject& details = {});
     void openRemote();
     void closeRemote(bool graceful=false);
@@ -81,6 +85,7 @@ private:
     void downloadProblem(const QString&);
     bool discover();
     bool launchHost();
+    bool ensureLocalConfiguration();
     void send(const QString&,const QJsonObject& = {});
     void consume(const QJsonObject&);
     void finalize(const QJsonObject&);
@@ -91,6 +96,8 @@ private:
     QString guiExecutable() const;
     QUdpSocket m_socket;
     QPointer<RemoteLink> m_link;
+    QPointer<QProcess> m_localSetup;
+    bool m_localChecked=false;
     bool m_remote=false,m_remoteLost=false,m_downloading=false,m_downloadReady=false,m_closingRemote=false;
     QString m_remoteAddress="127.0.0.1",m_accessKey,m_serverJobDir,m_resumePhase;
     quint16 m_remotePort=39001;
@@ -101,6 +108,9 @@ private:
     QTimer m_timer;
     QElapsedTimer m_clock,m_pendingClock,m_phaseClock;
     QByteArray m_pending;
+    QByteArray m_modelSnapshot;
+    QString m_uploadId;
+    int m_uploadOffset=0,m_uploadChunk=768;
     QString m_pendingId,m_pendingCommand,m_control;
     QString m_clientId,m_session,m_token,m_taskId,m_modelHash,m_jobDir,m_phase="Idle";
     QString m_helloPhase,m_error;

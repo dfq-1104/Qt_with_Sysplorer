@@ -1,5 +1,6 @@
 param([string]$SysplorerHome='C:\Program Files\MWORKS\Sysplorer 2026a')
 $ErrorActionPreference='Stop'
+Import-Module (Join-Path $PSHOME 'Modules\Microsoft.PowerShell.Utility\Microsoft.PowerShell.Utility.psd1') -ErrorAction Stop
 $hostRoot=[IO.Path]::GetFullPath($SysplorerHome)
 $hostExe=Join-Path $hostRoot 'Bin64\mworks.exe'
 $source=Join-Path $PSScriptRoot 'battery_udp_control.dll'

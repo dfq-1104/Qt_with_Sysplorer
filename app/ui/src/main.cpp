@@ -11,12 +11,15 @@
 #include <QSaveFile>
 #include <QPushButton>
 #include <QMessageBox>
+#include <QSettings>
 #include <memory>
 #include "battery_view.h"
 #include "sysplorer_runner.h"
 #include "runtime_environment.h"
 int main(int argc,char** argv) {
     QApplication app(argc,argv);
+    const auto testConfig=qEnvironmentVariable("BATTERY_TEST_CONFIG_ROOT");
+    if(!testConfig.isEmpty())QSettings::setPath(QSettings::IniFormat,QSettings::UserScope,testConfig);
     QString environmentError;
     if(!prepareRuntimeEnvironment(&environmentError)){
         const auto output=qEnvironmentVariable("BATTERY_TEST_ARTIFACTS");
@@ -59,6 +62,9 @@ int main(int argc,char** argv) {
     }
     if(app.arguments().contains("--verify-custom")) {
         auto runner=window.findChild<SysplorerRunner*>();
+        // This explicit diagnostic action includes a connection. Ordinary
+        // startup remains idle in both modes.
+        if(runner->remoteMode())QTimer::singleShot(0,runner,&SysplorerRunner::connectHost);
         QObject::connect(runner,&SysplorerRunner::finished,&app,[&app,runner](bool ok,const QString& csv,const QString& message){
             QJsonObject result{{"ok",ok},{"csv",csv},{"message",message},{"job",runner->lastRunDirectory()},
                 {"platform",QGuiApplication::platformName()}};

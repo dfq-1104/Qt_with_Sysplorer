@@ -1,5 +1,0 @@
-<RCC>
-  <qresource prefix="/models">
-    <file alias="BatterySim.mo">../../model/BatterySim.mo</file>
-  </qresource>
-</RCC>

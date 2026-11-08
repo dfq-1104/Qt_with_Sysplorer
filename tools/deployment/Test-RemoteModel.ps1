@@ -4,12 +4,8 @@ $ErrorActionPreference='Stop'
 # A Qt-launched Windows PowerShell process can inherit PowerShell 7 module
 # paths. Load the host's own standard utility cmdlets explicitly.
 Import-Module (Join-Path $PSHOME 'Modules\Microsoft.PowerShell.Utility\Microsoft.PowerShell.Utility.psd1') -ErrorAction Stop
-$root=[IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\..'))
-if(-not $ExpectedModelHash){$ExpectedModelHash=(Get-FileHash -LiteralPath (Join-Path $root 'model\BatterySim.mo')).Hash.ToLowerInvariant()}
-if($ExpectedModelHash -notmatch '^[0-9a-fA-F]{64}$'){throw 'Expected model SHA-256 is required'}
-if(-not $OutputFile){$OutputFile=Join-Path $root 'logs\remote-vm\model-preflight.json'}
+if(-not $OutputFile){$OutputFile=Join-Path $PSScriptRoot 'remote-diagnostic.json'}
 $output=[IO.Path]::GetFullPath($OutputFile)
-if(-not $output.StartsWith($root+'\',[StringComparison]::OrdinalIgnoreCase)){throw 'Diagnostic output must stay inside this worktree'}
 function Get-ExistingRemoteKey([string]$Path){
     if($Path){return [IO.File]::ReadAllText([IO.Path]::GetFullPath($Path),[Text.Encoding]::UTF8).Trim()}
     $settings=Join-Path ([Environment]::GetFolderPath('ApplicationData')) 'BatteryConsole\RemoteConnection.ini'
@@ -66,15 +62,16 @@ try{
     $reply=[Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($frame.payload))|ConvertFrom-Json
     $report['helloValidation']=[ordered]@{schema=$reply.schema;idMatches=($reply.id -eq $id);sessionMatches=($reply.session -eq $challenge.session);taskIdEmpty=([string]::IsNullOrEmpty($reply.taskId));ok=($reply.ok -eq $true);code=$reply.code;message=$reply.message}
     if($reply.schema -ne 1 -or $reply.id -ne $id -or $reply.session -ne $challenge.session -or -not [string]::IsNullOrEmpty($reply.taskId)){throw 'Invalid hello response; see helloValidation in the diagnostic'}
-    if(-not $reply.modelHash){throw ('Host hello failed before exposing model metadata: '+$reply.code)}
     $missing=@(foreach($name in @('modelLifecycle','splitLifecycle')){if($reply.$name -ne $true){$name}})
-    $report.modelChecked=$true;$report.modelMatches=($reply.modelHash -eq $ExpectedModelHash);$report.capabilitiesMatch=($missing.Count -eq 0)
+    if($reply.modelTransferVersion -ne 1){$missing+='modelTransferVersion=1'}
+    if($reply.modelInterface -ne 'battery-console/1'){$missing+='modelInterface=battery-console/1'}
+    $report.modelChecked=$false;$report.modelMatches=$null;$report.capabilitiesMatch=($missing.Count -eq 0)
     $report['actualModelHash']=$reply.modelHash;$report['missingCapabilities']=$missing
     $report['capabilities']=[ordered]@{modelLifecycle=($reply.modelLifecycle -eq $true);splitLifecycle=($reply.splitLifecycle -eq $true)}
     $report['ready']=($reply.ready -eq $true);$report['modelLoaded']=($reply.modelLoaded -eq $true);$report['phase']=$reply.status.phase;$report['hostPid']=$reply.status.pid
     $report['controllerState']=$reply.controllerState
     $report['lastTask']=[ordered]@{taskId=$reply.status.taskId;phase=$reply.status.phase;stage=$reply.status.stage;code=$reply.status.code;message=$reply.status.message;serverRunDirectory=$reply.status.jobDir}
-    $report.comparison=if($report.modelMatches -and $report.capabilitiesMatch){'compatible'}else{'mismatch'}
+    $report.comparison=if($report.capabilitiesMatch){'upload-capable; model verified after upload'}else{'capability-mismatch'}
     $report.stage='complete'
     if(-not $reply.ok){$report.stage='host-readiness';throw ('Host readiness/API check failed: '+$reply.code)}
 }catch{$report.error=$_.Exception.Message}finally{
@@ -85,4 +82,4 @@ try{
 Write-Output "Remote model preflight: $output"
 Write-Output "Authenticated=$($report.authenticated); ModelChecked=$($report.modelChecked); Comparison=$($report.comparison)"
 if($report.error){throw $report.error}
-if(-not $report.modelMatches -or -not $report.capabilitiesMatch){throw 'Remote model/capabilities mismatch. Update the remote plugin package before running tasks.'}
+if(-not $report.capabilitiesMatch){throw 'Remote plugin lacks model transfer capabilities. Update the plugin before running tasks.'}

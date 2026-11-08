@@ -12,6 +12,7 @@
 #include <QTimer>
 #include <QElapsedTimer>
 #include <QProcess>
+#include "../../../common/model_transfer.h"
 #ifdef Q_OS_WIN
 #include <windows.h>
 #endif
@@ -47,10 +48,12 @@ int main(int argc,char** argv){
     const auto session=QUuid::createUuid().toString(QUuid::WithoutBraces),token=session+session;
     const auto folder=qEnvironmentVariable("BATTERY_DISCOVERY_DIR");QDir().mkpath(folder);
     const auto endpoint=folder+"/"+QString::number(app.applicationPid())+".json";
+    QElapsedTimer elapsed;elapsed.start();
     auto advertise=[&]{QSaveFile f(endpoint);if(f.open(QIODevice::WriteOnly)){f.write(QJsonDocument(QJsonObject{{"schema",1},{"protocol","battery-udp/1"},
         {"pid",double(app.applicationPid())},{"executable",app.applicationFilePath()},{"port",socket.localPort()},{"session",session},{"token",token},
-        {"modelHash",qEnvironmentVariable("BATTERY_FIXTURE_MODEL_HASH")},{"bound",true},{"updated",QDateTime::currentDateTimeUtc().toString(Qt::ISODateWithMs)}}).toJson());f.commit();}};
-    QElapsedTimer elapsed;elapsed.start();QTimer timer;QObject::connect(&timer,&QTimer::timeout,&app,advertise);timer.start(200);advertise();
+        {"modelHash",qEnvironmentVariable("BATTERY_FIXTURE_MODEL_HASH")},{"bound",true},{"updated",QDateTime::currentDateTimeUtc().addSecs(elapsed.elapsed()<qEnvironmentVariableIntValue("BATTERY_FIXTURE_STALE_UNTIL_MS")?-30:0).toString(Qt::ISODateWithMs)}}).toJson());f.commit();}};
+    QTimer timer;QObject::connect(&timer,&QTimer::timeout,&app,advertise);timer.start(200);advertise();
+    ModelTransfer::Store uploads;QString task,owner,model,phase="Ready";QJsonObject params;bool lostRequest=false,lostReply=false;
     QObject::connect(&socket,&QUdpSocket::readyRead,&app,[&]{while(socket.hasPendingDatagrams()){
         const auto d=socket.receiveDatagram();const auto r=QJsonDocument::fromJson(d.data()).object();
         if(r["token"].toString()!=token)continue;
@@ -61,6 +64,25 @@ int main(int argc,char** argv){
             {"status",QJsonObject{{"phase","Ready"}}}};
         if(!qEnvironmentVariableIsSet("BATTERY_FIXTURE_MISSING_MODEL"))reply["modelLifecycle"]=true;
         if(!qEnvironmentVariableIsSet("BATTERY_FIXTURE_MISSING_SPLIT"))reply["splitLifecycle"]=true;
+        if(!qEnvironmentVariableIsSet("BATTERY_FIXTURE_MISSING_TRANSFER"))reply["modelTransferVersion"]=1;reply["modelInterface"]="battery-console/1";
+        if(qEnvironmentVariableIsSet("BATTERY_FIXTURE_TRANSFER")){
+            const auto cmd=r["command"].toString();
+            if(cmd=="model.chunk"&&!lostRequest){lostRequest=true;continue;}
+            try{
+                if(cmd.startsWith("model.")){
+                    auto result=uploads.execute(r["client"].toString(),cmd,r["args"].toObject(),ModelTransfer::UdpChunk,elapsed.elapsed());
+                    for(auto it=result.begin();it!=result.end();++it)reply[it.key()]=it.value();
+                    if(cmd=="model.chunk"&&!lostReply){lostReply=true;continue;}
+                }else if(cmd=="load"||cmd=="translate"){
+                    params=r["args"].toObject();model=ModelTransfer::sha(uploads.take(r["client"].toString(),params["modelHash"].toString(),elapsed.elapsed()));
+                    task=r["taskId"].toString();owner=r["client"].toString();phase=cmd=="load"?"Loaded":"Prepared";
+                    marker.write(QJsonDocument(QJsonObject{{"acceptedHash",model}}).toJson(QJsonDocument::Compact));marker.write("\n");marker.flush();
+                }else if(cmd=="discard")phase="Ready";
+                else if(cmd=="start")phase="Running";
+                else if(cmd=="stop")phase="Stopped";
+                reply["status"]=QJsonObject{{"phase",phase},{"taskId",task},{"owner",owner},{"modelHash",model},{"params",params},{"modelLoaded",!model.isEmpty()}};
+            }catch(const std::exception& e){reply["ok"]=false;reply["code"]=QString::fromUtf8(e.what());}
+        }
         socket.writeDatagram(QJsonDocument(reply).toJson(QJsonDocument::Compact),d.senderAddress(),d.senderPort());
     }});
     QTimer::singleShot(20000,&app,&QCoreApplication::quit);const int result=app.exec();QFile::remove(endpoint);return result;

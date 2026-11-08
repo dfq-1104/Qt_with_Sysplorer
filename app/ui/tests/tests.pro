@@ -1,5 +1,4 @@
 QT += core gui widgets network testlib
-RESOURCES += ../models.qrc
 TEMPLATE = app
 TARGET = ui_integration_test
 CONFIG += console c++11 testcase
