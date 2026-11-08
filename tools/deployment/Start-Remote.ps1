@@ -17,7 +17,10 @@ if(Test-Path -LiteralPath (Join-Path $PSScriptRoot 'local-worktree.json')){
     Import-Module (Join-Path $PSHOME 'Modules\Microsoft.PowerShell.Utility\Microsoft.PowerShell.Utility.psd1') -ErrorAction Stop
     $binding=Get-Content -LiteralPath (Join-Path $PSScriptRoot 'local-worktree.json') -Raw -Encoding UTF8|ConvertFrom-Json
     $context=& (Join-Path $binding.worktreeRoot 'tools\deployment\Start-LocalWorktree.ps1') -EnvironmentOnly
-    if($context.client -ne $PSScriptRoot){throw 'Prepared client binding differs from this directory'}
+    if($context.client -ne $PSScriptRoot -and
+       (Get-FileHash -LiteralPath $exe).Hash -ne (Get-FileHash -LiteralPath (Join-Path $context.client 'battery_console_ui.exe')).Hash){
+        throw 'This copied client differs from the prepared version. Extract the current package again.'
+    }
 }
 $names=@('BATTERY_CONNECTION_MODE','BATTERY_REMOTE_ADDRESS','BATTERY_REMOTE_PORT','BATTERY_REMOTE_KEY','PATH','QT_QPA_PLATFORM','QT_QPA_PLATFORM_PLUGIN_PATH','QT_PLUGIN_PATH','PYTHONHOME','PYTHONPATH')
 $saved=@{};foreach($name in $names){$saved[$name]=[Environment]::GetEnvironmentVariable($name,'Process')}
@@ -36,6 +39,10 @@ try{
     if($PassThru){return $started}
     Write-Output "Remote client opened for $Address`:$Port. Use Save and connect in Connection settings."
 }finally{
-    foreach($name in $saved.Keys){[Environment]::SetEnvironmentVariable($name,$saved[$name],'Process')}
+    # PowerShell 7/.NET preserves empty strings: remove originally absent values.
+    foreach($name in $saved.Keys){
+        if($null -eq $saved[$name]){Remove-Item "Env:$name" -ErrorAction SilentlyContinue}
+        else{[Environment]::SetEnvironmentVariable($name,$saved[$name],'Process')}
+    }
     $credential=$null
 }

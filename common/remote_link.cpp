@@ -2,6 +2,7 @@
 #include <QJsonDocument>
 #include <QJsonParseError>
 #include <QMessageAuthenticationCode>
+#include <QNetworkProxy>
 #include <QUuid>
 #include <QtEndian>
 
@@ -18,6 +19,8 @@ QString nonce(){return QUuid::createUuid().toString(QUuid::WithoutBraces)+QUuid:
 }
 RemoteLink::RemoteLink(QTcpSocket* socket,bool server,const QString& key,const QString& identity,const QString& session,QObject* parent)
     :QObject(parent),m_socket(socket),m_server(server),m_key(key),m_client(identity),m_session(session){
+    // Sysplorer endpoints are direct TCP services, independent of web proxies.
+    if(!m_server)m_socket->setProxy(QNetworkProxy::NoProxy);
     m_socket->setParent(this);m_socket->setReadBufferSize(MaxFrame*2);
     m_timeout.setSingleShot(true);m_timeout.setInterval(10000);
     connect(&m_timeout,&QTimer::timeout,this,[this]{reject(QStringLiteral("AUTH_TIMEOUT"));});

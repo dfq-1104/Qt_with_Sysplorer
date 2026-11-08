@@ -23,6 +23,7 @@ Write-LocalHostConfiguration $client $asciiHost
 Write-LocalClientManifest $client $state.modelHash
 $state.driveLetter=$drive.letter;Save-WorktreeJson $state $stateFile
 $context=[ordered]@{
+ BATTERY_WORKTREE_ROOT=$root
  SYSPLORER_HOME=$asciiHost.Replace('\','/')
  BATTERY_SIM_WORKSPACE=(Join-Path $drive.root '.local-sysplorer\jobs').Replace('\','/')
  BATTERY_DISCOVERY_DIR=(Join-Path $drive.root '.local-sysplorer\discovery').Replace('\','/')
@@ -49,4 +50,9 @@ if($arguments.Count){$options.ArgumentList=$arguments;$options.WindowStyle='Hidd
 $process=Start-Process @options
 if($PassThru){return $process}
 Write-Output "Local Qt started (PID $($process.Id)). Host starts only after an explicit connection or simulation action."
-}finally{foreach($name in $saved.Keys){[Environment]::SetEnvironmentVariable($name,$saved[$name],'Process')}}
+}finally{
+    foreach($name in $saved.Keys){
+        if($null -eq $saved[$name]){Remove-Item "Env:$name" -ErrorAction SilentlyContinue}
+        else{[Environment]::SetEnvironmentVariable($name,$saved[$name],'Process')}
+    }
+}

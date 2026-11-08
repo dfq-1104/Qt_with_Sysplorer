@@ -19,7 +19,8 @@ foreach($name in @('libEGL.dll','libGLESv2.dll','d3dcompiler_47.dll','opengl32sw
 Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'Start-Client.ps1') -Destination $client
 Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'Check-Local.ps1') -Destination $client
 Copy-Item -LiteralPath (Join-Path $root 'app\ui\UDP运行说明.md') -Destination (Join-Path $client '本机运行说明.md')
-"[Connection]`r`nMode=local`r`nAddress=127.0.0.1`r`nPort=39001`r`n`r`n[Host]`r`nHome=C:/Program Files/MWORKS/Sysplorer 2026a`r`nTimeoutMs=180000`r`n" | Set-Content -LiteralPath (Join-Path $client 'sysplorer.ini') -Encoding UTF8
+"[Connection]`r`nMode=local`r`nAddress=127.0.0.1`r`nPort=39001`r`n`r`n[Host]`r`nHome=`r`nTimeoutMs=180000`r`n" | Set-Content -LiteralPath (Join-Path $client 'sysplorer.ini') -Encoding UTF8
+Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'Start-Remote.ps1') -Destination $client
 $pluginSource=if($PluginDll){[IO.Path]::GetFullPath($PluginDll)}else{Join-Path $root 'tools\sysplorer_udp_plugin\release\battery_udp_control.dll'}
 Copy-Item -LiteralPath $pluginSource -Destination (Join-Path $server 'battery_udp_control.dll')
 foreach($name in @('Install-Server.ps1','Update-Plugin.ps1','Start-Sysplorer.ps1','Check-Server.ps1','Diagnose-Server.ps1','remote.ini.example')){Copy-Item -LiteralPath (Join-Path $PSScriptRoot $name) -Destination $server}

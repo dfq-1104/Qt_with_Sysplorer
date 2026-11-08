@@ -9,7 +9,7 @@ QMAKE_CXXFLAGS += /utf-8
 
 INCLUDEPATH += src
 
-SOURCES += src/main.cpp \
+SOURCES += src/main.cpp src/runtime_environment.cpp \
            src/main_window.cpp \
            src/battery_view.cpp \
            src/plot_widget.cpp \
@@ -17,7 +17,7 @@ SOURCES += src/main.cpp \
            src/replay_player.cpp \
            src/sysplorer_runner.cpp
 
-HEADERS += src/main_window.h \
+HEADERS += src/main_window.h src/runtime_environment.h \
            src/battery_view.h \
            src/plot_widget.h \
            src/replay_data.h \

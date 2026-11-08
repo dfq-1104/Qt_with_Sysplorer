@@ -41,5 +41,8 @@ try{
     if($PassThru){return $process}
     Write-Output "Remote client started (PID $($process.Id)) for $Address`:$Port. It will not launch or fall back to a local host."
 }finally{
-    foreach($name in $previous.Keys){[Environment]::SetEnvironmentVariable($name,$previous[$name],'Process')}
+    foreach($name in $previous.Keys){
+        if($null -eq $previous[$name]){Remove-Item "Env:$name" -ErrorAction SilentlyContinue}
+        else{[Environment]::SetEnvironmentVariable($name,$previous[$name],'Process')}
+    }
 }

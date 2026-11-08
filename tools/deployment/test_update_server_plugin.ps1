@@ -93,7 +93,10 @@ try{
         Assert-That ([IO.Path]::GetFullPath($ownedProcess.Path) -eq [IO.Path]::GetFullPath($runningExe)) 'Refused to stop an unowned process'
         $ownedProcess.Kill();$ownedProcess.WaitForExit()
     }
-    foreach($name in $saved.Keys){[Environment]::SetEnvironmentVariable($name,$saved[$name],'Process')}
+    foreach($name in $saved.Keys){
+        if($null -eq $saved[$name]){Remove-Item "Env:$name" -ErrorAction SilentlyContinue}
+        else{[Environment]::SetEnvironmentVariable($name,$saved[$name],'Process')}
+    }
 }
 foreach($path in $configuration){
     Assert-That ((Get-FileHash -LiteralPath $path).Hash -eq $before[$path].hash) "Configuration bytes changed: $path"

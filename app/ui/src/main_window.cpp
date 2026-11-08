@@ -145,6 +145,7 @@ MainWindow::MainWindow(QWidget* parent)
     setStateText(m_runner->remoteMode()?QString::fromUtf8("尚未连接，请在连接设置中连接远端"):
         QString::fromUtf8("尚未连接；点击连接设置，或加载、翻译、开始时按需连接本机"));
     appendStageLog(QString::fromUtf8("连接"),QString::fromUtf8("界面已启动，仅读取配置；尚未连接或启动 Sysplorer。"));
+    appendStageLog(QString::fromUtf8("环境"),QString::fromUtf8("客户端：%1；工作树：%2；本机宿主：%3").arg(QCoreApplication::applicationFilePath(),qEnvironmentVariable("BATTERY_WORKTREE_ROOT"),qEnvironmentVariable("SYSPLORER_HOME")));
     refreshButtons();
 }
 

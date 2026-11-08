@@ -18,6 +18,9 @@
 #include <QMessageAuthenticationCode>
 #include <QMessageBox>
 #include <QProcess>
+#include <QNetworkProxy>
+#include <QNetworkProxyFactory>
+#include <QNetworkInterface>
 #include <QtEndian>
 #include "remote_server.h"
 #include "sysplorer_runner.h"
@@ -44,10 +47,10 @@ public:
     QList<QPointer<RemoteLink>> clients;
     bool autoComplete=true,failDownload=false,badChunk=false,modelLifecycle=true,splitLifecycle=true,ready=true,dropPreparationReply=false,helloApiError=false;
     int starts=0,polls=0,downloads=0,hellos=0,preparations=0;
-    explicit FixtureHost(const QString& dir){
+    explicit FixtureHost(const QString& dir,const QString& listenAddress="127.0.0.1"){
         SysplorerRunner fingerprint;model=fingerprint.modelFingerprint();
         config=dir+"/remote.ini";QSettings settings(config,QSettings::IniFormat);
-        settings.setValue("Remote/Enabled",true);settings.setValue("Remote/ListenAddress","127.0.0.1");settings.setValue("Remote/Port",freePort());
+        settings.setValue("Remote/Enabled",true);settings.setValue("Remote/ListenAddress",listenAddress);settings.setValue("Remote/Port",freePort());
         settings.setValue("Remote/AccessKey",key);settings.setValue("Remote/StatusFile",dir+"/service.json");settings.sync();
         QObject::connect(&server,&RemoteServer::request,this,[this](RemoteLink* link,const QJsonObject& r){
             if(!clients.contains(link))clients.append(link);
@@ -192,6 +195,18 @@ private slots:
         QSignalSpy failed(&runner,&SysplorerRunner::hostConnectionFailed);runner.connectHost();QTRY_COMPARE_WITH_TIMEOUT(failed.count(),1,5000);QTest::qWait(300);
         QVERIFY(runner.remoteMode());QCOMPARE(runner.phase(),QString("ConnectionFailed"));QVERIFY(!QFileInfo::exists(marker));
     }
+    void remoteIpConnectionIgnoresApplicationProxy(){
+        QString address;for(const auto& candidate:QNetworkInterface::allAddresses())if(candidate.protocol()==QAbstractSocket::IPv4Protocol&&!candidate.isLoopback()){address=candidate.toString();break;}
+        if(address.isEmpty())QSKIP("No non-loopback IPv4 address for proxy integration test");
+        FixtureHost host(dir->path(),"0.0.0.0");QTcpServer proxy;QVERIFY(proxy.listen(QHostAddress::LocalHost,0));
+        int proxyConnections=0;QObject diagnostics;
+        connect(&proxy,&QTcpServer::newConnection,&diagnostics,[&]{while(proxy.hasPendingConnections()){++proxyConnections;auto socket=proxy.nextPendingConnection();socket->abort();socket->deleteLater();}});
+        struct RestoreProxy{QNetworkProxy original;bool system;~RestoreProxy(){if(system)QNetworkProxyFactory::setUseSystemConfiguration(true);else QNetworkProxy::setApplicationProxy(original);}} restore{QNetworkProxy::applicationProxy(),QNetworkProxyFactory::usesSystemConfiguration()};
+        QNetworkProxy::setApplicationProxy(QNetworkProxy(QNetworkProxy::HttpProxy,"127.0.0.1",proxy.serverPort()));
+        SysplorerRunner runner;QVERIFY(runner.configureConnection(true,address,host.server.port(),key,false));
+        runner.connectHost();QTRY_COMPARE_WITH_TIMEOUT(runner.phase(),QString("Connected"),5000);
+        QCOMPARE(proxyConnections,0);QVERIFY(runner.remoteMode());QVERIFY(runner.taskId().isEmpty());QCOMPARE(host.starts,0);
+    }
     void compatibilityFailureStopsRequests_data(){
         QTest::addColumn<bool>("remote");QTest::addColumn<int>("defect");QTest::addColumn<bool>("prepare");
         for(bool remote:{false,true})for(int defect:{1,2,3,4})for(bool prepare:{false,true}){
@@ -298,6 +313,14 @@ private slots:
         QSignalSpy timeout(&timed,&SysplorerRunner::hostConnectionFailed);timed.connectHost();QTRY_COMPARE_WITH_TIMEOUT(timed.phase(),QString("ConnectionFailed"),3000);QCOMPARE(timeout.count(),1);
         const int count=host.hellos;QTest::qWait(250);QCOMPARE(host.hellos,count);
     }
+    void unconfiguredLocalDoesNotUseSystemInstallation(){
+        qputenv("SYSPLORER_HOME",QByteArray(""));
+        SysplorerRunner runner;QSignalSpy failure(&runner,&SysplorerRunner::hostConnectionFailed);
+        runner.connectHost();QTRY_COMPARE(runner.phase(),QString("ConnectionFailed"));
+        QCOMPARE(failure.count(),1);QVERIFY(!runner.isConnecting());
+        QVERIFY(failure[0][0].toString().contains(QString::fromUtf8("尚未配置本机运行环境")));
+        QFile log(runner.lastRunDirectory()+"/client.log");QVERIFY(log.open(QIODevice::ReadOnly));QVERIFY(!log.readAll().contains("\"event\":\"launched\""));
+    }
     void fullResultIsDownloadedLocally(){
         FixtureHost host(dir->path());QVERIFY(host.server.isListening());SysplorerRunner runner;QVERIFY(runner.configureConnection(true,"127.0.0.1",host.server.port(),key,false));
         QSignalSpy done(&runner,&SysplorerRunner::finished);runner.prepareSimulation(3.45,2,1,.5,2);QTRY_VERIFY_WITH_TIMEOUT(runner.isPrepared(),5000);runner.beginSimulation();
@@ -338,7 +361,9 @@ private slots:
     void closingClientSendsStop(){
         FixtureHost host(dir->path());host.autoComplete=false;std::unique_ptr<SysplorerRunner> runner(new SysplorerRunner);
         QVERIFY(runner->configureConnection(true,"127.0.0.1",host.server.port(),key,false));runner->prepareSimulation(3.45,2,1,.5,2);
-        QTRY_VERIFY(runner->isPrepared());runner->beginSimulation();QTRY_COMPARE(runner->phase(),QString("Running"));runner.reset();
+        QTRY_VERIFY(runner->isPrepared());runner->beginSimulation();QTRY_COMPARE(runner->phase(),QString("Running"));
+        QVERIFY(runner->isRunning());
+        runner.reset();
         QTRY_COMPARE(host.phase,QString("Stopped"));QCOMPARE(host.starts,1);
     }
     void wrongKeyAndBusyHostAreExplicit(){

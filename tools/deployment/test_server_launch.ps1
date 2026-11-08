@@ -77,7 +77,12 @@ try{
             }
         }
     }
-}finally{foreach($name in $saved.Keys){[Environment]::SetEnvironmentVariable($name,$saved[$name],'Process')}}
+}finally{
+    foreach($name in $saved.Keys){
+        if($null -eq $saved[$name]){Remove-Item "Env:$name" -ErrorAction SilentlyContinue}
+        else{[Environment]::SetEnvironmentVariable($name,$saved[$name],'Process')}
+    }
+}
 foreach($path in $configuration){
     Assert-That ((Get-FileHash -LiteralPath $path).Hash -eq $configurationBefore[$path].hash) 'Configuration bytes changed'
     Assert-That ((Get-Acl -LiteralPath $path).Sddl -eq $configurationBefore[$path].acl) 'Configuration ACL changed'

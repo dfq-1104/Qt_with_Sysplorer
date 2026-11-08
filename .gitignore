@@ -14,6 +14,7 @@
 build/
 dist/
 /.local-sysplorer/
+/mw_crash_handler/
 app/ui/runtime_udp/
 app/ui/runtime_tuning/
 app/ui/runtime_buttons/

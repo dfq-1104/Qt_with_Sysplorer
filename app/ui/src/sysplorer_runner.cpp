@@ -107,7 +107,8 @@ SysplorerRunner::~SysplorerRunner(){m_timer.stop();bestEffortStop();closeRemote(
 QString SysplorerRunner::guiExecutable() const {
     QSettings config(QCoreApplication::applicationDirPath()+"/sysplorer.ini",QSettings::IniFormat);
     const auto home=qEnvironmentVariable("SYSPLORER_HOME",
-        config.value("Host/Home","C:/Program Files/MWORKS/Sysplorer 2026a").toString());
+        config.value("Host/Home").toString());
+    if(home.trimmed().isEmpty())return {};
     return QDir(home).absoluteFilePath("Bin64/mworks.exe");
 }
 QString SysplorerRunner::modelFingerprint() const {
@@ -130,6 +131,8 @@ void SysplorerRunner::connectHost(){
     const auto base=qEnvironmentVariable("BATTERY_SIM_WORKSPACE",QDir::tempPath()+"/BatteryConsoleUDP");
     m_jobDir=QDir(base).absoluteFilePath("startup/"+m_clientId);QDir().mkpath(m_jobDir);
     m_log.close();m_log.setFileName(m_jobDir+"/client.log");m_log.open(QIODevice::WriteOnly|QIODevice::Append);
+    trace("connection_environment",{{"clientExecutable",QCoreApplication::applicationFilePath()},{"worktreeRoot",qEnvironmentVariable("BATTERY_WORKTREE_ROOT")},
+        {"hostExecutable",guiExecutable()},{"discoveryDirectory",qEnvironmentVariable("BATTERY_DISCOVERY_DIR")},{"mode",m_remote?"remote":"local"}});
     m_connectOnly=true;m_port=0;m_pending.clear();m_pendingCommand.clear();m_clock.restart();m_connectionWarned=false;
     m_autoAttempted=false;m_launchedPid=0;m_hostPid=0;m_busyHosts.clear();
     m_remoteLost=false;m_session.clear();m_token.clear();
@@ -223,9 +226,16 @@ bool SysplorerRunner::discover(){
 bool SysplorerRunner::launchHost(){
     if(m_remote){fail(QString::fromUtf8("远程模式只连接指定地址，不启动本机 Sysplorer。"));return false;}
     const auto exe=guiExecutable();
+    if(exe.isEmpty()){connectionFailed("LOCAL_RUNTIME_NOT_CONFIGURED",QString::fromUtf8("尚未配置本机运行环境。请使用当前工作树的 run_local.bat，或先准备配套私有 Sysplorer 环境。"));return false;}
     const auto plugin=QFileInfo(exe).absolutePath()+"/addins/BatteryUdpControl/battery_udp_control.dll";
     if(!QFileInfo::exists(exe)){connectionFailed("HOST_NOT_FOUND",QString::fromUtf8("找不到本地 Sysplorer：%1").arg(exe));return false;}
     if(!QFileInfo::exists(plugin)){connectionFailed("PLUGIN_NOT_FOUND",QString::fromUtf8("未安装配套插件：%1。请先部署插件。").arg(plugin));return false;}
+#ifdef Q_OS_WIN
+    DWORD binaryType=0;
+    if(!GetBinaryTypeW(reinterpret_cast<LPCWSTR>(exe.utf16()),&binaryType)||binaryType!=SCS_64BIT_BINARY){
+        connectionFailed("HOST_START_FAILED",QString::fromUtf8("无法启动 Sysplorer：目标不是有效的 64 位 Windows 程序：%1").arg(exe));return false;
+    }
+#endif
     auto env=QProcessEnvironment::systemEnvironment();
     for(const auto&key:{"QT_QPA_PLATFORM","QT_QPA_PLATFORM_PLUGIN_PATH","QT_PLUGIN_PATH","PYTHONHOME","PYTHONPATH"})env.remove(key);
     env.insert("PATH",QDir::toNativeSeparators(QFileInfo(exe).absolutePath())+";"+env.value("PATH"));

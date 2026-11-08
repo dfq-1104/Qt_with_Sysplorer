@@ -31,5 +31,8 @@ try{
     $started=Start-Process @options
     if($PassThru){return $started}
 }finally{
-    foreach($name in $saved.Keys){[Environment]::SetEnvironmentVariable($name,$saved[$name],'Process')}
+    foreach($name in $saved.Keys){
+        if($null -eq $saved[$name]){Remove-Item "Env:$name" -ErrorAction SilentlyContinue}
+        else{[Environment]::SetEnvironmentVariable($name,$saved[$name],'Process')}
+    }
 }

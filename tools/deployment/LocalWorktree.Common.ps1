@@ -80,5 +80,6 @@ function Write-LocalHostConfiguration([string]$Client,[string]$HomePath){
     }
     if(-not @($hostOptions|Where-Object {$_ -match '^\s*TimeoutMs\s*='}).Count){$hostOptions.Add('TimeoutMs=180000')}
     $lines=@($other)+@('[Host]',('Home='+$HomePath.Replace('\','/')))+@($hostOptions)
+    if(-not @($lines|Where-Object {$_ -match '^\s*WorktreeBound\s*=\s*true\s*$'}).Count){$lines+=@('[Runtime]','WorktreeBound=true')}
     [IO.File]::WriteAllText($path,($lines -join "`r`n")+"`r`n",(New-Object Text.UTF8Encoding $true))
 }

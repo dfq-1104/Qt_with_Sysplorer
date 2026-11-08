@@ -50,7 +50,12 @@ try{
             }
         }
     }
-}finally{foreach($name in $saved.Keys){[Environment]::SetEnvironmentVariable($name,$saved[$name],'Process')}}
+}finally{
+    foreach($name in $saved.Keys){
+        if($null -eq $saved[$name]){Remove-Item "Env:$name" -ErrorAction SilentlyContinue}
+        else{[Environment]::SetEnvironmentVariable($name,$saved[$name],'Process')}
+    }
+}
 $settingsAfter=if(Test-Path -LiteralPath $userSettings){(Get-FileHash -LiteralPath $userSettings).Hash}else{''}
 if($settingsBefore -ne $settingsAfter){throw 'User connection settings changed during connection-only verification'}
 $afterReport=Join-Path $output 'server-after.json'
