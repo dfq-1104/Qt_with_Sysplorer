@@ -10,8 +10,21 @@
 
 *截图来自来源 R5 ZIP 启动检查，说明启动和界面布局，不作为本次新验收。配图来源见[说明](docs/readme-assets/来源说明.md)。*
 
+## 项目详解阅读入口
+
+完整图文介绍位于 [docs/项目详解](docs/项目详解/阅读说明.md)，已从 be10 同名目录完整同步，保留 Markdown、HTML、全部配图和来源清单。
+
+| 顺序 | GitHub 上阅读 Markdown | 离线 HTML |
+|---|---|---|
+| 1 | [项目总览](docs/项目详解/01_项目总览.md)：项目目标、整体架构、双模式和模型来源 | [项目总览 HTML](docs/项目详解/01_项目总览.html) |
+| 2 | [Qt 客户端详解](docs/项目详解/02_Qt客户端详解.md)：组件、状态机、通信、结果和开发经验 | [Qt 客户端 HTML](docs/项目详解/02_Qt客户端详解.html) |
+| 3 | [Sysplorer 调用与部署详解](docs/项目详解/03_Sysplorer调用与部署详解.md)：宿主对象、SDK、两端部署与故障定位 | [Sysplorer 调用与部署 HTML](docs/项目详解/03_Sysplorer调用与部署详解.html) |
+
+离线阅读请下载或克隆仓库后，用浏览器打开 [index.html](docs/项目详解/index.html)；三篇正文 HTML 内嵌图片和样式，可单独复制。阅读 Markdown 时保留同目录 `assets/`。截图和测试的来源、适用范围见[阅读说明](docs/项目详解/阅读说明.md)与 [manifest.json](docs/项目详解/manifest.json)。这些介绍以来源 R5 为基线，本工作树后续合并回归仍以本文“验证记录和已知边界”及相应记录为准。
+
 ## 目录
 
+- [项目详解阅读入口](#项目详解阅读入口)
 - [项目能做什么](#项目能做什么)
 - [系统架构与职责](#系统架构与职责)
 - [本机与远程通信](#本机与远程通信)
@@ -239,11 +252,13 @@ model/BatterySim.mo            固定电池模型源，编入客户端资源
 tools/sysplorer_udp_plugin/    宿主插件、SDK 适配与采样
 tools/deployment/              两端打包、首次设置、更新和诊断
 docs/                         部署、协议、验收与历史复盘
+docs/项目详解/                完整项目总览、Qt 和 Sysplorer 图文详解
 docs/readme-assets/            README 必要配图与来源说明
 ```
 
 | 阅读目的 | 推荐入口 |
 |---|---|
+| 从整体架构深入代码及部署 | [项目总览](docs/项目详解/01_项目总览.md) → [Qt 客户端详解](docs/项目详解/02_Qt客户端详解.md) → [Sysplorer 调用与部署详解](docs/项目详解/03_Sysplorer调用与部署详解.md) |
 | 使用、安装和日常启动 | [可移植部署说明](docs/可移植部署说明.md) |
 | 模型从哪里来、如何上传 | [模型上传协议](docs/模型上传协议.md)、[双击启动与模型读取说明](docs/双击启动与模型读取说明.txt) |
 | 通信联调 | [TCP 远程协议](docs/TCP远程任务协议.md)、[UDP 协议](docs/UDP任务协议.md) |

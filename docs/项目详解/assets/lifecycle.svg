@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="760" viewBox="0 0 1100 760" role="img" aria-label="任务阶段与显式恢复入口">
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#52657a"/></marker></defs>
+<style>text{font-family:"Microsoft YaHei","Noto Sans CJK SC",sans-serif;fill:#203348} .caption{fill:#52657a}</style>
+<rect width="1100" height="760" fill="#ffffff"/>
+<text x="36" y="38" font-size="25" font-weight="700" text-anchor="start">任务阶段与显式恢复入口</text>
+<rect x="45" y="90" width="285" height="80" rx="10" fill="#edf4fc" stroke="#9eafbf" stroke-width="1.5"/>
+<text x="187.5" y="135.95" font-size="17" font-weight="400" text-anchor="middle">Idle / 未连接</text>
+<rect x="360" y="90" width="285" height="80" rx="10" fill="#edf4fc" stroke="#9eafbf" stroke-width="1.5"/>
+<text x="502.5" y="135.95" font-size="17" font-weight="400" text-anchor="middle">Connecting</text>
+<rect x="710" y="90" width="285" height="80" rx="10" fill="#edf4fc" stroke="#9eafbf" stroke-width="1.5"/>
+<text x="852.5" y="135.95" font-size="17" font-weight="400" text-anchor="middle">Connected</text>
+<rect x="710" y="230" width="285" height="80" rx="10" fill="#edf4fc" stroke="#9eafbf" stroke-width="1.5"/>
+<text x="852.5" y="275.95" font-size="17" font-weight="400" text-anchor="middle">上传并 commit</text>
+<rect x="360" y="230" width="285" height="80" rx="10" fill="#edf4fc" stroke="#9eafbf" stroke-width="1.5"/>
+<text x="502.5" y="275.95" font-size="17" font-weight="400" text-anchor="middle">Loading / Loaded</text>
+<rect x="45" y="230" width="285" height="80" rx="10" fill="#edf4fc" stroke="#9eafbf" stroke-width="1.5"/>
+<text x="187.5" y="275.95" font-size="17" font-weight="400" text-anchor="middle">Preparing / Translating</text>
+<rect x="45" y="385" width="285" height="80" rx="10" fill="#edf4fc" stroke="#9eafbf" stroke-width="1.5"/>
+<text x="187.5" y="430.95" font-size="17" font-weight="400" text-anchor="middle">Prepared</text>
+<rect x="360" y="385" width="285" height="80" rx="10" fill="#edf4fc" stroke="#9eafbf" stroke-width="1.5"/>
+<text x="502.5" y="430.95" font-size="17" font-weight="400" text-anchor="middle">Starting / Running</text>
+<rect x="710" y="385" width="285" height="80" rx="10" fill="#edf4fc" stroke="#9eafbf" stroke-width="1.5"/>
+<text x="852.5" y="430.95" font-size="17" font-weight="400" text-anchor="middle">Finalizing / Downloading</text>
+<rect x="710" y="555" width="285" height="80" rx="10" fill="#edf4fc" stroke="#9eafbf" stroke-width="1.5"/>
+<text x="852.5" y="600.95" font-size="17" font-weight="400" text-anchor="middle">Completed / Stopped</text>
+<line x1="330" y1="130" x2="360" y2="130" stroke="#52657a" stroke-width="2" marker-end="url(#arrow)" />
+<line x1="645" y1="130" x2="710" y2="130" stroke="#52657a" stroke-width="2" marker-end="url(#arrow)" />
+<line x1="852" y1="170" x2="852" y2="230" stroke="#52657a" stroke-width="2" marker-end="url(#arrow)" />
+<text x="852.0" y="188.0" font-size="16" font-weight="400" text-anchor="middle">显式加载 / 翻译 / 开始</text>
+<line x1="710" y1="270" x2="645" y2="270" stroke="#52657a" stroke-width="2" marker-end="url(#arrow)" />
+<line x1="360" y1="270" x2="330" y2="270" stroke="#52657a" stroke-width="2" marker-end="url(#arrow)" />
+<line x1="187" y1="310" x2="187" y2="385" stroke="#52657a" stroke-width="2" marker-end="url(#arrow)" />
+<line x1="330" y1="425" x2="360" y2="425" stroke="#52657a" stroke-width="2" marker-end="url(#arrow)" />
+<text x="345.0" y="413.0" font-size="16" font-weight="400" text-anchor="middle">开始</text>
+<line x1="645" y1="425" x2="710" y2="425" stroke="#52657a" stroke-width="2" marker-end="url(#arrow)" />
+<line x1="852" y1="465" x2="852" y2="555" stroke="#52657a" stroke-width="2" marker-end="url(#arrow)" />
+<rect x="360" y="555" width="285" height="80" rx="10" fill="#fff3df" stroke="#9eafbf" stroke-width="1.5"/>
+<text x="502.5" y="600.95" font-size="17" font-weight="400" text-anchor="middle">Paused / 暂停边界</text>
+<line x1="502" y1="465" x2="502" y2="555" stroke="#52657a" stroke-width="2" marker-end="url(#arrow)" marker-start="url(#arrow)" />
+<text x="502.0" y="498.0" font-size="16" font-weight="400" text-anchor="middle">暂停 / 继续</text>
+<text x="40" y="665" font-size="18" font-weight="400" text-anchor="start">连接失败 → 显式重连；运行断线 → 核对原任务；下载失败 → 只重试下载。</text>
+<text x="40" y="697" font-size="17" font-weight="400" text-anchor="start">仅加载在 Loaded 停留，翻译需显式操作或由一键开始触发。</text>
+<text x="40" y="729" font-size="17" font-weight="400" text-anchor="start">示意图省略部分过渡阶段；错误不覆盖历史有效结果。</text>
+</svg>

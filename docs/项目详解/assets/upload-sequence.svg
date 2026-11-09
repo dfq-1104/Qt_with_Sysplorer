@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="896" viewBox="0 0 1100 896" role="img" aria-label="模型上传事务到 SDK 调用的顺序">
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#52657a"/></marker></defs>
+<style>text{font-family:"Microsoft YaHei","Noto Sans CJK SC",sans-serif;fill:#203348} .caption{fill:#52657a}</style>
+<rect width="1100" height="896" fill="#ffffff"/>
+<text x="36" y="38" font-size="25" font-weight="700" text-anchor="start">模型上传事务到 SDK 调用的顺序</text>
+<rect x="70.0" y="65" width="160" height="55" rx="10" fill="#edf4fc" stroke="#9eafbf" stroke-width="1.5"/>
+<text x="150.0" y="98.8" font-size="18" font-weight="400" text-anchor="middle">Qt 客户端</text>
+<line x1="150.0" y1="120" x2="150.0" y2="821" stroke="#aab9c6" stroke-dasharray="5 5"/>
+<rect x="470.0" y="65" width="160" height="55" rx="10" fill="#edf4fc" stroke="#9eafbf" stroke-width="1.5"/>
+<text x="550.0" y="98.8" font-size="18" font-weight="400" text-anchor="middle">宿主插件</text>
+<line x1="550.0" y1="120" x2="550.0" y2="821" stroke="#aab9c6" stroke-dasharray="5 5"/>
+<rect x="870.0" y="65" width="160" height="55" rx="10" fill="#edf4fc" stroke="#9eafbf" stroke-width="1.5"/>
+<text x="950.0" y="98.8" font-size="18" font-weight="400" text-anchor="middle">宿主 SDK</text>
+<line x1="950.0" y1="120" x2="950.0" y2="821" stroke="#aab9c6" stroke-dasharray="5 5"/>
+<line x1="150.0" y1="165" x2="550.0" y2="165" stroke="#52657a" stroke-width="2" marker-end="url(#arrow)" />
+<text x="350.0" y="153.0" font-size="16" font-weight="400" text-anchor="middle">hello  能力与就绪检查</text>
+<line x1="150.0" y1="226" x2="550.0" y2="226" stroke="#52657a" stroke-width="2" marker-end="url(#arrow)" />
+<text x="350.0" y="214.0" font-size="16" font-weight="400" text-anchor="middle">model.begin  长度 / 哈希 / 接口</text>
+<line x1="150.0" y1="287" x2="550.0" y2="287" stroke="#52657a" stroke-width="2" marker-end="url(#arrow)" />
+<text x="350.0" y="275.0" font-size="16" font-weight="400" text-anchor="middle">model.chunk  offset / 块哈希</text>
+<line x1="550.0" y1="348" x2="150.0" y2="348" stroke="#52657a" stroke-width="2" marker-end="url(#arrow)" />
+<text x="350.0" y="336.0" font-size="16" font-weight="400" text-anchor="middle">逐块确认  重传沿用请求 ID</text>
+<line x1="150.0" y1="409" x2="550.0" y2="409" stroke="#52657a" stroke-width="2" marker-end="url(#arrow)" />
+<text x="350.0" y="397.0" font-size="16" font-weight="400" text-anchor="middle">model.commit</text>
+<rect x="435.0" y="453" width="230" height="42" rx="10" fill="#fff3df" stroke="#9eafbf" stroke-width="1.5"/>
+<text x="550.0" y="479.6" font-size="16" font-weight="400" text-anchor="middle">长度 / 整体哈希 / UTF8 校验</text>
+<line x1="150.0" y1="531" x2="550.0" y2="531" stroke="#52657a" stroke-width="2" marker-end="url(#arrow)" />
+<text x="350.0" y="519.0" font-size="16" font-weight="400" text-anchor="middle">load 或 translate  指定模型哈希</text>
+<line x1="550.0" y1="592" x2="950.0" y2="592" stroke="#52657a" stroke-width="2" marker-end="url(#arrow)" />
+<text x="750.0" y="580.0" font-size="16" font-weight="400" text-anchor="middle">NewModel  从收到的文本建立模型</text>
+<line x1="550.0" y1="653" x2="950.0" y2="653" stroke="#52657a" stroke-width="2" marker-end="url(#arrow)" />
+<text x="750.0" y="641.0" font-size="16" font-weight="400" text-anchor="middle">仅翻译入口写参回读 / TranslateModel</text>
+<line x1="950.0" y1="714" x2="550.0" y2="714" stroke="#52657a" stroke-width="2" marker-end="url(#arrow)" />
+<text x="750.0" y="702.0" font-size="16" font-weight="400" text-anchor="middle">翻译完成信号 → Prepared</text>
+<line x1="150.0" y1="775" x2="550.0" y2="775" stroke="#52657a" stroke-width="2" marker-end="url(#arrow)" />
+<text x="350.0" y="763.0" font-size="16" font-weight="400" text-anchor="middle">显式 start → 真实求解</text>
+<text x="35" y="866" font-size="17" font-weight="400" text-anchor="start">插件不预置第二份模型；未提交的文本不能触发 SDK 加载。</text>
+</svg>

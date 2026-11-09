@@ -1,0 +1,65 @@
+{
+  "baseline": "20261108-embedded-model-r5",
+  "date": "2026-11-08",
+  "sources": {
+    "app/ui/models.qrc": "e55d6a742925a8500d9e29d77c79568b4bec86fce681f3f291dd6580c824873e",
+    "common/model_file.h": "f79d9006c4749e4bc93971bac9fabfdea67d82d364ca0ef6672700a02798786e",
+    "app/ui/src/sysplorer_runner.cpp": "ea62117a79bd05d971117f01afbbe68e9db400714cf9bf9b71cd7ae3ea9bf5f7",
+    "app/ui/src/main_window.cpp": "2cfc86fccedb1ae19ef469a4d3d545006dbeb2a685f1675376f30152fcee0495",
+    "app/ui/src/replay_player.cpp": "e5dc26abeb7479acb39fdf865f2340d8ac6c94447b849050715141afed40123f",
+    "common/remote_link.cpp": "d4e4bdd5c429e8252ee89fedd9cbf5e462d151130825ad95e9fbae5aaff75de2",
+    "tools/sysplorer_udp_plugin/control_plugin.cpp": "e10a9749d5c7d3d9dfa1a4e33de209131a4e03fb09d06e1c3be64b0af748958d",
+    "app/ui/ui.pro": "5f2d2c4943dc77b6b1528c7a93f790b2ba21a691f8df3633080a708f2877d790",
+    "common/model_transfer.h": "62d07c9f8f09663a07e7728743e001ed3ebece57d32e3ab9b5feb6255e9b480e",
+    "common/remote_server.cpp": "b07db6925a892fcdf14a215a50e5af2386e76c3453ec8c9349d1f487ab294eb2",
+    "model/BatterySim.mo": "e03bd3634004ca82bb190521c214ec5fae25713120db83caf016aeac8b7472cd",
+    "tools/deployment/Start-Client.ps1": "315c4f53d3cd5e8103967d0f4dfa8ad0477e59b0d9b137e5c0897af4f7cd462f",
+    "tools/deployment/Setup-Deployment.ps1": "74f9e30d6d92f4d414547e0f4215d4bca4c4043337caeab90910ea58fdf0db2b",
+    "tools/deployment/Check-Server.ps1": "a4b374e2f649eb5c17a0f8f58a8b67e5607862a0f296835d96e346f50fc42fa0",
+    "tools/sysplorer_udp_plugin/task_status_compat.h": "3e50e62d200e28d1789df9f7d98f0401c084c5a0eed9d1bc03500e1ab1b450cf",
+    "docs/内置模型交付测试报告.md": "ed54a60c7193438fbcf2ef0f5518e59bcf2a54385c6d6cdfde54c54455e67b1e"
+  },
+  "images": [
+    {
+      "file": "assets/ui-startup-r5.png",
+      "source": "logs/portable/packages-4d1a4d277cc940e283388e7525de14f4/中文 解压 空格/evidence/ui_startup.png",
+      "altered": false
+    },
+    {
+      "file": "assets/ui-connection-layout.png",
+      "source": "logs/portable/regression-final/remote-cXifHc/connection-settings.png",
+      "altered": false
+    },
+    {
+      "file": "assets/ui-result-layout-historical.png",
+      "source": "logs/portable/ui-release-warm/remote-nfqkUY/real-remote-ui-completed.png",
+      "altered": false
+    }
+  ],
+  "documents": [
+    {
+      "file": "01_项目总览.html",
+      "title": "电池仿真操作台项目总览",
+      "sections": 10,
+      "figures": 5,
+      "codeBlocks": 1,
+      "sha256": "727b459052b0a224b07e40841fb214830e211f4d8b68dd46877882ec12761afd"
+    },
+    {
+      "file": "02_Qt客户端详解.html",
+      "title": "Qt 客户端设计与开发详解",
+      "sections": 25,
+      "figures": 6,
+      "codeBlocks": 8,
+      "sha256": "41380117876b20d75bdd7c1a2653e6e2b0b0f26fbb03a86fd61a9ffc95949f94"
+    },
+    {
+      "file": "03_Sysplorer调用与部署详解.html",
+      "title": "Sysplorer 调用与部署详解",
+      "sections": 16,
+      "figures": 6,
+      "codeBlocks": 7,
+      "sha256": "3b714a934c4481adf5aa22ead3c09815a711c7b92a6c0238ca564859d986e716"
+    }
+  ]
+}

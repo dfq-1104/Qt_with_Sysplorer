@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="652" viewBox="0 0 1100 652" role="img" aria-label="远程认证与签名帧  不提供内容加密">
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#52657a"/></marker></defs>
+<style>text{font-family:"Microsoft YaHei","Noto Sans CJK SC",sans-serif;fill:#203348} .caption{fill:#52657a}</style>
+<rect width="1100" height="652" fill="#ffffff"/>
+<text x="36" y="38" font-size="25" font-weight="700" text-anchor="start">远程认证与签名帧  不提供内容加密</text>
+<rect x="70.0" y="65" width="160" height="55" rx="10" fill="#edf4fc" stroke="#9eafbf" stroke-width="1.5"/>
+<text x="150.0" y="98.8" font-size="18" font-weight="400" text-anchor="middle">客户端</text>
+<line x1="150.0" y1="120" x2="150.0" y2="577" stroke="#aab9c6" stroke-dasharray="5 5"/>
+<rect x="870.0" y="65" width="160" height="55" rx="10" fill="#edf4fc" stroke="#9eafbf" stroke-width="1.5"/>
+<text x="950.0" y="98.8" font-size="18" font-weight="400" text-anchor="middle">服务器插件</text>
+<line x1="950.0" y1="120" x2="950.0" y2="577" stroke="#aab9c6" stroke-dasharray="5 5"/>
+<line x1="150.0" y1="165" x2="950.0" y2="165" stroke="#52657a" stroke-width="2" marker-end="url(#arrow)" />
+<text x="550.0" y="153.0" font-size="16" font-weight="400" text-anchor="middle">TCP connect</text>
+<line x1="950.0" y1="226" x2="150.0" y2="226" stroke="#52657a" stroke-width="2" marker-end="url(#arrow)" />
+<text x="550.0" y="214.0" font-size="16" font-weight="400" text-anchor="middle">challenge  serverNonce / session</text>
+<line x1="150.0" y1="287" x2="950.0" y2="287" stroke="#52657a" stroke-width="2" marker-end="url(#arrow)" />
+<text x="550.0" y="275.0" font-size="16" font-weight="400" text-anchor="middle">authenticate  clientNonce / client / proof</text>
+<line x1="950.0" y1="348" x2="150.0" y2="348" stroke="#52657a" stroke-width="2" marker-end="url(#arrow)" />
+<text x="550.0" y="336.0" font-size="16" font-weight="400" text-anchor="middle">authenticated  server proof</text>
+<rect x="35.0" y="392" width="230" height="42" rx="10" fill="#fff3df" stroke="#9eafbf" stroke-width="1.5"/>
+<text x="150.0" y="418.6" font-size="16" font-weight="400" text-anchor="middle">双方推导 channel key</text>
+<line x1="150.0" y1="470" x2="950.0" y2="470" stroke="#52657a" stroke-width="2" marker-end="url(#arrow)" />
+<text x="550.0" y="458.0" font-size="16" font-weight="400" text-anchor="middle">n / Base64 payload / HMAC</text>
+<line x1="950.0" y1="531" x2="150.0" y2="531" stroke="#52657a" stroke-width="2" marker-end="url(#arrow)" />
+<text x="550.0" y="519.0" font-size="16" font-weight="400" text-anchor="middle">反向独立序号与 HMAC</text>
+<text x="35" y="622" font-size="17" font-weight="400" text-anchor="start">HMAC 校验身份与完整性；Base64 可还原，不等于 TLS 或模型加密。</text>
+</svg>

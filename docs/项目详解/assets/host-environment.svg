@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="610" viewBox="0 0 1100 610" role="img" aria-label="普通桌面图标启动的宿主与任务环境">
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#52657a"/></marker></defs>
+<style>text{font-family:"Microsoft YaHei","Noto Sans CJK SC",sans-serif;fill:#203348} .caption{fill:#52657a}</style>
+<rect width="1100" height="610" fill="#ffffff"/>
+<text x="36" y="38" font-size="25" font-weight="700" text-anchor="start">普通桌面图标启动的宿主与任务环境</text>
+<rect x="35" y="90" width="280" height="90" rx="10" fill="#edf4fc" stroke="#9eafbf" stroke-width="1.5"/>
+<text x="175.0" y="127.65" font-size="19" font-weight="400" text-anchor="middle">原 Sysplorer 桌面图标</text>
+<text x="175.0" y="155.65" font-size="19" font-weight="400" text-anchor="middle">启动 mworks.exe</text>
+<rect x="410" y="90" width="650" height="90" rx="10" fill="#e9f6ef" stroke="#9eafbf" stroke-width="1.5"/>
+<text x="735.0" y="127.65" font-size="19" font-weight="400" text-anchor="middle">插件 initialize 推导当前安装路径</text>
+<text x="735.0" y="155.65" font-size="19" font-weight="400" text-anchor="middle">仅设置宿主进程 PATH，供求解器子进程继承</text>
+<line x1="315" y1="135" x2="410" y2="135" stroke="#52657a" stroke-width="2" marker-end="url(#arrow)" />
+<rect x="410" y="270" width="650" height="100" rx="10" fill="#fff3df" stroke="#9eafbf" stroke-width="1.5"/>
+<text x="735.0" y="312.65" font-size="19" font-weight="400" text-anchor="middle">Bin64 + Simulator/Bin64 + 已有 GCC 目录</text>
+<text x="735.0" y="340.65" font-size="19" font-weight="400" text-anchor="middle">不修改 Windows 全局 PATH</text>
+<line x1="735" y1="180" x2="735" y2="270" stroke="#52657a" stroke-width="2" marker-end="url(#arrow)" />
+<rect x="35" y="440" width="490" height="95" rx="10" fill="#edf4fc" stroke="#9eafbf" stroke-width="1.5"/>
+<text x="280.0" y="480.15" font-size="19" font-weight="400" text-anchor="middle">任务开始  保存并设置</text>
+<text x="280.0" y="508.15" font-size="19" font-weight="400" text-anchor="middle">CodePath / ResultPath / 当前目录</text>
+<rect x="590" y="440" width="470" height="95" rx="10" fill="#edf4fc" stroke="#9eafbf" stroke-width="1.5"/>
+<text x="825.0" y="480.15" font-size="19" font-weight="400" text-anchor="middle">任务结束或失败  恢复原路径</text>
+<text x="825.0" y="508.15" font-size="19" font-weight="400" text-anchor="middle">不调用不兼容的全局 SetWorkPath</text>
+<line x1="525" y1="487" x2="590" y2="487" stroke="#52657a" stroke-width="2" marker-end="url(#arrow)" />
+<text x="557.5" y="475.0" font-size="16" font-weight="400" text-anchor="middle">恢复</text>
+<text x="40" y="582" font-size="18" font-weight="400" text-anchor="start">宿主安装及许可仍是前提；服务器任务目录要求 ASCII，客户端解压目录可含中文和空格。</text>
+</svg>

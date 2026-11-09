@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="665" viewBox="0 0 1100 665" role="img" aria-label="模型来源的三种方案及当前选择">
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#52657a"/></marker></defs>
+<style>text{font-family:"Microsoft YaHei","Noto Sans CJK SC",sans-serif;fill:#203348} .caption{fill:#52657a}</style>
+<rect width="1100" height="665" fill="#ffffff"/>
+<text x="36" y="38" font-size="25" font-weight="700" text-anchor="start">模型来源的三种方案及当前选择</text>
+<text x="40" y="90" font-size="20" font-weight="700" text-anchor="start">早期  两端各内置</text>
+<rect x="40" y="120" width="350" height="65" rx="10" fill="#f3f4f5" stroke="#9eafbf" stroke-width="1.5"/>
+<text x="215.0" y="159.15" font-size="19" font-weight="400" text-anchor="middle">Qt EXE 模型 A</text>
+<rect x="625" y="120" width="420" height="65" rx="10" fill="#f3f4f5" stroke="#9eafbf" stroke-width="1.5"/>
+<text x="835.0" y="159.15" font-size="19" font-weight="400" text-anchor="middle">插件 DLL 模型 A</text>
+<line x1="390" y1="152" x2="625" y2="152" stroke="#52657a" stroke-width="2" marker-end="url(#arrow)" />
+<text x="507.5" y="140.0" font-size="16" font-weight="400" text-anchor="middle">哈希需一致</text>
+<text x="45" y="223" font-size="18" font-weight="400" text-anchor="start">须同步构建，旧 DLL 容易不匹配</text>
+<text x="40" y="265" font-size="20" font-weight="700" text-anchor="start">过渡  客户端外部文件</text>
+<rect x="40" y="295" width="350" height="65" rx="10" fill="#f3f4f5" stroke="#9eafbf" stroke-width="1.5"/>
+<text x="215.0" y="334.15" font-size="19" font-weight="400" text-anchor="middle">Qt 读取外部 mo</text>
+<rect x="625" y="295" width="420" height="65" rx="10" fill="#f3f4f5" stroke="#9eafbf" stroke-width="1.5"/>
+<text x="835.0" y="334.15" font-size="19" font-weight="400" text-anchor="middle">上传文本 → 插件</text>
+<line x1="390" y1="327" x2="625" y2="327" stroke="#52657a" stroke-width="2" marker-end="url(#arrow)" />
+<text x="507.5" y="315.0" font-size="16" font-weight="400" text-anchor="middle">模型传输</text>
+<text x="45" y="398" font-size="18" font-weight="400" text-anchor="start">单一来源，但仍依赖运行时文件读取</text>
+<text x="40" y="440" font-size="20" font-weight="700" text-anchor="start">R5  客户端 EXE 内置</text>
+<rect x="40" y="470" width="350" height="65" rx="10" fill="#e9f6ef" stroke="#9eafbf" stroke-width="1.5"/>
+<text x="215.0" y="509.15" font-size="19" font-weight="400" text-anchor="middle">Qt 内置资源文本</text>
+<rect x="625" y="470" width="420" height="65" rx="10" fill="#e9f6ef" stroke="#9eafbf" stroke-width="1.5"/>
+<text x="835.0" y="509.15" font-size="19" font-weight="400" text-anchor="middle">上传文本 → NewModel</text>
+<line x1="390" y1="502" x2="625" y2="502" stroke="#52657a" stroke-width="2" marker-end="url(#arrow)" />
+<text x="507.5" y="490.0" font-size="16" font-weight="400" text-anchor="middle">模型传输</text>
+<text x="45" y="573" font-size="18" font-weight="400" text-anchor="start">运行时无外部 mo；更新模型需重编客户端</text>
+<text x="40" y="642" font-size="18" font-weight="400" text-anchor="start">当前仍为固定电池接口；内置并不意味着模型加密或任意模型编辑功能。</text>
+</svg>

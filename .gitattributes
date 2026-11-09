@@ -1,0 +1,2 @@
+# Keep the synchronized documentation byte-identical to its source manifest.
+docs/项目详解/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol

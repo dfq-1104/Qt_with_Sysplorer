@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="650" viewBox="0 0 1100 650" role="img" aria-label="Qt 客户端内部职责与数据流">
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#52657a"/></marker></defs>
+<style>text{font-family:"Microsoft YaHei","Noto Sans CJK SC",sans-serif;fill:#203348} .caption{fill:#52657a}</style>
+<rect width="1100" height="650" fill="#ffffff"/>
+<text x="36" y="38" font-size="25" font-weight="700" text-anchor="start">Qt 客户端内部职责与数据流</text>
+<rect x="35" y="80" width="1025" height="85" rx="10" fill="#edf4fc" stroke="#9eafbf" stroke-width="1.5"/>
+<text x="547.5" y="130.2" font-size="22" font-weight="400" text-anchor="middle">MainWindow  用户意图  按钮 guard  结果选择  日志</text>
+<rect x="35" y="225" width="310" height="95" rx="10" fill="#edf4fc" stroke="#9eafbf" stroke-width="1.5"/>
+<text x="190.0" y="265.15" font-size="19" font-weight="400" text-anchor="middle">BatteryView / PlotWidget</text>
+<text x="190.0" y="293.15" font-size="19" font-weight="400" text-anchor="middle">输入与自绘显示</text>
+<rect x="405" y="225" width="320" height="95" rx="10" fill="#edf4fc" stroke="#9eafbf" stroke-width="1.5"/>
+<text x="565.0" y="265.15" font-size="19" font-weight="400" text-anchor="middle">SysplorerRunner</text>
+<text x="565.0" y="293.15" font-size="19" font-weight="400" text-anchor="middle">状态与 pending 请求</text>
+<rect x="785" y="225" width="275" height="95" rx="10" fill="#edf4fc" stroke="#9eafbf" stroke-width="1.5"/>
+<text x="922.5" y="265.15" font-size="19" font-weight="400" text-anchor="middle">ReplayPlayer / Data</text>
+<text x="922.5" y="293.15" font-size="19" font-weight="400" text-anchor="middle">本地样本播放</text>
+<line x1="180" y1="165" x2="180" y2="225" stroke="#52657a" stroke-width="2" marker-end="url(#arrow)" />
+<line x1="565" y1="165" x2="565" y2="225" stroke="#52657a" stroke-width="2" marker-end="url(#arrow)" />
+<line x1="925" y1="165" x2="925" y2="225" stroke="#52657a" stroke-width="2" marker-end="url(#arrow)" />
+<rect x="35" y="420" width="300" height="100" rx="10" fill="#fff3df" stroke="#9eafbf" stroke-width="1.5"/>
+<text x="185.0" y="462.8" font-size="18" font-weight="400" text-anchor="middle">ModelFile / Qt 资源</text>
+<text x="185.0" y="489.8" font-size="18" font-weight="400" text-anchor="middle">校验与文本快照</text>
+<rect x="405" y="420" width="320" height="100" rx="10" fill="#e9f6ef" stroke="#9eafbf" stroke-width="1.5"/>
+<text x="565.0" y="462.65" font-size="19" font-weight="400" text-anchor="middle">UDP / RemoteLink</text>
+<text x="565.0" y="490.65" font-size="19" font-weight="400" text-anchor="middle">上传  控制  下载</text>
+<rect x="785" y="420" width="275" height="100" rx="10" fill="#fff3df" stroke="#9eafbf" stroke-width="1.5"/>
+<text x="922.5" y="462.8" font-size="18" font-weight="400" text-anchor="middle">CSV / JSON 清单</text>
+<text x="922.5" y="489.8" font-size="18" font-weight="400" text-anchor="middle">只播放已核验数据</text>
+<line x1="405" y1="270" x2="345" y2="270" stroke="#52657a" stroke-width="2" marker-end="url(#arrow)" />
+<text x="375.0" y="258.0" font-size="16" font-weight="400" text-anchor="middle">样本</text>
+<line x1="335" y1="470" x2="405" y2="470" stroke="#52657a" stroke-width="2" marker-end="url(#arrow)" />
+<text x="370.0" y="458.0" font-size="16" font-weight="400" text-anchor="middle">文本</text>
+<line x1="565" y1="320" x2="565" y2="420" stroke="#52657a" stroke-width="2" marker-end="url(#arrow)" />
+<line x1="725" y1="470" x2="785" y2="470" stroke="#52657a" stroke-width="2" marker-end="url(#arrow)" />
+<text x="755.0" y="458.0" font-size="16" font-weight="400" text-anchor="middle">核验后</text>
+<line x1="925" y1="420" x2="925" y2="320" stroke="#52657a" stroke-width="2" marker-end="url(#arrow)" />
+<line x1="925" y1="320" x2="925" y2="365" stroke="#52657a" stroke-width="2" marker-end="url(#arrow)" stroke-dasharray="6 5" />
+<line x1="925" y1="365" x2="190" y2="365" stroke="#52657a" stroke-width="2" marker-end="url(#arrow)" stroke-dasharray="6 5" />
+<line x1="190" y1="365" x2="190" y2="320" stroke="#52657a" stroke-width="2" marker-end="url(#arrow)" stroke-dasharray="6 5" />
+<text x="220" y="353" font-size="16" font-weight="400" text-anchor="start">本地回放 tick</text>
+<text x="40" y="595" font-size="18" font-weight="400" text-anchor="start">正式 Qt 工程不编译 battery_simulator.cpp；通信失败不使用本地简化模型接替。</text>
+</svg>

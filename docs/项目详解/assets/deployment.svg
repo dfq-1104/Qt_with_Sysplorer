@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="550" viewBox="0 0 1100 550" role="img" aria-label="本机 UDP 与远程 TCP 的部署位置">
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#52657a"/></marker></defs>
+<style>text{font-family:"Microsoft YaHei","Noto Sans CJK SC",sans-serif;fill:#203348} .caption{fill:#52657a}</style>
+<rect width="1100" height="550" fill="#ffffff"/>
+<text x="36" y="38" font-size="25" font-weight="700" text-anchor="start">本机 UDP 与远程 TCP 的部署位置</text>
+<rect x="25" y="70" width="1045" height="185" rx="12" fill="none" stroke="#afbac6" stroke-dasharray="7 5"/>
+<text x="39" y="95" font-size="17" font-weight="700" text-anchor="start">本机模式  同一台 Windows 电脑</text>
+<rect x="55" y="125" width="245" height="85" rx="10" fill="#edf4fc" stroke="#9eafbf" stroke-width="1.5"/>
+<text x="177.5" y="160.15" font-size="19" font-weight="400" text-anchor="middle">Qt 客户端</text>
+<text x="177.5" y="188.15" font-size="19" font-weight="400" text-anchor="middle">内置模型文本</text>
+<rect x="430" y="125" width="280" height="85" rx="10" fill="#e9f6ef" stroke="#9eafbf" stroke-width="1.5"/>
+<text x="570.0" y="174.15" font-size="19" font-weight="400" text-anchor="middle">本机 Sysplorer + 插件</text>
+<rect x="800" y="125" width="235" height="85" rx="10" fill="#fff3df" stroke="#9eafbf" stroke-width="1.5"/>
+<text x="917.5" y="174.15" font-size="19" font-weight="400" text-anchor="middle">真实求解器</text>
+<line x1="300" y1="167" x2="430" y2="167" stroke="#52657a" stroke-width="2" marker-end="url(#arrow)" marker-start="url(#arrow)" />
+<text x="365.0" y="155.0" font-size="16" font-weight="400" text-anchor="middle">回环 UDP</text>
+<line x1="710" y1="167" x2="800" y2="167" stroke="#52657a" stroke-width="2" marker-end="url(#arrow)" />
+<text x="755.0" y="155.0" font-size="16" font-weight="400" text-anchor="middle">SDK</text>
+<rect x="25" y="300" width="325" height="195" rx="12" fill="none" stroke="#afbac6" stroke-dasharray="7 5"/>
+<text x="39" y="325" font-size="17" font-weight="700" text-anchor="start">客户端电脑  可不装 Sysplorer</text>
+<rect x="620" y="300" width="450" height="195" rx="12" fill="none" stroke="#afbac6" stroke-dasharray="7 5"/>
+<text x="634" y="325" font-size="17" font-weight="700" text-anchor="start">服务器电脑  已安装并授权 Sysplorer</text>
+<rect x="55" y="365" width="265" height="85" rx="10" fill="#edf4fc" stroke="#9eafbf" stroke-width="1.5"/>
+<text x="187.5" y="400.15" font-size="19" font-weight="400" text-anchor="middle">同一个 Qt 客户端</text>
+<text x="187.5" y="428.15" font-size="19" font-weight="400" text-anchor="middle">同一份内置模型</text>
+<rect x="655" y="365" width="380" height="85" rx="10" fill="#e9f6ef" stroke="#9eafbf" stroke-width="1.5"/>
+<text x="845.0" y="414.15" font-size="19" font-weight="400" text-anchor="middle">Sysplorer 插件 + 求解器</text>
+<line x1="320" y1="407" x2="655" y2="407" stroke="#52657a" stroke-width="2" marker-end="url(#arrow)" marker-start="url(#arrow)" />
+<text x="487.5" y="395.0" font-size="16" font-weight="400" text-anchor="middle">认证 TCP  默认 39001</text>
+<text x="40" y="530" font-size="18" font-weight="400" text-anchor="start">运行地点不同，任务协议和宿主执行器共用；远程失败不会切换本机。</text>
+</svg>
