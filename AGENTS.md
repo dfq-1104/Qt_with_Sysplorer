@@ -2,7 +2,7 @@
 
 适用于本仓库及所有子目录；更深层的 `AGENTS.md` 若存在，对其目录作补充或细化。用户当前明确要求优先。本文件提供开发基线，不授权关闭用户程序、丢弃未保存数据、发布或覆盖其他工作树。
 
-维护日期：2026-11-08。当前基线为 be10 最终内置模型双模式版本。先核对当前源码，不要把历史对话或旧文档中的行为恢复到新版。
+维护日期：2026-11-09。当前基线为 be10 最终内置模型双模式版本 `20261108-embedded-model-r5`。本文已按当前源码、构建和部署脚本核对；本次维护没有重新运行仿真。先核对当前源码，不要把历史对话或旧文档中的行为恢复到新版。
 
 ## 1. 项目定位与阅读顺序
 
@@ -11,12 +11,14 @@
 开始相关任务时按需阅读：
 
 1. [README.md](README.md)：当前主目录架构、界面、配置、构建和已知限制。
-2. [可移植部署说明](docs/可移植部署说明.md)、[模型上传协议](docs/模型上传协议.md)、[TCP远程任务协议](docs/TCP远程任务协议.md)、[UDP任务协议](docs/UDP任务协议.md)：现行部署、上传及两种传输契约。
-3. [按钮细化界面开发交付记录](docs/按钮细化界面开发交付记录.md)：当前交互及实现背景。
-4. [主目录合并测试结果](docs/主目录合并测试结果.md)：真实验收、首次失败和复测证据。
-5. 修改相关模块前阅读其实现与对应测试。
+2. [项目详解阅读说明](docs/项目详解/阅读说明.md) → [项目总览](docs/项目详解/01_项目总览.md) → [Qt 客户端详解](docs/项目详解/02_Qt客户端详解.md) → [Sysplorer 调用与部署详解](docs/项目详解/03_Sysplorer调用与部署详解.md)：先理解职责、状态、宿主对象和两端操作。离线 HTML 从 [index.html](docs/项目详解/index.html) 打开。
+3. 按任务阅读[可移植部署说明](docs/可移植部署说明.md)、[模型上传协议](docs/模型上传协议.md)、[TCP远程任务协议](docs/TCP远程任务协议.md)、[UDP任务协议](docs/UDP任务协议.md)：部署步骤及具体通信契约。
+4. [内置模型交付测试报告](docs/内置模型交付测试报告.md)与[最终双模式版本合并记录](docs/最终双模式版本合并记录_20261108.md)：分别核对来源版本验收和本工作树回归，不混用通过数量与时间。
+5. 涉及界面演进时再读[按钮细化交付记录](docs/按钮细化界面开发交付记录.md)和[早期主目录合并测试](docs/主目录合并测试结果.md)；修改前始终阅读相关实现与对应测试。
 
 当前交付证据见[内置模型交付测试报告](docs/内置模型交付测试报告.md)。早期双模式、R3/R4 外部模型和主目录合并报告均有历史适用范围，不得把旧结论当作 R5 当前状态。
+
+`docs/项目详解` 是完整同步的 R5 文档快照：代码摘录行号、截图及 manifest 哈希对应其生成时点，不自动随代码更新。HTML 内嵌图片，Markdown 依赖同目录 assets。阅读说明提及的 `tools/documentation/` 生成工具未随本仓库同步，不能当作当前已有的可运行命令。`.gitattributes` 对该目录保留原始字节；不为消除源文档中的尾部空白而批量格式化，以免破坏清单和来源一致性。
 
 `docs/交付文档/`、根目录部分 SDK 故障说明描述早期 helper 阶段；`docs/UDP正式接入开发记录.md` 和 `docs/UDP架构设计与开发经验及helper方案对比.md` 包含更早 UDP 阶段。按章节、日期及源码判断适用范围，不能把这些文档全部当作当前规范。
 
@@ -33,6 +35,7 @@
 | `common/model_transfer.h`、`model_file.h` | 模型分块上传、UTF-8/哈希校验及诊断 |
 | `app/ui/src/runtime_environment.*` | 正式客户端启动环境处理 |
 | `tools/deployment/` | 可移植客户端/服务器打包、配置、诊断与部署入口 |
+| `docs/项目详解/` | 总览、Qt、Sysplorer 图文详解；含 Markdown、离线 HTML、assets 和来源清单 |
 | `app/ui/src/replay_data.*`、`replay_player.*` | 已核验结果的本地读取、插值与回放 |
 | `app/ui/tests/udp_integration_test.cpp` | 当前真实 Qt 交互及宿主集成测试 |
 | `tools/sysplorer_udp_plugin/control_plugin.*` | 正式宿主插件、任务控制、运行期输入、采集及结果导出 |
@@ -49,7 +52,7 @@
 
 - 两个主要应用为 Qt 与 Sysplorer；SDK 是进程内接口，不是独立网络进程。编译器、求解器可有子进程。
 - 正式路径不重新接入 helper 或 Python 查看桥接，不以近似公式、模拟样本或旧 CSV 替代真实计算。
-- 打开客户端只读设置，不自动连接或启动宿主；保存并连接或业务操作才发起连接。远程模式只访问指定服务器。
+- 正常启动显示界面、读取设置，并按启动入口校验内置模型；不自动连接或启动宿主。保存并连接或业务操作才发起连接，远程模式只访问指定服务器。
 - 当前固定顶层模型为 `BatterySim.SingleRun`；不能宣称自动控制宿主任意打开的模型。
 - 独立加载只加载模型，翻译完成停在 `Prepared`，开始仿真复用有效准备实例；未准备时开始入口自动准备。不要将不同按钮连接为同一完整流程。
 - 保存参数只保存客户端设置并更新预览；翻译和开始读取当前输入，不强制先保存。输入变化必须按准备快照规则处理。
@@ -65,10 +68,10 @@
 - 保留请求编号、会话、客户端、任务归属、模型哈希、游标和有限重试检查。收到命令确认不等于业务完成。
 - 保留独立模型生命周期、模型上传能力和接口检查，不静默降级为旧插件行为。协议修改同步客户端、插件、common 模块、测试及对应文档。
 - 复用宿主现有模型管理器、仿真面板与控制器；任务控制前检查实际绑定对象。不能仅凭任务 UUID 认定可控制。
-- 已有宿主忙碌或模型不匹配时按发现逻辑跳过，不接管其他任务；新实例数量按当前保护逻辑限制。
+- 已有宿主忙碌、能力不足或接口不兼容时按当前发现和错误处理逻辑处理，不接管其他任务；显式连接与准备任务的入口可能有不同策略，新实例数量按保护逻辑限制。模型内容以本次已提交的上传快照为准，不恢复“客户端模型哈希必须等于插件内置模型哈希”的旧约束。
 - `tune` 提交六个运行期字段，按协议校验。在实际模型采样回读确认前不能显示已生效；即时 `GetReals` 可能还是旧步值。
 - 在线调参保持同一任务、时间与 SOC，不重新初始化。运行中先暂停写入再恢复；已暂停任务保持暂停。
-- 最终结果使用本地 CSV 和清单交接；保留任务、模型、参数、哈希、点数、时间和数值检查。部分结果按有效范围裁剪，不能以配置终点冒充有效时间。
+- 本机结果读取同机任务文件；远程结果下载到客户端后核验 CSV 与清单，不依赖共享目录或直接读取远端路径。保留任务、模型、参数、哈希、点数、时间和数值检查。部分结果按有效范围裁剪，不能以配置终点冒充有效时间；仅下载失败不重新启动求解。
 - `nativeResult` 当前为结果根目录，不应直接当作具体 MSR 文件打开；原生绘图使用宿主结果对象。
 - 正式模型来自 `:/models/BatterySim.mo`，不读取外部 `.mo` 或 `BATTERY_MODEL_FILE` 覆盖；测试专用覆盖宏不得进入正式 EXE。修改模型后重建客户端；插件按上传文本校验和加载，不再要求两端内置模型一致。修改接口或插件本身仍需配套构建并重启宿主，不绕过上传完整性与接口保护。
 - 倍速映射 SDK 减速因子为 `1/speed`；仿真秒、现实耗时、采样间隔和渲染频率必须区分。
@@ -78,7 +81,24 @@
 
 当前脚本使用 Windows x64、C++11、VS 2017 Professional、Qt 5.14.2 `msvc2017_64` 与 Sysplorer SDK 2026a（vs2017）。默认路径写在各构建脚本、插件 `plugin.pro` 和 UI 部署脚本中，环境不同时先核对，不擅自升级工具链。
 
-从仓库根目录的 PowerShell 构建；按修改范围选择必要项：
+### 干净构建与可移植打包
+
+需要完整验证或生成交付包时，优先从仓库根目录的 PowerShell 使用新的英文构建名称；此流程只生成本树产物，不安装服务器或执行仿真：
+
+```powershell
+$ErrorActionPreference = 'Stop'
+$batteryBuildName = 'release-' + (Get-Date -Format 'yyyyMMdd-HHmmss')
+& .\tools\deployment\Build-Clean.ps1 -BuildName $batteryBuildName
+$batteryBuildRoot = Join-Path (Get-Location).Path ('build/' + $batteryBuildName)
+& .\tools\deployment\package.ps1 `
+    -OutputDirectory (Join-Path (Get-Location).Path ('dist/' + $batteryBuildName)) `
+    -ClientExe (Join-Path $batteryBuildRoot 'ui/release/battery_console_ui.exe') `
+    -PluginDll (Join-Path $batteryBuildRoot 'plugin/release/battery_udp_control.dll')
+```
+
+Build-Clean 构建 `ui`、`plugin`、`validation`、`transfer`、`remote`、`build_startup_fixture`、`layout` 七个目标，产物在 `build/<名称>/<目标>/release/`。打包必须显式选择同次构建的 EXE 和 DLL，不误用旧 `release` 文件。输出客户端 ZIP、服务器 ZIP、文件清单和哈希；不把输出包、运行依赖或凭据提交 Git。
+
+仅修改局部模块时，也可使用现有增量脚本，按需要选择，不要求每次全部执行：
 
 ```powershell
 .\tools\sysplorer_udp_plugin\build.cmd
@@ -89,23 +109,22 @@ if ($LASTEXITCODE -ne 0) { throw '客户端构建失败' }
 if ($LASTEXITCODE -ne 0) { throw '测试构建失败' }
 ```
 
-主要产物分别在 `tools/sysplorer_udp_plugin/release/`、`app/ui/build/release/`、`app/ui/tests/build/release/`。不手工修改生成的 Makefile。
+增量脚本主要产物分别在 `tools/sysplorer_udp_plugin/release/`、`app/ui/build/release/`、`app/ui/tests/build/release/`，与干净构建目录不同。不手工修改生成的 Makefile。
 
-优先使用纯英文、短路径的专用宿主和工作目录。参考部署流程如下，执行前确保目标是本任务的新目录、插件已构建、运行包未被占用：
+### 启动与部署边界
 
-```powershell
-$ErrorActionPreference = 'Stop'
-$batteryAgentHost = Join-Path $env:TEMP ('BQ' + (Get-Date -Format 'MMddHHmmss'))
-if (Test-Path -LiteralPath $batteryAgentHost) { throw '请选择新的专用宿主目录' }
-& .\tools\sysplorer_udp_plugin\prepare_isolated_host.ps1 `
-    -SysplorerHome 'C:\Program Files\MWORKS\Sysplorer 2026a' -Destination $batteryAgentHost
-& .\app\ui\deploy.ps1 -RuntimeDirectory app/ui/runtime_buttons -SysplorerHome $batteryAgentHost
-Add-Content -LiteralPath .\app\ui\runtime_buttons\sysplorer.ini -Value 'TimeoutMs=180000' -Encoding utf8
-```
+- 可移植客户端：完整解压包，`Check-Model.cmd` 检查内置模型，`Start-Client.cmd` 启动。启动脚本清理继承的开发绑定并在实际 Qt 进程内执行资源自检，不自动启动宿主；只有后续连接或业务操作才按需准备。
+- 本机首次设置：`Setup-Local.ps1` 调用统一 `Setup-Deployment.ps1 -Mode Local`，确认真实安装、配套插件、工作目录及用户收据。正常设置和测试隔离是不同流程，不把本机私有路径写入发布包。
+- 远程服务器首次设置：`Setup-Server.cmd`／`Setup-Server.ps1` 调用统一脚本的 Server 模式。安装更新前保存并关闭对应宿主，必要时提权；可能改安装目录和防火墙，未获当前任务授权时不执行。沿用有效凭据和配置，不能为排除超时随意轮换密钥。
+- 日常远程使用：用户从原图标启动服务器 Sysplorer，再用 `Check-Server.cmd` 确认监听、双向认证、上传能力及引擎 READY。服务器不需要同时运行 Qt；仅远程使用的客户端无需本地安装 Sysplorer。没有后台服务或远程 shell 启动宿主功能。
+- 仓库开发入口：`app/ui/run_ui.bat → start_ui.ps1`。有本树 `.local-sysplorer/state.json` 时转专用开发入口，否则按显式 RuntimeDirectory 或候选包选择。它不等同正式包启动脚本；不要假定固定优先 runtime_buttons，或仅凭构建完成就认定启动的是新包。
+- 测试宿主：优先采用本树授权的隔离副本及短英文工作路径，使用前阅读相应准备脚本参数和产物依赖；不把旧私有工作树脚本当作普通用户部署入口。
 
-可移植包主入口为客户端 `Start-Client.cmd`、服务器 `Setup-Server.cmd`；仓库入口及参数以当前 README、脚本为准。上面的隔离宿主命令是早期开发方式，使用前应核对与当前部署脚本兼容。新包不得携带开发工作树、私有宿主路径、凭据或测试配置。服务器设置和插件更新可能改安装目录及防火墙，不是纯只读操作；本任务未明确授权时不执行。
+### 配置优先级
 
-本机配置优先级：开发/测试的 `SYSPLORER_HOME` → EXE 旁 `sysplorer.ini` 的 `Host/Home` → 用户级 `local-runtime.json` 收据；未配置时应走设置或明确报错，不默认接管系统安装。`BATTERY_HOST_TIMEOUT_MS` 覆盖 `Host/TimeoutMs`，当前默认 180000 ms，有效范围 1000–600000 ms。`BATTERY_SIM_WORKSPACE` 指定任务工作目录基础路径，客户端与宿主配置应一致。
+直接启动 EXE 时，本机宿主配置为开发/测试的 `SYSPLORER_HOME` → EXE 旁 `sysplorer.ini` 的 `Host/Home` → 用户级 `local-runtime.json` 收据；未配置时走设置或明确报错，不默认接管系统安装。正式 `Start-Client` 会清理 SYSPLORER_HOME 等继承变量，因此不能把直接 EXE 的优先级当作正式启动脚本允许的覆盖方式。
+
+`BATTERY_HOST_TIMEOUT_MS` 覆盖 `Host/TimeoutMs`，Runner 当前默认 180000 ms，有效范围 1000–600000 ms。开发/测试的 `BATTERY_SIM_WORKSPACE` 指定任务基础路径；正式设置还会记录部署工作目录。默认远程 TCP 端口为 39001，本机 UDP 动态端口不可与其混淆。客户端访问凭据按当前 Windows 用户 DPAPI 保护保存，不复制到仓库或报告。
 
 ## 6. 验证与验收
 
@@ -116,19 +135,23 @@ Add-Content -LiteralPath .\app\ui\runtime_buttons\sysplorer.ini -Value 'TimeoutM
 - `tools/deployment/Build-Clean.ps1 -BuildName <新的英文名称>` 可在本树新建干净构建目录。模型校验、模型传输、TCP/界面模拟回归及打包自检优先使用此轮新产物；模拟通过不代表实际两机通过，跳过项不计通过。
 - 模拟测试还须隔离用户级 `local-runtime.json`，不能只设置一个不存在的 `SYSPLORER_HOME`；“未配置”用例会清空该环境变量。可用本树测试目录的 `BATTERY_LOCAL_CONFIG` 指向空收据，测试 EXE 旁不要配置真实宿主。避免继承真实服务器凭据及实机测试开关。
 
-专用宿主准备好后，从仓库根目录运行：
+专项测试应按实际产物路径执行。`run_remote.ps1` 读取 `app/ui/tests/build_remote/release/`，不能直接用于 Build-Clean 的 `remote/release/` 产物；后者应调用本次构建的测试 EXE，并准备模型、测试根目录、Qt 平台等环境。模型覆盖宏只属于测试工程。
+
+需要执行已有真实本机按钮测试时，先核验 `$batteryAgentHost` 指向本任务已准备、配套的专用宿主，并确认增量测试产物已构建，再运行：
 
 ```powershell
 & .\app\ui\tests\run_button_details.ps1 -TestHost $batteryAgentHost
 ```
 
-日志、逐项结果和截图默认输出到 `logs/button_details/`，具体选项以脚本当前实现为准。按改动覆盖加载/翻译/开始、状态确认、真实暂停继续停止、结果选择与回放、调参、失败保护和忙碌实例隔离中的相关路径。
+该按钮脚本的日志、逐项结果和截图默认输出到 `logs/button_details/`，还会选择 TEMP 下的测试工作目录；其他测试输出以各脚本为准。按改动覆盖加载/翻译/开始、状态确认、真实暂停继续停止、结果选择与回放、调参、失败保护和忙碌实例隔离中的相关路径。
 
 排障先查本次 `%TEMP%/BatteryConsoleUDP/<任务 UUID>`（或配置目录）的 `client.log`、`plugin.log`、`status.json`、`result.json` 和 CSV，再核对实际启动 EXE、宿主路径、加载插件版本和模型哈希。
 
 2026-11-05 历史完整复测记录为 10 passed、0 failed，其中 8 项业务、初始化及清理。此前首次回归发生过 `TRANSLATE_FAILED`；相同二进制复测通过不能宣称根因已解决。不得把旧报告写成本轮新测试结果。
 
 R5 已有普通双击本地实际计算和正式 EXE 到虚拟机计算的来源验收记录，但不自动代表本次合并后重新验收。远程认证超时与关闭窗口停止时序仍有已知边界；运行中先停止并等终态再退出。根因未确证不得标为修复。
+
+本工作树 2026-11-08 最终合并回归为连接／界面 69 passed、1 failed、3 skipped，失败为 closingClientSendsStop。来源 R5 的 70 passed、0 failed、3 skipped 是另一份历史证据；项目详解中的数字不能覆盖合并后的失败记录。维护 AGENTS、README 或图文文档不需要因此重新构建、部署或运行真实求解。
 
 ## 7. 部署、进程与文件操作边界
 
