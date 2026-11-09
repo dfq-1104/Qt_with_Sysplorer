@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="660" viewBox="0 0 1100 660" role="img" aria-label="整体架构与进程边界">
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#52657a"/></marker></defs>
+<style>text{font-family:"Microsoft YaHei","Noto Sans CJK SC",sans-serif;fill:#203348} .caption{fill:#52657a}</style>
+<rect width="1100" height="660" fill="#ffffff"/>
+<text x="36" y="38" font-size="25" font-weight="700" text-anchor="start">整体架构与进程边界</text>
+<rect x="25" y="70" width="310" height="465" rx="12" fill="none" stroke="#afbac6" stroke-dasharray="7 5"/>
+<text x="39" y="95" font-size="17" font-weight="700" text-anchor="start">客户端进程 battery_console_ui.exe</text>
+<rect x="390" y="70" width="680" height="465" rx="12" fill="none" stroke="#afbac6" stroke-dasharray="7 5"/>
+<text x="404" y="95" font-size="17" font-weight="700" text-anchor="start">Sysplorer 宿主进程 mworks.exe 与子进程</text>
+<rect x="50" y="115" width="260" height="95" rx="10" fill="#edf4fc" stroke="#9eafbf" stroke-width="1.5"/>
+<text x="180.0" y="155.15" font-size="19" font-weight="400" text-anchor="middle">Qt Widgets</text>
+<text x="180.0" y="183.15" font-size="19" font-weight="400" text-anchor="middle">参数  控制  曲线  回放</text>
+<rect x="50" y="270" width="260" height="100" rx="10" fill="#edf4fc" stroke="#9eafbf" stroke-width="1.5"/>
+<text x="180.0" y="312.65" font-size="19" font-weight="400" text-anchor="middle">SysplorerRunner</text>
+<text x="180.0" y="340.65" font-size="19" font-weight="400" text-anchor="middle">任务状态机与结果校验</text>
+<rect x="50" y="420" width="260" height="75" rx="10" fill="#fff3df" stroke="#9eafbf" stroke-width="1.5"/>
+<text x="180.0" y="464.15" font-size="19" font-weight="400" text-anchor="middle">EXE 内置模型资源</text>
+<rect x="420" y="270" width="270" height="100" rx="10" fill="#e9f6ef" stroke="#9eafbf" stroke-width="1.5"/>
+<text x="555.0" y="312.65" font-size="19" font-weight="400" text-anchor="middle">BatteryUdpControl</text>
+<text x="555.0" y="340.65" font-size="19" font-weight="400" text-anchor="middle">校验命令并调用 SDK</text>
+<rect x="760" y="110" width="280" height="95" rx="10" fill="#e9f6ef" stroke="#9eafbf" stroke-width="1.5"/>
+<text x="900.0" y="150.3" font-size="18" font-weight="400" text-anchor="middle">ClassManager / MoHandler</text>
+<text x="900.0" y="177.3" font-size="18" font-weight="400" text-anchor="middle">模型与参数管理</text>
+<rect x="760" y="270" width="280" height="100" rx="10" fill="#e9f6ef" stroke="#9eafbf" stroke-width="1.5"/>
+<text x="900.0" y="312.8" font-size="18" font-weight="400" text-anchor="middle">SimInstPanel / SimControl</text>
+<text x="900.0" y="339.8" font-size="18" font-weight="400" text-anchor="middle">翻译与求解控制</text>
+<rect x="760" y="420" width="280" height="75" rx="10" fill="#fff3df" stroke="#9eafbf" stroke-width="1.5"/>
+<text x="900.0" y="463.8" font-size="18" font-weight="400" text-anchor="middle">编译器与求解器子进程</text>
+<line x1="180" y1="210" x2="180" y2="270" stroke="#52657a" stroke-width="2" marker-end="url(#arrow)" />
+<line x1="180" y1="420" x2="180" y2="370" stroke="#52657a" stroke-width="2" marker-end="url(#arrow)" />
+<line x1="310" y1="320" x2="420" y2="320" stroke="#52657a" stroke-width="2" marker-end="url(#arrow)" marker-start="url(#arrow)" />
+<text x="365.0" y="308.0" font-size="16" font-weight="400" text-anchor="middle">UDP / TCP</text>
+<line x1="690" y1="295" x2="760" y2="165" stroke="#52657a" stroke-width="2" marker-end="url(#arrow)" />
+<line x1="690" y1="320" x2="760" y2="320" stroke="#52657a" stroke-width="2" marker-end="url(#arrow)" />
+<line x1="900" y1="370" x2="900" y2="420" stroke="#52657a" stroke-width="2" marker-end="url(#arrow)" />
+<rect x="420" y="565" width="620" height="60" rx="10" fill="#edf4fc" stroke="#9eafbf" stroke-width="1.5"/>
+<text x="730.0" y="601.3" font-size="18" font-weight="400" text-anchor="middle">本机共享任务文件 / 远程下载 → CSV 与结果清单</text>
+<line x1="900" y1="495" x2="900" y2="565" stroke="#52657a" stroke-width="2" marker-end="url(#arrow)" />
+<line x1="420" y1="595" x2="180" y2="535" stroke="#52657a" stroke-width="2" marker-end="url(#arrow)" />
+<text x="300.0" y="553.0" font-size="16" font-weight="400" text-anchor="middle">结果与采样</text>
+</svg>
