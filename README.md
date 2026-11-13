@@ -1,5 +1,7 @@
 # Qt 与 Sysplorer 电池充放电仿真操作台
 
+**[下载 R5 Windows x64 客户端 ZIP（23.6 MB）](https://github.com/dfq-1104/Qt_with_Sysplorer/releases/download/20261108-embedded-model-r5/BatteryConsole-Client-win64.zip)**（预发行版）。完整解压后，双击 `Start-Client.cmd` 启动。
+
 基于 **Qt Widgets、Sysplorer 宿主内 C++ 插件和 Modelica** 的 Windows 桌面仿真项目。用户在同一个界面输入参数、控制真实计算、查看实时曲线，并回放已经核验的完整或部分结果。计算可以发生在本机，也可以发生在另一台安装并授权 Sysplorer 的电脑上。
 
 当前基线为 **20261108-embedded-model-r5**。模型只有一个发布来源：**客户端 EXE 内置的 Qt 资源 `:/models/BatterySim.mo`**。本机通过 UDP、远程通过认证 TCP 上传；插件收到文本后调用 SDK 建立模型，不再内置第二份业务模型。正式客户端不读取旁边的外部 `.mo`，也不接受 `BATTERY_MODEL_FILE` 覆盖。
